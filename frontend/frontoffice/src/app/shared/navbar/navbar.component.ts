@@ -24,4 +24,8 @@ export class NavbarComponent implements OnInit {
   logout() {
     this.keycloakService.logout('http://localhost:4200'); // redirect back to Angular app
   }
+
+  register () {
+    this.keycloakService.register();
+  }
 }

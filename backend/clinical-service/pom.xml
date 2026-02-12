@@ -13,11 +13,11 @@
         <relativePath/>
     </parent>
 
-    <groupId>org.example</groupId>
-    <artifactId>Hospitalization-service</artifactId>
+    <groupId>esprit</groupId>
+    <artifactId>clinical-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Hospitalization1</name>
-    <description>Hospitalization1 Project</description>
+    <name>clinical-service</name>
+    <description>Clinical Service Project</description>
 
     <properties>
         <java.version>17</java.version>
@@ -38,16 +38,19 @@
     </dependencyManagement>
 
     <dependencies>
-        <!-- Spring Boot Starter Web -->
+        <!-- Spring Boot Starters -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- Spring Boot JPA -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
         <!-- Eureka Client -->
