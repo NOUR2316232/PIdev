@@ -1,7 +1,7 @@
 package org.example.hospitalizationservice.repository;
 
-import org.example.hospitalizationservice.entities.hospitalization;
+import org.example.hospitalizationservice.entities.Hospitalization;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface HospitalizationRepository extends JpaRepository<hospitalization, String> {
+public interface HospitalizationRepository extends JpaRepository<Hospitalization, Long> {
 }
