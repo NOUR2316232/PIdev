@@ -1,0 +1,53 @@
+<div class="container">
+  <h2>Diagnostic Orders CRUD</h2>
+
+  <form [formGroup]="form" (ngSubmit)="saveOrder()">
+    <input placeholder="Order Type" formControlName="orderType" />
+    <input placeholder="Test Name" formControlName="testName" />
+    <input placeholder="Order Date" type="datetime-local" formControlName="orderDate" />
+    <input placeholder="Priority" formControlName="priority" />
+    <input placeholder="Status" formControlName="status" />
+    <input placeholder="Clinical Notes" formControlName="clinicalNotes" />
+    <input placeholder="User ID" formControlName="user_id" />
+    <input placeholder="Consultation ID" formControlName="consultationId" />
+    <input placeholder="Ordered By" formControlName="orderedBy" />
+    <button type="submit">{{ editingId ? 'Update' : 'Create' }}</button>
+    <button type="button" (click)="cancelEdit()">Cancel</button>
+  </form>
+
+  <hr />
+
+  <table border="1" width="100%">
+    <thead>
+    <tr>
+      <th>Order Type</th>
+      <th>Test Name</th>
+      <th>Order Date</th>
+      <th>Priority</th>
+      <th>Status</th>
+      <th>Clinical Notes</th>
+      <th>User ID</th>
+      <th>Consultation ID</th>
+      <th>Ordered By</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let order of orders">
+      <td>{{ order.orderType }}</td>
+      <td>{{ order.testName }}</td>
+      <td>{{ order.orderDate }}</td>
+      <td>{{ order.priority }}</td>
+      <td>{{ order.status }}</td>
+      <td>{{ order.clinicalNotes }}</td>
+      <td>{{ order.user_id }}</td>
+      <td>{{ order.consultationId }}</td>
+      <td>{{ order.orderedBy }}</td>
+      <td>
+        <button (click)="editOrder(order)">Edit</button>
+        <button (click)="deleteOrder(order.id)">Delete</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
