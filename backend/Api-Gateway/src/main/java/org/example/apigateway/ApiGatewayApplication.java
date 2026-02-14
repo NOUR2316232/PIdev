@@ -21,18 +21,33 @@ public class ApiGatewayApplication {
 
 				// Dialysis Service
 				.route("dialysis-service", r -> r
-						.path("/dialysis/**")              // Gateway URL prefix
-						.filters(f -> f.stripPrefix(1))    // Remove /dialysis before forwarding
-						.uri("lb://dialysis-service")      // Eureka service name
+						.path("/dialysis/**")
+						.filters(f -> f.stripPrefix(1))
+						.uri("lb://dialysis-service")
 				)
 
 				// Hospitalization Service
 				.route("hospitalization-service", r -> r
-						.path("/hospitalization/**")          // Gateway URL prefix
-						.filters(f -> f.stripPrefix(1))       // Remove /hospitalization before forwarding
-						.uri("lb://hospitalization-service")  // Eureka service name
+						.path("/hospitalization/**")
+						.filters(f -> f.stripPrefix(1))
+						.uri("lb://hospitalization-service")
+				)
+
+				// Pharmacy Service
+				.route("pharmacy-service", r -> r
+						.path("/pharmacy/**")
+						.filters(f -> f.stripPrefix(1))
+						.uri("lb://pharmacy-service")
+				)
+
+				// Diagnostic Service ✅
+				.route("diagnostic-service", r -> r
+						.path("/diagnostic/**")
+						.filters(f -> f.stripPrefix(1))
+						.uri("lb://diagnostic-service") // Eureka service name (lowercase)
 				)
 
 				.build();
 	}
+
 }

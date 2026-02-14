@@ -10,15 +10,6 @@
         <module name="api-gateway" />
         <module name="discovery-service" />
       </profile>
-      <profile name="Annotation profile for Hospitalization1" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
-        </processorPath>
-        <module name="Hospitalization-service" />
-      </profile>
       <profile name="Annotation profile for dialysis-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -29,7 +20,7 @@
         </processorPath>
         <module name="dialysis-service" />
       </profile>
-      <profile name="Annotation profile for user-service" enabled="true">
+      <profile name="Annotation profile for pharmacy-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -39,6 +30,16 @@
         <module name="clinical-service" />
         <module name="pharmacy-service" />
         <module name="user-service" />
+      </profile>
+      <profile name="Annotation profile for diagnostic-app" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
+        </processorPath>
+        <module name="diagnostic-service" />
+        <module name="Hospitalization-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -50,6 +51,7 @@
       <module name="Hospitalization-service" options="-parameters" />
       <module name="api-gateway" options="-parameters" />
       <module name="clinical-service" options="-parameters" />
+      <module name="diagnostic-service" options="-parameters" />
       <module name="dialysis-service" options="-parameters" />
       <module name="discovery-service" options="-parameters" />
       <module name="gateway-service" options="-parameters" />
