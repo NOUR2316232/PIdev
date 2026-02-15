@@ -2,9 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 
 @Component({
-  selector: 'app-dropdown',
-  templateUrl: './dropdown.component.html',
-  imports:[CommonModule]
+    selector: 'app-dropdown',
+    templateUrl: './dropdown.component.html',
+    standalone: true,
+    imports: [CommonModule]
 })
 export class DropdownComponent implements AfterViewInit, OnDestroy {
   @Input() isOpen = false;

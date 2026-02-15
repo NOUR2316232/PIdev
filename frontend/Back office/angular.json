@@ -63,6 +63,9 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "port": 4369
+          },
           "configurations": {
             "production": {
               "buildTarget": "ng-tailadmin:build:production"
@@ -73,6 +76,7 @@
           },
           "defaultConfiguration": "development"
         },
+
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n"
         },
