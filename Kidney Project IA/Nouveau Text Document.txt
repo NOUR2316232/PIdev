@@ -1,0 +1,110 @@
+i have this Plateforme Intelligent de Gestion en Néphrologie Pédiatrique –
+Système de Détection et Classification sur Images CT du Rein
+1. Introduction
+Dans le domaine médical, l'imagerie par tomodensitométrie (CT-scan) est cruciale pour diagnostiquer les affections rénales (kystes, tumeurs, calculs, anomalies normales). Une analyse manuelle des images CT est coûteuse, chronophage et dépend fortement de l’expérience du radiologue.
+Ce projet propose une plateforme intelligente capable de 
+Prédire la présence d’anomalies rénales sur images CT,
+Segmenter les patients selon le type de lésion,
+Recommander des actions cliniques pertinentes à partir de l’analyse visuelle.
+2. Description du Dataset
+Le dataset utilisé dans ce projet est extrait de Kaggle 
+👉 httpswww.kaggle.comdatasetsnazmul0087ct-kidney-dataset-normal-cyst-tumor-and-stonedata
+Caractéristiques 
+Type de données  Images CT du rein
+Classes 
+Normal
+Kyste
+Tumeur
+Calcul rénal (stone)
+Format  Images médicales (probablement PNGJPG ou DICOM converti)
+Utilisation  Classification supervisée d’images
+Ce dataset est bien adapté pour entraîner des modèles de vision par ordinateur (CNN, etc.) pour détecter et classer automatiquement des anomalies rénales.
+3. Objectifs Métier (3 BSOs)
+BSO1
+Automatiser la détection et classification des anomalies rénales sur images CT pour accélérer le diagnostic.
+BSO2
+Réduire la charge de travail des radiologues .
+BSO3
+Améliorer la qualité des soins en fournissant des recommandations de suivi spécifiques à chaque type de lésion.
+4. Objectifs Data Science (3 DSOs)
+DSO1  Prédiction
+classifier les images)Construire un modèle de vision par ordinateur capable de prédire avec précision la classe d’une image rénale (normal, kyste, tumeur, stone).
+DSO2  Segmentation
+Segmentation des profilscluster d’images similaires (ex  tumeurs agressives vs tumeurs non agressives) pour regrouper les cas cliniques.
+DSO3  Recommandation
+recommander des actions )Élaborer un moteur de recommandations qui, à partir de l’image classifiée, propose des actions cliniques pertinentes (suivi, urgences, examens complémentaires).
+5. Architecture du Système
+La plateforme est composée de plusieurs modules microservices 
+
+
+Image CT
+   ↓
+Prétraitement
+   ↓
+CNN (Prédiction)
+   ↓
+Clustering (Segmentation)
+   ↓
+Recommandation
+   ↓
+Tableau de bord médecin
+Composants clés 
+Service de Prétraitement  Redimensionnement, normalisation, augmentation d’images
+Service de Prédiction  Réseau de neurones convolutionnels (CNN)
+Service de Segmentation  Clustering des cas cliniques
+Service de Recommandation  Génération d’actions en fonction de la classe prédite
+6. Module de Prédiction
+Objectif
+Identifier à partir d’une image CT si le rein est 
+Normal
+Porteur de kyste
+Porteur de tumeur
+Porteur de calcul
+Méthodes possibles 
+CNN classiques  ResNet, VGG, DenseNet
+Modèles pré-entraînés avec transfert learning
+Augmentation de données
+Sortie possible 
+Probabilité associée à chaque classe
+Classe prédominante
+7. Module de Segmentation
+Objectif
+Regrouper des patients en profils cliniques visuels selon les caractéristiques des images 
+Cluster 1  Normaux
+Cluster 2  Kystes simples
+Cluster 3  Tumeurs suspectes
+Cluster 4  Calculs rénaux fréquents
+Méthode
+Utilisation de techniques de clustering sur les vecteurs d’activation extraits du modèle CNN (ex  K-Means sur l’espace latent).
+8. Module de Recommandation
+Objectif
+Proposer des recommandations personnalisées selon le type de lésion prédit.
+Logique 
+Classe prédite	Exemple de recommandation
+Normal	Suivi de routine
+Kyste	Suivi périodique + échographie
+Tumeur	Consultation urgente + biopsie
+Calcul	Analgésie + traitement des calculs
+
+
+Ce module peut combiner règles médicales et similarité de cas.
+9. Évaluation des Modèles
+Métriques utilisées 
+Accuracy
+Precision
+Recall
+F1-Score
+Le modèle doit être validé avec des techniques comme
+Cross-validation
+Split traintest
+Confusion matrix
+10. Considérations Éthiques
+Respect de la confidentialité des données médicales
+Outil d’aide uniquement (le diagnostic final appartient au médecin)
+Nécessite validation clinique avant déploiement réel
+11. Conclusion
+Ce projet démontre qu’il est possible de développer une plateforme intelligente capable de 
+Détecter automatiquement les anomalies rénales
+Segmenter les cas selon des profils cliniques
+Recommander des actions adaptées
+L’intégration d’un dataset d’images CT rénales dans un workflow ML fournit un réel potentiel d’amélioration du diagnostic, d’accélération des processus cliniques et d’optimisation du suivi médical pédiatrique.  and the professor told us this for the validation       1)BU Rappel BOs + DSOs   2) data understanding  AED , graphiques  3) data preparation  tous les etapes  nettoyage , trans , FS , FE , + PCA obligatoire  4) Modeling (vision + implementation si existante)

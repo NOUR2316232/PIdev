@@ -1,0 +1,24 @@
+🎯 Business Objectives (BOs)
+
+BO1 : Automatiser la détection des anomalies rénales pour accélérer le diagnostic.
+BO2 : Réduire la charge des radiologues.
+BO3 : Améliorer la qualité des soins via recommandations personnalisées.
+
+🤖 Data Science Objectives (DSOs)
+
+DSO1 – Classification
+Construire un modèle CNN capable de prédire :
+
+Normal
+
+Kyste
+
+Tumeur
+
+Calcul
+
+DSO2 – Segmentation
+Clustering des représentations latentes extraites du CNN.
+
+DSO3 – Recommandation
+Générer des recommandations cliniques à partir de la classe prédite.
