@@ -12,7 +12,7 @@ export class RoleGuard implements CanActivate {
         const userRoles = await this.keycloak.getUserRoles();
 
         // Allow only doctor or admin
-        if (userRoles.includes('doctor') || userRoles.includes('admin')) {
+        if (userRoles.includes('doctor') || userRoles.includes('admin') || userRoles.includes('nurse')) {
             return true;
         }
 

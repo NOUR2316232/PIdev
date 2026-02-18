@@ -1,206 +1,386 @@
-<div class="container-fluid py-5">
-  <div class="container">
+<div class="hosp-page">
+  <div class="container-fluid py-5">
+    <div class="container">
 
-    <!-- PAGE HEADER -->
-    <div class="text-center mx-auto mb-5" style="max-width: 600px;">
-      <h5 class="d-inline-block text-primary text-uppercase border-bottom border-5">Patient Portal</h5>
-      <h1 class="display-4">My Hospitalization Records</h1>
-      <p class="text-muted">Consult your hospitalization history and vital sign measurements below.</p>
-    </div>
+      <!-- ══════════ PAGE HEADER ══════════ -->
+      <div class="page-header text-center mx-auto mb-5">
+        <p class="portal-label">Patient Portal</p>
+        <h1 class="page-title">My Hospitalization Records</h1>
+        <p class="page-subtitle">Track your care history, vital sign trends, and medical progress.</p>
+      </div>
 
-    <!-- SEARCH -->
-    <div class="row justify-content-center mb-4">
-      <div class="col-lg-6">
-        <div class="input-group shadow-sm">
-          <span class="input-group-text bg-white border-end-0">
-            <i class="fa fa-search text-primary"></i>
-          </span>
-          <input type="text"
-                 class="form-control border-start-0 bg-white"
-                 placeholder="Search by room, reason, status…"
-                 [(ngModel)]="searchTerm"
-                 (input)="filterHospitalizations()"
-                 name="search"
-                 [ngModelOptions]="{standalone: true}">
+      <!-- ══════════ STATS BANNER ══════════ -->
+      <div class="stats-banner row g-3 mb-4" *ngIf="hospitalizations.length > 0">
+        <div class="col-6 col-md-3">
+          <div class="stat-card stat-total">
+            <div class="stat-value">{{ hospitalizations.length }}</div>
+            <div class="stat-label">Total Records</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-card stat-active">
+            <div class="stat-value">{{ countByStatus('active') }}</div>
+            <div class="stat-label">Currently Active</div>
+            <div class="stat-dot" style="background:#20c997;"></div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-card stat-pending">
+            <div class="stat-value">{{ countByStatus('pending') }}</div>
+            <div class="stat-label">Pending</div>
+            <div class="stat-dot" style="background:#ffc107;"></div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-card stat-discharged">
+            <div class="stat-value">{{ countByStatus('discharged') }}</div>
+            <div class="stat-label">Discharged</div>
+            <div class="stat-dot" style="background:#6c757d;"></div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- EMPTY STATE -->
-    <div *ngIf="filteredHospitalizations.length === 0" class="text-center py-5">
-      <i class="fa fa-hospital-o fa-4x text-primary mb-3 d-block" style="opacity:.35;"></i>
-      <h5 class="text-muted">No hospitalization records found.</h5>
-    </div>
+      <!-- ══════════ TOOLBAR ══════════ -->
+      <div class="toolbar d-flex flex-wrap align-items-center gap-3 mb-4">
 
-    <!-- CARDS -->
-    <div class="row g-4">
-      <div class="col-12" *ngFor="let h of filteredHospitalizations">
-        <div class="hosp-card bg-light rounded overflow-hidden shadow-sm">
-
-          <!-- Header -->
-          <div class="d-flex align-items-center justify-content-between px-4 py-3"
-               style="background: var(--secondary);">
-            <div class="d-flex align-items-center gap-3">
-              <div class="d-flex align-items-center justify-content-center rounded-circle bg-primary text-white fw-bold"
-                   style="width:40px;height:40px;font-size:.85rem;flex-shrink:0;">
-                #{{ h.id }}
-              </div>
-              <div>
-                <div class="text-white fw-bold" style="font-size:1.05rem;">Room {{ h.roomNumber || '—' }}</div>
-                <div class="text-white-50" style="font-size:.85rem;">{{ h.admissionReason || 'No reason specified' }}</div>
-              </div>
-            </div>
-            <span *ngIf="h.status === 'active'" class="badge rounded-pill px-3 py-2" style="background:#20c997;font-size:.8rem;">● Active</span>
-            <span *ngIf="h.status === 'discharged'" class="badge rounded-pill px-3 py-2 bg-secondary" style="font-size:.8rem;">✓ Discharged</span>
-            <span *ngIf="h.status === 'pending'" class="badge rounded-pill px-3 py-2" style="background:#ffc107;color:#212529;font-size:.8rem;">⏳ Pending</span>
-            <span *ngIf="h.status !== 'active' && h.status !== 'discharged' && h.status !== 'pending'"
-                  class="badge rounded-pill px-3 py-2 bg-light text-dark" style="font-size:.8rem;">{{ h.status || '—' }}</span>
-          </div>
-
-          <!-- Dates + IDs -->
-          <div class="px-4 py-3 border-bottom">
-            <div class="row g-3 text-center">
-              <div class="col-6 col-md-3">
-                <div class="text-muted small text-uppercase fw-semibold mb-1">Admission</div>
-                <div class="fw-bold" style="font-size:.9rem;">{{ h.admissionDate ? (h.admissionDate | date:'MMM d, y') : '—' }}</div>
-                <div class="text-muted" style="font-size:.78rem;">{{ h.admissionDate ? (h.admissionDate | date:'HH:mm') : '' }}</div>
-              </div>
-              <div class="col-6 col-md-3">
-                <div class="text-muted small text-uppercase fw-semibold mb-1">Discharge</div>
-                <div class="fw-bold" style="font-size:.9rem;">{{ h.dischargeDate ? (h.dischargeDate | date:'MMM d, y') : 'In progress' }}</div>
-                <div class="text-muted" style="font-size:.78rem;">{{ h.dischargeDate ? (h.dischargeDate | date:'HH:mm') : '' }}</div>
-              </div>
-              <div class="col-6 col-md-3">
-                <div class="text-muted small text-uppercase fw-semibold mb-1">Patient ID</div>
-                <div class="fw-bold" style="font-size:.9rem;">{{ h.userId || '—' }}</div>
-              </div>
-              <div class="col-6 col-md-3">
-                <div class="text-muted small text-uppercase fw-semibold mb-1">Doctor ID</div>
-                <div class="fw-bold" style="font-size:.9rem;">{{ h.attendingDoctorId || '—' }}</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- VITAL SIGNS -->
-          <div class="px-4 py-3">
-
-            <!-- ✅ Pure Angular toggle — no Bootstrap JS, no dynamic IDs -->
-            <button class="btn btn-sm btn-outline-primary rounded-pill px-3"
-                    type="button"
-                    (click)="h['_vsOpen'] = !h['_vsOpen']">
-              <i class="fa fa-heartbeat me-2"></i>
-              Vital Signs
-              <span class="badge rounded-pill ms-2"
-                    [class.bg-primary]="h.vitalSignsRecords?.length > 0"
-                    [class.bg-secondary]="!h.vitalSignsRecords?.length">
-                {{ h.vitalSignsRecords?.length || 0 }}
-              </span>
-              <i class="fa ms-2"
-                 [class.fa-chevron-down]="!h['_vsOpen']"
-                 [class.fa-chevron-up]="h['_vsOpen']"
-                 style="font-size:.7rem;"></i>
+        <!-- Search -->
+        <div class="search-wrap flex-grow-1" style="min-width:220px;max-width:340px;">
+          <div class="input-group shadow-sm">
+            <span class="input-group-text bg-white border-end-0">
+              <i class="fa fa-search text-primary"></i>
+            </span>
+            <input type="text"
+                   class="form-control border-start-0 bg-white"
+                   placeholder="Search room, reason, status…"
+                   [(ngModel)]="searchTerm"
+                   (input)="applyFilters()"
+                   name="search"
+                   [ngModelOptions]="{standalone: true}">
+            <button *ngIf="searchTerm" class="btn btn-outline-secondary border-start-0"
+                    type="button" (click)="searchTerm=''; applyFilters()">
+              <i class="fa fa-times"></i>
             </button>
+          </div>
+        </div>
 
-            <!-- Panel shown/hidden by Angular -->
-            <div *ngIf="h['_vsOpen']" class="mt-3 vs-panel">
+        <!-- Status filter pills -->
+        <div class="filter-pills d-flex gap-2 flex-wrap">
+          <button class="filter-pill" [class.active]="activeFilter === 'all'"
+                  (click)="setFilter('all')">All</button>
+          <button class="filter-pill filter-pill-active" [class.active]="activeFilter === 'active'"
+                  (click)="setFilter('active')">● Active</button>
+          <button class="filter-pill filter-pill-pending" [class.active]="activeFilter === 'pending'"
+                  (click)="setFilter('pending')">⏳ Pending</button>
+          <button class="filter-pill filter-pill-discharged" [class.active]="activeFilter === 'discharged'"
+                  (click)="setFilter('discharged')">✓ Discharged</button>
+        </div>
 
-              <!-- Empty -->
-              <div *ngIf="!h.vitalSignsRecords?.length"
-                   class="text-center py-4 rounded"
-                   style="border:2px dashed #dee2e6;">
-                <i class="fa fa-heartbeat fa-2x text-muted mb-2 d-block" style="opacity:.35;"></i>
-                <span class="text-muted small">No vital signs recorded for this hospitalization.</span>
+        <!-- Sort -->
+        <div class="ms-auto">
+          <select class="form-select form-select-sm sort-select"
+                  [(ngModel)]="sortField"
+                  (change)="applyFilters()"
+                  [ngModelOptions]="{standalone: true}">
+            <option value="date-desc">Newest first</option>
+            <option value="date-asc">Oldest first</option>
+            <option value="room">By room</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- ══════════ CRITICAL ALERTS BANNER ══════════ -->
+      <div class="alert-banner mb-4" *ngIf="criticalCount > 0">
+        <div class="d-flex align-items-center gap-3">
+          <div class="alert-icon">
+            <i class="fa fa-exclamation-triangle"></i>
+          </div>
+          <div>
+            <div class="fw-bold">{{ criticalCount }} critical vital sign{{ criticalCount > 1 ? 's' : '' }} detected</div>
+            <div class="small opacity-75">Review the highlighted records below and contact your doctor if needed.</div>
+          </div>
+          <button class="btn btn-sm btn-outline-light ms-auto rounded-pill"
+                  (click)="scrollToFirstCritical()">View →</button>
+        </div>
+      </div>
+
+      <!-- ══════════ RESULTS COUNT ══════════ -->
+      <div class="results-info mb-3" *ngIf="hospitalizations.length > 0">
+        <span class="text-muted small">
+          Showing <strong>{{ filteredHospitalizations.length }}</strong>
+          of <strong>{{ hospitalizations.length }}</strong> records
+        </span>
+      </div>
+
+      <!-- ══════════ EMPTY STATE ══════════ -->
+      <div *ngIf="filteredHospitalizations.length === 0" class="empty-state text-center py-5">
+        <div class="empty-icon-wrap mb-4">
+          <i class="fa fa-heartbeat"></i>
+        </div>
+        <h5 class="text-muted mb-2">No records found</h5>
+        <p class="text-muted small" *ngIf="searchTerm || activeFilter !== 'all'">
+          Try adjusting your search or filter.
+          <button class="btn btn-link btn-sm p-0 ms-1" (click)="clearFilters()">Clear all</button>
+        </p>
+        <p class="text-muted small" *ngIf="!searchTerm && activeFilter === 'all'">
+          No hospitalization records have been recorded yet.
+        </p>
+      </div>
+
+      <!-- ══════════ CARDS ══════════ -->
+      <div class="row g-4">
+        <div class="col-12 hosp-card-wrap"
+             *ngFor="let h of filteredHospitalizations; let ci = index"
+             [id]="hasCriticalVitals(h) ? 'critical-' + h.id : null"
+             [style.animation-delay]="(ci * 60) + 'ms'">
+
+          <div class="hosp-card" [class.hosp-card-critical]="hasCriticalVitals(h)">
+
+            <!-- ── Critical badge ── -->
+            <div class="critical-ribbon" *ngIf="hasCriticalVitals(h)">
+              <i class="fa fa-exclamation-triangle me-1"></i> Critical Vitals
+            </div>
+
+            <!-- ── Header ── -->
+            <div class="hosp-header d-flex align-items-center justify-content-between px-4 py-3">
+              <div class="d-flex align-items-center gap-3">
+                <div class="hosp-id-badge">{{ h.id }}</div>
+                <div>
+                  <div class="hosp-room">Room {{ h.roomNumber || '—' }}</div>
+                  <div class="hosp-reason">{{ h.admissionReason || 'No reason specified' }}</div>
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <!-- Duration badge -->
+                <span class="duration-badge" *ngIf="h.admissionDate">
+                  <i class="fa fa-clock-o me-1"></i>{{ getStayDuration(h) }}
+                </span>
+                <!-- Status -->
+                <span class="status-badge status-active"     *ngIf="h.status === 'active'">● Active</span>
+                <span class="status-badge status-discharged" *ngIf="h.status === 'discharged'">✓ Discharged</span>
+                <span class="status-badge status-pending"    *ngIf="h.status === 'pending'">⏳ Pending</span>
+              </div>
+            </div>
+
+            <!-- ── Timeline strip ── -->
+            <div class="hosp-timeline px-4 py-3 border-bottom">
+              <div class="timeline-track">
+                <!-- Admission node -->
+                <div class="timeline-node timeline-node-start">
+                  <div class="tl-dot tl-dot-start"></div>
+                  <div class="tl-label">Admission</div>
+                  <div class="tl-date">{{ h.admissionDate ? (h.admissionDate | date:'MMM d, y') : '—' }}</div>
+                  <div class="tl-time">{{ h.admissionDate ? (h.admissionDate | date:'HH:mm') : '' }}</div>
+                </div>
+
+                <!-- Progress bar -->
+                <div class="tl-bar-wrap">
+                  <div class="tl-bar">
+                    <div class="tl-bar-fill" [style.width]="getProgressPercent(h) + '%'"></div>
+                  </div>
+                  <!-- VS markers on bar -->
+                  <div class="tl-vs-marker"
+                       *ngFor="let vs of (h.vitalSignsRecords || [])"
+                       [style.left]="getVsPosition(h, vs) + '%'"
+                       [class.tl-vs-marker-critical]="isVsCritical(vs)"
+                       [title]="vs.recordDate | date:'MMM d HH:mm'">
+                  </div>
+                </div>
+
+                <!-- Discharge node -->
+                <div class="timeline-node timeline-node-end">
+                  <div class="tl-dot" [class.tl-dot-end]="h.dischargeDate" [class.tl-dot-active]="!h.dischargeDate"></div>
+                  <div class="tl-label">{{ h.dischargeDate ? 'Discharge' : 'Ongoing' }}</div>
+                  <div class="tl-date">{{ h.dischargeDate ? (h.dischargeDate | date:'MMM d, y') : 'In progress' }}</div>
+                  <div class="tl-time">{{ h.dischargeDate ? (h.dischargeDate | date:'HH:mm') : '' }}</div>
+                </div>
               </div>
 
-              <!-- List -->
-              <div *ngIf="h.vitalSignsRecords?.length > 0" class="row g-3">
-                <div class="col-12" *ngFor="let vs of h.vitalSignsRecords; let vi = index">
-                  <div class="rounded p-3" style="background:#fff;border:1px solid #e9ecef;">
+              <!-- Meta row -->
+              <div class="d-flex gap-4 mt-3" style="font-size:.8rem;">
+                <span class="text-muted">
+                  <i class="fa fa-user me-1 text-primary"></i>Patient #{{ h.userId || '—' }}
+                </span>
+                <span class="text-muted">
+                  <i class="fa fa-user-md me-1 text-primary"></i>Doctor #{{ h.attendingDoctorId || '—' }}
+                </span>
+                <span class="text-muted" *ngIf="h.vitalSignsRecords?.length > 0">
+                  <i class="fa fa-heartbeat me-1 text-primary"></i>
+                  {{ h.vitalSignsRecords.length }} measurement{{ h.vitalSignsRecords.length !== 1 ? 's' : '' }}
+                </span>
+                <span class="ms-auto text-danger small fw-semibold" *ngIf="getAbnormalCount(h) > 0">
+                  <i class="fa fa-exclamation-circle me-1"></i>{{ getAbnormalCount(h) }} abnormal
+                </span>
+              </div>
+            </div>
 
-                    <!-- VS header -->
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                      <div class="d-flex align-items-center gap-2">
-                        <span class="d-flex align-items-center justify-content-center rounded-circle text-white fw-bold"
-                              style="width:28px;height:28px;background:var(--primary);font-size:.75rem;flex-shrink:0;">
-                          {{ vi + 1 }}
-                        </span>
-                        <span class="fw-semibold text-dark" style="font-size:.9rem;">Measurement</span>
-                      </div>
-                      <div class="text-end">
-                        <div class="text-muted small">{{ vs.recordDate ? (vs.recordDate | date:'MMM d, y · HH:mm') : '—' }}</div>
-                        <div class="text-muted small" *ngIf="vs.recordedBy">By {{ vs.recordedBy }}</div>
-                      </div>
-                    </div>
+            <!-- ── VITAL SIGNS ── -->
+            <div class="px-4 py-3">
 
-                    <!-- Metrics -->
-                    <div class="row g-2 text-center">
+              <button class="vs-toggle-btn"
+                      type="button"
+                      (click)="h['_vsOpen'] = !h['_vsOpen']">
+                <i class="fa fa-heartbeat me-2"></i>
+                Vital Signs
+                <span class="vs-count-badge"
+                      [class.has-records]="h.vitalSignsRecords?.length > 0"
+                      [class.has-critical]="hasCriticalVitals(h)">
+                  {{ h.vitalSignsRecords?.length || 0 }}
+                </span>
+                <i class="fa ms-2 chevron-icon"
+                   [class.fa-chevron-down]="!h['_vsOpen']"
+                   [class.fa-chevron-up]="h['_vsOpen']"></i>
+              </button>
 
-                      <div class="col-6 col-md-4 col-lg-2">
-                        <div class="vs-metric rounded p-2" style="background:#fff8f0;">
-                          <div style="font-size:1.3rem;">🌡️</div>
-                          <div class="fw-bold text-dark">{{ vs.temperature != null ? vs.temperature + ' °C' : '—' }}</div>
-                          <div class="text-muted" style="font-size:.72rem;text-transform:uppercase;">Temperature</div>
-                          <span *ngIf="vs.temperature != null && vs.temperature > 38" class="badge bg-danger mt-1 w-100" style="font-size:.65rem;">Fever</span>
-                          <span *ngIf="vs.temperature != null && vs.temperature < 36" class="badge bg-warning text-dark mt-1 w-100" style="font-size:.65rem;">Low temp</span>
-                        </div>
-                      </div>
+              <!-- Panel -->
+              <div *ngIf="h['_vsOpen']" class="vs-panel mt-3">
 
-                      <div class="col-6 col-md-4 col-lg-2">
-                        <div class="vs-metric rounded p-2" style="background:#f0f4ff;">
-                          <div style="font-size:1.3rem;">🩺</div>
-                          <div class="fw-bold text-dark">{{ vs.bloodPressure || '—' }}</div>
-                          <div class="text-muted" style="font-size:.72rem;text-transform:uppercase;">Blood Pressure</div>
-                        </div>
-                      </div>
-
-                      <div class="col-6 col-md-4 col-lg-2">
-                        <div class="vs-metric rounded p-2" style="background:#fff0f3;">
-                          <div style="font-size:1.3rem;">❤️</div>
-                          <div class="fw-bold text-dark">{{ vs.heartRate != null ? vs.heartRate + ' bpm' : '—' }}</div>
-                          <div class="text-muted" style="font-size:.72rem;text-transform:uppercase;">Heart Rate</div>
-                          <span *ngIf="vs.heartRate != null && vs.heartRate > 100" class="badge bg-warning text-dark mt-1 w-100" style="font-size:.65rem;">Tachycardia</span>
-                          <span *ngIf="vs.heartRate != null && vs.heartRate < 60" class="badge bg-warning text-dark mt-1 w-100" style="font-size:.65rem;">Bradycardia</span>
-                        </div>
-                      </div>
-
-                      <div class="col-6 col-md-4 col-lg-2">
-                        <div class="vs-metric rounded p-2" style="background:#f0fff8;">
-                          <div style="font-size:1.3rem;">🫁</div>
-                          <div class="fw-bold text-dark">{{ vs.respiratoryRate != null ? vs.respiratoryRate + ' /min' : '—' }}</div>
-                          <div class="text-muted" style="font-size:.72rem;text-transform:uppercase;">Resp. Rate</div>
-                          <span *ngIf="vs.respiratoryRate != null && (vs.respiratoryRate < 12 || vs.respiratoryRate > 20)"
-                                class="badge bg-warning text-dark mt-1 w-100" style="font-size:.65rem;">Abnormal</span>
-                        </div>
-                      </div>
-
-                      <div class="col-6 col-md-4 col-lg-2">
-                        <div class="vs-metric rounded p-2" style="background:#f0f9ff;">
-                          <div style="font-size:1.3rem;">💨</div>
-                          <div class="fw-bold text-dark">{{ vs.oxygenSaturation != null ? vs.oxygenSaturation + ' %' : '—' }}</div>
-                          <div class="text-muted" style="font-size:.72rem;text-transform:uppercase;">SpO₂</div>
-                          <span *ngIf="vs.oxygenSaturation != null && vs.oxygenSaturation < 95"
-                                class="badge bg-danger mt-1 w-100" style="font-size:.65rem;">Low SpO₂</span>
-                        </div>
-                      </div>
-
-                      <div class="col-12 col-lg-2" *ngIf="vs.notes">
-                        <div class="vs-metric rounded p-2 h-100 text-start" style="background:#fafafa;">
-                          <div style="font-size:1.3rem;">📝</div>
-                          <div class="text-muted mb-1" style="font-size:.72rem;text-transform:uppercase;">Notes</div>
-                          <div class="text-dark" style="font-size:.8rem;line-height:1.4;">{{ vs.notes }}</div>
-                        </div>
-                      </div>
-
-                    </div><!-- /metrics -->
-                  </div><!-- /VS card -->
+                <!-- Empty -->
+                <div *ngIf="!h.vitalSignsRecords?.length" class="vs-empty">
+                  <i class="fa fa-heartbeat fa-2x mb-2 d-block"></i>
+                  No vital signs recorded yet.
                 </div>
-              </div><!-- /vs list -->
-            </div><!-- /*ngIf _vsOpen -->
 
-          </div><!-- /vital signs section -->
-        </div><!-- /hosp-card -->
-      </div>
-    </div><!-- /row -->
+                <!-- Records list -->
+                <div *ngIf="h.vitalSignsRecords?.length > 0" class="row g-3">
+                  <div class="col-12"
+                       *ngFor="let vs of h.vitalSignsRecords; let vi = index">
 
+                    <div class="vs-record" [class.vs-record-critical]="isVsCritical(vs)">
+
+                      <!-- VS header -->
+                      <div class="vs-record-header">
+                        <div class="d-flex align-items-center gap-2">
+                          <span class="vs-index">{{ vi + 1 }}</span>
+                          <span class="fw-semibold" style="font-size:.9rem;">Measurement</span>
+                        </div>
+                        <div class="text-end">
+                          <div class="text-muted small">
+                            <i class="fa fa-calendar me-1"></i>
+                            {{ vs.recordDate ? (vs.recordDate | date:'MMM d, y · HH:mm') : '—' }}
+                          </div>
+                          <div class="text-muted small" *ngIf="vs.recordedBy">
+                            <i class="fa fa-user-md me-1"></i>{{ vs.recordedBy }}
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Metrics grid -->
+                      <div class="row g-2 text-center mt-2">
+
+                        <!-- Temperature -->
+                        <div class="col-6 col-md-4 col-xl-2">
+                          <div class="metric-tile" style="--tile-bg:#fff8f0;--tile-border:#ffe4c4;">
+                            <div class="metric-emoji">🌡️</div>
+                            <div class="metric-value">{{ vs.temperature != null ? vs.temperature : '—' }}</div>
+                            <div class="metric-unit">°C</div>
+                            <div class="metric-label">Temperature</div>
+                            <!-- Trend vs previous -->
+                            <div class="metric-trend" *ngIf="vi > 0 && vs.temperature != null && h.vitalSignsRecords[vi-1].temperature != null">
+                              <span [class.trend-up]="vs.temperature > h.vitalSignsRecords[vi-1].temperature"
+                                    [class.trend-down]="vs.temperature < h.vitalSignsRecords[vi-1].temperature"
+                                    [class.trend-flat]="vs.temperature === h.vitalSignsRecords[vi-1].temperature">
+                                {{ vs.temperature > h.vitalSignsRecords[vi-1].temperature ? '↑' :
+                                   vs.temperature < h.vitalSignsRecords[vi-1].temperature ? '↓' : '→' }}
+                                {{ (vs.temperature - h.vitalSignsRecords[vi-1].temperature) | number:'1.1-1' }}
+                              </span>
+                            </div>
+                            <span *ngIf="vs.temperature > 38" class="metric-alert alert-danger-sm">Fever</span>
+                            <span *ngIf="vs.temperature < 36" class="metric-alert alert-warning-sm">Low</span>
+                          </div>
+                        </div>
+
+                        <!-- Blood Pressure -->
+                        <div class="col-6 col-md-4 col-xl-2">
+                          <div class="metric-tile" style="--tile-bg:#f0f4ff;--tile-border:#c7d2fe;">
+                            <div class="metric-emoji">🩺</div>
+                            <div class="metric-value" style="font-size:.95rem;">{{ vs.bloodPressure || '—' }}</div>
+                            <div class="metric-unit">mmHg</div>
+                            <div class="metric-label">Blood Pressure</div>
+                          </div>
+                        </div>
+
+                        <!-- Heart Rate -->
+                        <div class="col-6 col-md-4 col-xl-2">
+                          <div class="metric-tile" style="--tile-bg:#fff0f3;--tile-border:#fecdd3;">
+                            <div class="metric-emoji">❤️</div>
+                            <div class="metric-value">{{ vs.heartRate != null ? vs.heartRate : '—' }}</div>
+                            <div class="metric-unit">bpm</div>
+                            <div class="metric-label">Heart Rate</div>
+                            <div class="metric-trend" *ngIf="vi > 0 && vs.heartRate != null && h.vitalSignsRecords[vi-1].heartRate != null">
+                              <span [class.trend-up]="vs.heartRate > h.vitalSignsRecords[vi-1].heartRate"
+                                    [class.trend-down]="vs.heartRate < h.vitalSignsRecords[vi-1].heartRate"
+                                    [class.trend-flat]="vs.heartRate === h.vitalSignsRecords[vi-1].heartRate">
+                                {{ vs.heartRate > h.vitalSignsRecords[vi-1].heartRate ? '↑' :
+                                   vs.heartRate < h.vitalSignsRecords[vi-1].heartRate ? '↓' : '→' }}
+                                {{ vs.heartRate - h.vitalSignsRecords[vi-1].heartRate }}
+                              </span>
+                            </div>
+                            <span *ngIf="vs.heartRate > 100" class="metric-alert alert-warning-sm">Tachy.</span>
+                            <span *ngIf="vs.heartRate < 60" class="metric-alert alert-warning-sm">Brady.</span>
+                          </div>
+                        </div>
+
+                        <!-- Respiratory Rate -->
+                        <div class="col-6 col-md-4 col-xl-2">
+                          <div class="metric-tile" style="--tile-bg:#f0fff8;--tile-border:#a7f3d0;">
+                            <div class="metric-emoji">🫁</div>
+                            <div class="metric-value">{{ vs.respiratoryRate != null ? vs.respiratoryRate : '—' }}</div>
+                            <div class="metric-unit">/min</div>
+                            <div class="metric-label">Resp. Rate</div>
+                            <div class="metric-trend" *ngIf="vi > 0 && vs.respiratoryRate != null && h.vitalSignsRecords[vi-1].respiratoryRate != null">
+                              <span [class.trend-up]="vs.respiratoryRate > h.vitalSignsRecords[vi-1].respiratoryRate"
+                                    [class.trend-down]="vs.respiratoryRate < h.vitalSignsRecords[vi-1].respiratoryRate"
+                                    [class.trend-flat]="vs.respiratoryRate === h.vitalSignsRecords[vi-1].respiratoryRate">
+                                {{ vs.respiratoryRate > h.vitalSignsRecords[vi-1].respiratoryRate ? '↑' :
+                                   vs.respiratoryRate < h.vitalSignsRecords[vi-1].respiratoryRate ? '↓' : '→' }}
+                              </span>
+                            </div>
+                            <span *ngIf="vs.respiratoryRate < 12 || vs.respiratoryRate > 20"
+                                  class="metric-alert alert-warning-sm">Abnormal</span>
+                          </div>
+                        </div>
+
+                        <!-- SpO2 -->
+                        <div class="col-6 col-md-4 col-xl-2">
+                          <div class="metric-tile" style="--tile-bg:#f0f9ff;--tile-border:#bae6fd;">
+                            <div class="metric-emoji">💨</div>
+                            <div class="metric-value">{{ vs.oxygenSaturation != null ? vs.oxygenSaturation : '—' }}</div>
+                            <div class="metric-unit">%</div>
+                            <div class="metric-label">SpO₂</div>
+                            <div class="metric-trend" *ngIf="vi > 0 && vs.oxygenSaturation != null && h.vitalSignsRecords[vi-1].oxygenSaturation != null">
+                              <span [class.trend-up]="vs.oxygenSaturation > h.vitalSignsRecords[vi-1].oxygenSaturation"
+                                    [class.trend-down]="vs.oxygenSaturation < h.vitalSignsRecords[vi-1].oxygenSaturation"
+                                    [class.trend-flat]="vs.oxygenSaturation === h.vitalSignsRecords[vi-1].oxygenSaturation">
+                                {{ vs.oxygenSaturation > h.vitalSignsRecords[vi-1].oxygenSaturation ? '↑' :
+                                   vs.oxygenSaturation < h.vitalSignsRecords[vi-1].oxygenSaturation ? '↓' : '→' }}
+                              </span>
+                            </div>
+                            <span *ngIf="vs.oxygenSaturation < 95" class="metric-alert alert-danger-sm">Low SpO₂</span>
+                          </div>
+                        </div>
+
+                        <!-- Notes -->
+                        <div class="col-12 col-xl-2" *ngIf="vs.notes">
+                          <div class="metric-tile text-start h-100" style="--tile-bg:#fafafa;--tile-border:#e5e7eb;">
+                            <div class="metric-emoji">📝</div>
+                            <div class="metric-label mb-1">Notes</div>
+                            <div style="font-size:.8rem;line-height:1.4;color:#374151;">{{ vs.notes }}</div>
+                          </div>
+                        </div>
+
+                      </div><!-- /metrics row -->
+                    </div><!-- /vs-record -->
+                  </div>
+                </div><!-- /records list -->
+
+              </div><!-- /vs-panel -->
+            </div><!-- /vital signs section -->
+
+          </div><!-- /hosp-card -->
+        </div><!-- /col -->
+      </div><!-- /row cards -->
+
+    </div>
   </div>
 </div>
