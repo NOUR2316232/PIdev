@@ -17,7 +17,8 @@ import { ImagesComponent } from './pages/ui-elements/images/images.component';
 import { VideosComponent } from './pages/ui-elements/videos/videos.component';
 import { CalenderComponent } from './pages/calender/calender.component';
 import { RoleGuard } from './guards/role.guard';
-
+import {HospitalizationComponent} from "./pages/dashboard/hospitalization/hospitalization.component";
+import { StatistiqueHospitalizationComponent } from './pages/statistique/statistique-hospitalization.component';
 export const routes: Routes = [
   {
     path: '',
@@ -46,8 +47,9 @@ export const routes: Routes = [
       { path: 'videos', component: VideosComponent },
       // Back office modules
       /*{ path: 'pharmacy', component: PharmacyComponent },
-      { path: 'diagnosis', component: DiagnosisComponent },
-      { path: 'hospitalization', component: HospitalizationComponent },*/
+      { path: 'diagnosis', component: DiagnosisComponent },*/
+      { path: 'hospitalization', component: HospitalizationComponent },
+      { path: 'statistique-hospitalization', component: StatistiqueHospitalizationComponent },
     ],
   },
   // Public/Error Pages

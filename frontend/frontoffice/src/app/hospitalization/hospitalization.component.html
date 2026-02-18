@@ -1,191 +1,206 @@
 <div class="container-fluid py-5">
   <div class="container">
 
-    <div class="text-center mx-auto mb-5" style="max-width: 500px;">
-      <h5 class="d-inline-block text-primary text-uppercase border-bottom border-5">
-        Patient Management
-      </h5>
-      <h1 class="display-4">Hospitalization Records</h1>
+    <!-- PAGE HEADER -->
+    <div class="text-center mx-auto mb-5" style="max-width: 600px;">
+      <h5 class="d-inline-block text-primary text-uppercase border-bottom border-5">Patient Portal</h5>
+      <h1 class="display-4">My Hospitalization Records</h1>
+      <p class="text-muted">Consult your hospitalization history and vital sign measurements below.</p>
     </div>
 
-    <!-- ================= FORM ================= -->
-    <div class="row justify-content-center mb-5">
-      <div class="col-lg-10">
-        <div class="bg-light rounded p-5">
-
-          <h3 class="mb-4 text-primary">
-            {{ editingId ? 'Edit' : 'Add' }} Hospitalization
-          </h3>
-
-          <form [formGroup]="form" (ngSubmit)="save()">
-
-            <div class="row g-3 mb-3">
-              <div class="col-md-6">
-                <label class="form-label fw-bold">Admission Date</label>
-                <input type="datetime-local"
-                       class="form-control bg-white border-0"
-                       formControlName="admissionDate">
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label fw-bold">Discharge Date</label>
-                <input type="datetime-local"
-                       class="form-control bg-white border-0"
-                       formControlName="dischargeDate">
-              </div>
-            </div>
-
-            <div class="row g-3 mb-3">
-              <div class="col-md-6">
-                <label class="form-label fw-bold">Room Number</label>
-                <input type="text"
-                       class="form-control bg-white border-0"
-                       formControlName="roomNumber">
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label fw-bold">Admission Reason</label>
-                <input type="text"
-                       class="form-control bg-white border-0"
-                       formControlName="admissionReason">
-              </div>
-            </div>
-
-            <div class="row g-3 mb-4">
-
-              <div class="col-md-4">
-                <label class="form-label fw-bold">Status</label>
-                <select class="form-select bg-white border-0"
-                        formControlName="status">
-                  <option value="">Select Status</option>
-                  <option value="ACTIVE">Active</option>
-                  <option value="DISCHARGED">Discharged</option>
-                  <option value="TRANSFERRED">Transferred</option>
-                </select>
-              </div>
-
-              <div class="col-md-4">
-                <label class="form-label fw-bold">Patient ID</label>
-                <input type="number"
-                       class="form-control bg-white border-0"
-                       formControlName="userId">
-              </div>
-
-              <div class="col-md-4">
-                <label class="form-label fw-bold">Attending Doctor ID</label>
-                <input type="number"
-                       class="form-control bg-white border-0"
-                       formControlName="attendingDoctorId">
-              </div>
-
-            </div>
-
-            <div class="d-flex gap-2">
-              <button type="submit"
-                      class="btn btn-primary rounded-pill py-3 px-5">
-                {{ editingId ? 'Update' : 'Save' }}
-              </button>
-
-              <button type="button"
-                      class="btn btn-outline-primary rounded-pill py-3 px-5"
-                      (click)="cancel()">
-                Cancel
-              </button>
-            </div>
-
-          </form>
+    <!-- SEARCH -->
+    <div class="row justify-content-center mb-4">
+      <div class="col-lg-6">
+        <div class="input-group shadow-sm">
+          <span class="input-group-text bg-white border-end-0">
+            <i class="fa fa-search text-primary"></i>
+          </span>
+          <input type="text"
+                 class="form-control border-start-0 bg-white"
+                 placeholder="Search by room, reason, status…"
+                 [(ngModel)]="searchTerm"
+                 (input)="filterHospitalizations()"
+                 name="search"
+                 [ngModelOptions]="{standalone: true}">
         </div>
       </div>
     </div>
 
-    <!-- ================= TABLE ================= -->
-    <div class="row">
-      <div class="col-12">
-        <div class="bg-light rounded p-4">
+    <!-- EMPTY STATE -->
+    <div *ngIf="filteredHospitalizations.length === 0" class="text-center py-5">
+      <i class="fa fa-hospital-o fa-4x text-primary mb-3 d-block" style="opacity:.35;"></i>
+      <h5 class="text-muted">No hospitalization records found.</h5>
+    </div>
 
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 class="text-primary mb-0">Current Hospitalizations</h3>
+    <!-- CARDS -->
+    <div class="row g-4">
+      <div class="col-12" *ngFor="let h of filteredHospitalizations">
+        <div class="hosp-card bg-light rounded overflow-hidden shadow-sm">
 
-            <!-- ✅ FIXED SEARCH -->
-            <div class="input-group" style="max-width: 300px;">
-              <input type="text"
-                     class="form-control"
-                     placeholder="Search..."
-                     [(ngModel)]="searchTerm"
-                     (input)="filterHospitalizations()"
-                     name="search"
-                     [ngModelOptions]="{standalone: true}">
+          <!-- Header -->
+          <div class="d-flex align-items-center justify-content-between px-4 py-3"
+               style="background: var(--secondary);">
+            <div class="d-flex align-items-center gap-3">
+              <div class="d-flex align-items-center justify-content-center rounded-circle bg-primary text-white fw-bold"
+                   style="width:40px;height:40px;font-size:.85rem;flex-shrink:0;">
+                #{{ h.id }}
+              </div>
+              <div>
+                <div class="text-white fw-bold" style="font-size:1.05rem;">Room {{ h.roomNumber || '—' }}</div>
+                <div class="text-white-50" style="font-size:.85rem;">{{ h.admissionReason || 'No reason specified' }}</div>
+              </div>
+            </div>
+            <span *ngIf="h.status === 'active'" class="badge rounded-pill px-3 py-2" style="background:#20c997;font-size:.8rem;">● Active</span>
+            <span *ngIf="h.status === 'discharged'" class="badge rounded-pill px-3 py-2 bg-secondary" style="font-size:.8rem;">✓ Discharged</span>
+            <span *ngIf="h.status === 'pending'" class="badge rounded-pill px-3 py-2" style="background:#ffc107;color:#212529;font-size:.8rem;">⏳ Pending</span>
+            <span *ngIf="h.status !== 'active' && h.status !== 'discharged' && h.status !== 'pending'"
+                  class="badge rounded-pill px-3 py-2 bg-light text-dark" style="font-size:.8rem;">{{ h.status || '—' }}</span>
+          </div>
+
+          <!-- Dates + IDs -->
+          <div class="px-4 py-3 border-bottom">
+            <div class="row g-3 text-center">
+              <div class="col-6 col-md-3">
+                <div class="text-muted small text-uppercase fw-semibold mb-1">Admission</div>
+                <div class="fw-bold" style="font-size:.9rem;">{{ h.admissionDate ? (h.admissionDate | date:'MMM d, y') : '—' }}</div>
+                <div class="text-muted" style="font-size:.78rem;">{{ h.admissionDate ? (h.admissionDate | date:'HH:mm') : '' }}</div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="text-muted small text-uppercase fw-semibold mb-1">Discharge</div>
+                <div class="fw-bold" style="font-size:.9rem;">{{ h.dischargeDate ? (h.dischargeDate | date:'MMM d, y') : 'In progress' }}</div>
+                <div class="text-muted" style="font-size:.78rem;">{{ h.dischargeDate ? (h.dischargeDate | date:'HH:mm') : '' }}</div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="text-muted small text-uppercase fw-semibold mb-1">Patient ID</div>
+                <div class="fw-bold" style="font-size:.9rem;">{{ h.userId || '—' }}</div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="text-muted small text-uppercase fw-semibold mb-1">Doctor ID</div>
+                <div class="fw-bold" style="font-size:.9rem;">{{ h.attendingDoctorId || '—' }}</div>
+              </div>
             </div>
           </div>
 
-          <div class="table-responsive">
-            <table class="table table-hover table-striped mb-0">
+          <!-- VITAL SIGNS -->
+          <div class="px-4 py-3">
 
-              <thead class="table-primary">
-              <tr>
-                <th>ID</th>
-                <th>Admission Date</th>
-                <th>Discharge Date</th>
-                <th>Room</th>
-                <th>Reason</th>
-                <th>Status</th>
-                <th>Patient ID</th>
-                <th>Doctor ID</th>
-                <th class="text-center">Actions</th>
-              </tr>
-              </thead>
+            <!-- ✅ Pure Angular toggle — no Bootstrap JS, no dynamic IDs -->
+            <button class="btn btn-sm btn-outline-primary rounded-pill px-3"
+                    type="button"
+                    (click)="h['_vsOpen'] = !h['_vsOpen']">
+              <i class="fa fa-heartbeat me-2"></i>
+              Vital Signs
+              <span class="badge rounded-pill ms-2"
+                    [class.bg-primary]="h.vitalSignsRecords?.length > 0"
+                    [class.bg-secondary]="!h.vitalSignsRecords?.length">
+                {{ h.vitalSignsRecords?.length || 0 }}
+              </span>
+              <i class="fa ms-2"
+                 [class.fa-chevron-down]="!h['_vsOpen']"
+                 [class.fa-chevron-up]="h['_vsOpen']"
+                 style="font-size:.7rem;"></i>
+            </button>
 
-              <tbody>
+            <!-- Panel shown/hidden by Angular -->
+            <div *ngIf="h['_vsOpen']" class="mt-3 vs-panel">
 
-              <!-- ✅ SAFE LOOP -->
-              <tr *ngFor="let h of filteredHospitalizations">
+              <!-- Empty -->
+              <div *ngIf="!h.vitalSignsRecords?.length"
+                   class="text-center py-4 rounded"
+                   style="border:2px dashed #dee2e6;">
+                <i class="fa fa-heartbeat fa-2x text-muted mb-2 d-block" style="opacity:.35;"></i>
+                <span class="text-muted small">No vital signs recorded for this hospitalization.</span>
+              </div>
 
-                <td>{{ h.id }}</td>
+              <!-- List -->
+              <div *ngIf="h.vitalSignsRecords?.length > 0" class="row g-3">
+                <div class="col-12" *ngFor="let vs of h.vitalSignsRecords; let vi = index">
+                  <div class="rounded p-3" style="background:#fff;border:1px solid #e9ecef;">
 
-                <td>
-                  {{ h.admissionDate ? (h.admissionDate | date:'yyyy-MM-dd HH:mm') : '-' }}
-                </td>
+                    <!-- VS header -->
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                      <div class="d-flex align-items-center gap-2">
+                        <span class="d-flex align-items-center justify-content-center rounded-circle text-white fw-bold"
+                              style="width:28px;height:28px;background:var(--primary);font-size:.75rem;flex-shrink:0;">
+                          {{ vi + 1 }}
+                        </span>
+                        <span class="fw-semibold text-dark" style="font-size:.9rem;">Measurement</span>
+                      </div>
+                      <div class="text-end">
+                        <div class="text-muted small">{{ vs.recordDate ? (vs.recordDate | date:'MMM d, y · HH:mm') : '—' }}</div>
+                        <div class="text-muted small" *ngIf="vs.recordedBy">By {{ vs.recordedBy }}</div>
+                      </div>
+                    </div>
 
-                <td>
-                  {{ h.dischargeDate ? (h.dischargeDate | date:'yyyy-MM-dd HH:mm') : '-' }}
-                </td>
+                    <!-- Metrics -->
+                    <div class="row g-2 text-center">
 
-                <td>{{ h.roomNumber }}</td>
-                <td>{{ h.admissionReason }}</td>
-                <td>{{ h.status }}</td>
-                <td>{{ h.userId }}</td>
-                <td>{{ h.attendingDoctorId }}</td>
+                      <div class="col-6 col-md-4 col-lg-2">
+                        <div class="vs-metric rounded p-2" style="background:#fff8f0;">
+                          <div style="font-size:1.3rem;">🌡️</div>
+                          <div class="fw-bold text-dark">{{ vs.temperature != null ? vs.temperature + ' °C' : '—' }}</div>
+                          <div class="text-muted" style="font-size:.72rem;text-transform:uppercase;">Temperature</div>
+                          <span *ngIf="vs.temperature != null && vs.temperature > 38" class="badge bg-danger mt-1 w-100" style="font-size:.65rem;">Fever</span>
+                          <span *ngIf="vs.temperature != null && vs.temperature < 36" class="badge bg-warning text-dark mt-1 w-100" style="font-size:.65rem;">Low temp</span>
+                        </div>
+                      </div>
 
-                <td class="text-center">
-                  <button class="btn btn-sm btn-warning me-1"
-                          (click)="edit(h)">
-                    Edit
-                  </button>
+                      <div class="col-6 col-md-4 col-lg-2">
+                        <div class="vs-metric rounded p-2" style="background:#f0f4ff;">
+                          <div style="font-size:1.3rem;">🩺</div>
+                          <div class="fw-bold text-dark">{{ vs.bloodPressure || '—' }}</div>
+                          <div class="text-muted" style="font-size:.72rem;text-transform:uppercase;">Blood Pressure</div>
+                        </div>
+                      </div>
 
-                  <button class="btn btn-sm btn-danger"
-                          (click)="delete(h.id)">
-                    Delete
-                  </button>
-                </td>
+                      <div class="col-6 col-md-4 col-lg-2">
+                        <div class="vs-metric rounded p-2" style="background:#fff0f3;">
+                          <div style="font-size:1.3rem;">❤️</div>
+                          <div class="fw-bold text-dark">{{ vs.heartRate != null ? vs.heartRate + ' bpm' : '—' }}</div>
+                          <div class="text-muted" style="font-size:.72rem;text-transform:uppercase;">Heart Rate</div>
+                          <span *ngIf="vs.heartRate != null && vs.heartRate > 100" class="badge bg-warning text-dark mt-1 w-100" style="font-size:.65rem;">Tachycardia</span>
+                          <span *ngIf="vs.heartRate != null && vs.heartRate < 60" class="badge bg-warning text-dark mt-1 w-100" style="font-size:.65rem;">Bradycardia</span>
+                        </div>
+                      </div>
 
-              </tr>
+                      <div class="col-6 col-md-4 col-lg-2">
+                        <div class="vs-metric rounded p-2" style="background:#f0fff8;">
+                          <div style="font-size:1.3rem;">🫁</div>
+                          <div class="fw-bold text-dark">{{ vs.respiratoryRate != null ? vs.respiratoryRate + ' /min' : '—' }}</div>
+                          <div class="text-muted" style="font-size:.72rem;text-transform:uppercase;">Resp. Rate</div>
+                          <span *ngIf="vs.respiratoryRate != null && (vs.respiratoryRate < 12 || vs.respiratoryRate > 20)"
+                                class="badge bg-warning text-dark mt-1 w-100" style="font-size:.65rem;">Abnormal</span>
+                        </div>
+                      </div>
 
-              <!-- ✅ EMPTY STATE -->
-              <tr *ngIf="filteredHospitalizations.length === 0">
-                <td colspan="9"
-                    class="text-center text-muted">
-                  No hospitalizations found.
-                </td>
-              </tr>
+                      <div class="col-6 col-md-4 col-lg-2">
+                        <div class="vs-metric rounded p-2" style="background:#f0f9ff;">
+                          <div style="font-size:1.3rem;">💨</div>
+                          <div class="fw-bold text-dark">{{ vs.oxygenSaturation != null ? vs.oxygenSaturation + ' %' : '—' }}</div>
+                          <div class="text-muted" style="font-size:.72rem;text-transform:uppercase;">SpO₂</div>
+                          <span *ngIf="vs.oxygenSaturation != null && vs.oxygenSaturation < 95"
+                                class="badge bg-danger mt-1 w-100" style="font-size:.65rem;">Low SpO₂</span>
+                        </div>
+                      </div>
 
-              </tbody>
+                      <div class="col-12 col-lg-2" *ngIf="vs.notes">
+                        <div class="vs-metric rounded p-2 h-100 text-start" style="background:#fafafa;">
+                          <div style="font-size:1.3rem;">📝</div>
+                          <div class="text-muted mb-1" style="font-size:.72rem;text-transform:uppercase;">Notes</div>
+                          <div class="text-dark" style="font-size:.8rem;line-height:1.4;">{{ vs.notes }}</div>
+                        </div>
+                      </div>
 
-            </table>
-          </div>
+                    </div><!-- /metrics -->
+                  </div><!-- /VS card -->
+                </div>
+              </div><!-- /vs list -->
+            </div><!-- /*ngIf _vsOpen -->
 
-        </div>
+          </div><!-- /vital signs section -->
+        </div><!-- /hosp-card -->
       </div>
-    </div>
+    </div><!-- /row -->
 
   </div>
 </div>

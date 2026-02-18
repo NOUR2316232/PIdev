@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.ALWAYS) // Always include fields in JSON
-public class Hospitalization {
+public class    Hospitalization {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,11 +44,12 @@ public class Hospitalization {
     @Pattern(regexp = "^(pending|active|discharged)$", message = "Status must be 'pending', 'active' or 'discharged'")
     private String status;
 
-    @NotBlank(message = "User ID is required")
-    private String userId;
+    // After
+    @NotNull(message = "User ID is required")
+    private Long userId;
 
-    @NotBlank(message = "Attending doctor ID is required")
-    private String attendingDoctorId;
+    @NotNull(message = "Attending doctor ID is required")
+    private Long attendingDoctorId;
 
     // One Hospitalization has many VitalSigns
     @OneToMany(mappedBy = "hospitalization", cascade = CascadeType.ALL, orphanRemoval = true)

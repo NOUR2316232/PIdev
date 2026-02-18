@@ -1,0 +1,291 @@
+<div class="min-h-screen bg-gray-50 px-4 py-8 font-outfit dark:bg-gray-900">
+  <div class="mx-auto max-w-7xl">
+
+    <!-- ── PAGE HEADER ── -->
+    <div class="mb-8">
+      <p class="mb-1 text-theme-sm font-medium uppercase tracking-widest text-brand-500">
+        Patient Management
+      </p>
+      <h1 class="text-title-md font-semibold text-gray-900 dark:text-white/90">
+        Dashboard
+      </h1>
+    </div>
+
+    <!-- ── LOADING STATE ── -->
+    <div *ngIf="loading" class="flex items-center justify-center py-24">
+      <div class="flex items-center gap-3 text-gray-500 dark:text-gray-400">
+        <svg class="h-5 w-5 animate-spin text-brand-500" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+        </svg>
+        Loading data...
+      </div>
+    </div>
+
+    <div *ngIf="!loading" class="space-y-6">
+
+      <!-- ══════════ KPI CARDS ══════════ -->
+      <div class="grid grid-cols-2 gap-5 lg:grid-cols-4">
+
+        <!-- Total -->
+        <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-theme-sm dark:border-gray-800 dark:bg-white/[0.03]">
+          <div class="flex items-center justify-between mb-4">
+            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 dark:bg-brand-500/[0.12]">
+              <svg class="h-5 w-5 text-brand-500 dark:text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0H5m14 0h2M5 21H3M9 7h1m-1 4h1m4-4h1m-1 4h1M9 21v-3a3 3 0 016 0v3"/>
+              </svg>
+            </span>
+          </div>
+          <p class="text-2xl font-bold text-gray-900 dark:text-white/90">{{ total }}</p>
+          <p class="mt-1 text-theme-sm text-gray-500 dark:text-gray-400">Total Hospitalizations</p>
+        </div>
+
+        <!-- Active -->
+        <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-theme-sm dark:border-gray-800 dark:bg-white/[0.03]">
+          <div class="flex items-center justify-between mb-4">
+            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-success-50 dark:bg-success-500/[0.12]">
+              <svg class="h-5 w-5 text-success-500 dark:text-success-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </span>
+          </div>
+          <p class="text-2xl font-bold text-gray-900 dark:text-white/90">{{ active }}</p>
+          <p class="mt-1 text-theme-sm text-gray-500 dark:text-gray-400">Active</p>
+          <p class="mt-2 text-xs font-medium text-success-600 dark:text-success-400">{{ percent(active) }} of total</p>
+        </div>
+
+        <!-- Pending -->
+        <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-theme-sm dark:border-gray-800 dark:bg-white/[0.03]">
+          <div class="flex items-center justify-between mb-4">
+            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-warning-50 dark:bg-warning-500/[0.12]">
+              <svg class="h-5 w-5 text-warning-500 dark:text-warning-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </span>
+          </div>
+          <p class="text-2xl font-bold text-gray-900 dark:text-white/90">{{ pending }}</p>
+          <p class="mt-1 text-theme-sm text-gray-500 dark:text-gray-400">Pending</p>
+          <p class="mt-2 text-xs font-medium text-warning-600 dark:text-warning-400">{{ percent(pending) }} of total</p>
+        </div>
+
+        <!-- Discharged -->
+        <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-theme-sm dark:border-gray-800 dark:bg-white/[0.03]">
+          <div class="flex items-center justify-between mb-4">
+            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-100 dark:bg-white/[0.06]">
+              <svg class="h-5 w-5 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+              </svg>
+            </span>
+          </div>
+          <p class="text-2xl font-bold text-gray-900 dark:text-white/90">{{ discharged }}</p>
+          <p class="mt-1 text-theme-sm text-gray-500 dark:text-gray-400">Discharged</p>
+          <p class="mt-2 text-xs font-medium text-gray-500 dark:text-gray-400">{{ percent(discharged) }} of total</p>
+        </div>
+
+      </div>
+
+      <!-- ══════════ CHARTS ROW ══════════ -->
+      <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+
+        <!-- ── Donut Chart: Status Breakdown ── -->
+        <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-theme-sm dark:border-gray-800 dark:bg-white/[0.03]">
+          <h3 class="mb-1 text-base font-semibold text-gray-800 dark:text-white/90">Status Breakdown</h3>
+          <p class="mb-6 text-theme-sm text-gray-500 dark:text-gray-400">Distribution of current hospitalizations</p>
+
+          <div *ngIf="total === 0" class="flex flex-col items-center justify-center py-10 text-gray-400 dark:text-gray-600">
+            <svg class="mb-2 h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            <p class="text-theme-sm">No data available</p>
+          </div>
+
+          <div *ngIf="total > 0" class="flex flex-col items-center gap-6 sm:flex-row sm:items-center sm:justify-around">
+
+            <!-- SVG Donut -->
+            <div class="relative flex-shrink-0">
+              <svg [attr.width]="SIZE" [attr.height]="SIZE" [attr.viewBox]="'0 0 ' + SIZE + ' ' + SIZE"
+                   style="transform: rotate(-90deg)">
+                <!-- Background ring -->
+                <circle
+                  [attr.cx]="SIZE/2" [attr.cy]="SIZE/2" [attr.r]="radius"
+                  fill="none" stroke="#e4e7ec" [attr.stroke-width]="STROKE"/>
+
+                <!-- Active segment -->
+                <circle *ngIf="active > 0"
+                  [attr.cx]="SIZE/2" [attr.cy]="SIZE/2" [attr.r]="radius"
+                  fill="none" stroke="#12b76a" [attr.stroke-width]="STROKE"
+                  [attr.stroke-dasharray]="activeDash + ' ' + (circumference - activeDash)"
+                  [attr.stroke-dashoffset]="-activeOffset"
+                  stroke-linecap="butt"/>
+
+                <!-- Pending segment -->
+                <circle *ngIf="pending > 0"
+                  [attr.cx]="SIZE/2" [attr.cy]="SIZE/2" [attr.r]="radius"
+                  fill="none" stroke="#f79009" [attr.stroke-width]="STROKE"
+                  [attr.stroke-dasharray]="pendingDash + ' ' + (circumference - pendingDash)"
+                  [attr.stroke-dashoffset]="-pendingOffset"
+                  stroke-linecap="butt"/>
+
+                <!-- Discharged segment -->
+                <circle *ngIf="discharged > 0"
+                  [attr.cx]="SIZE/2" [attr.cy]="SIZE/2" [attr.r]="radius"
+                  fill="none" stroke="#98a2b3" [attr.stroke-width]="STROKE"
+                  [attr.stroke-dasharray]="dischargedDash + ' ' + (circumference - dischargedDash)"
+                  [attr.stroke-dashoffset]="-dischargedOffset"
+                  stroke-linecap="butt"/>
+              </svg>
+
+              <!-- Center label -->
+              <div class="absolute inset-0 flex flex-col items-center justify-center"
+                   style="transform: rotate(0deg)">
+                <span class="text-2xl font-bold text-gray-900 dark:text-white/90">{{ total }}</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">Total</span>
+              </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="flex flex-col gap-4 w-full sm:w-auto">
+
+              <div class="flex items-center justify-between gap-8 sm:gap-12">
+                <div class="flex items-center gap-2">
+                  <span class="h-3 w-3 rounded-full bg-success-500 flex-shrink-0"></span>
+                  <span class="text-theme-sm text-gray-600 dark:text-gray-400">Active</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-theme-sm font-semibold text-gray-800 dark:text-white/90">{{ active }}</span>
+                  <span class="text-xs text-gray-400 dark:text-gray-600">{{ percent(active) }}</span>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between gap-8 sm:gap-12">
+                <div class="flex items-center gap-2">
+                  <span class="h-3 w-3 rounded-full bg-warning-500 flex-shrink-0"></span>
+                  <span class="text-theme-sm text-gray-600 dark:text-gray-400">Pending</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-theme-sm font-semibold text-gray-800 dark:text-white/90">{{ pending }}</span>
+                  <span class="text-xs text-gray-400 dark:text-gray-600">{{ percent(pending) }}</span>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between gap-8 sm:gap-12">
+                <div class="flex items-center gap-2">
+                  <span class="h-3 w-3 rounded-full bg-gray-400 flex-shrink-0"></span>
+                  <span class="text-theme-sm text-gray-600 dark:text-gray-400">Discharged</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-theme-sm font-semibold text-gray-800 dark:text-white/90">{{ discharged }}</span>
+                  <span class="text-xs text-gray-400 dark:text-gray-600">{{ percent(discharged) }}</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Bar Chart: Monthly Admissions ── -->
+        <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-theme-sm dark:border-gray-800 dark:bg-white/[0.03]">
+          <h3 class="mb-1 text-base font-semibold text-gray-800 dark:text-white/90">Monthly Admissions</h3>
+          <p class="mb-6 text-theme-sm text-gray-500 dark:text-gray-400">Last 6 months</p>
+
+          <div class="flex h-40 items-end gap-3">
+            <div *ngFor="let m of monthlyAdmissions"
+                 class="flex flex-1 flex-col items-center gap-2">
+              <span class="text-xs font-medium text-gray-600 dark:text-gray-400">{{ m.count }}</span>
+              <div class="w-full rounded-t-lg bg-brand-100 dark:bg-brand-500/20 relative overflow-hidden"
+                   [style.height.%]="100">
+                <div class="absolute bottom-0 w-full rounded-t-lg bg-brand-500 dark:bg-brand-400 transition-all duration-500"
+                     [style.height]="barWidth(m.count)"></div>
+              </div>
+              <span class="text-xs text-gray-400 dark:text-gray-600 whitespace-nowrap">{{ m.label }}</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ══════════ STATUS PROGRESS BARS ══════════ -->
+      <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-theme-sm dark:border-gray-800 dark:bg-white/[0.03]">
+        <h3 class="mb-1 text-base font-semibold text-gray-800 dark:text-white/90">Status Overview</h3>
+        <p class="mb-6 text-theme-sm text-gray-500 dark:text-gray-400">Proportion of each status across all hospitalizations</p>
+
+        <div class="space-y-5">
+
+          <!-- Active bar -->
+          <div>
+            <div class="mb-2 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="h-2 w-2 rounded-full bg-success-500"></span>
+                <span class="text-theme-sm font-medium text-gray-700 dark:text-gray-300">Active</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-theme-sm font-semibold text-gray-800 dark:text-white/90">{{ active }}</span>
+                <span class="w-10 text-right text-xs text-gray-400 dark:text-gray-600">{{ percent(active) }}</span>
+              </div>
+            </div>
+            <div class="h-2 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
+              <div class="h-full rounded-full bg-success-500 transition-all duration-700"
+                   [style.width]="percent(active)"></div>
+            </div>
+          </div>
+
+          <!-- Pending bar -->
+          <div>
+            <div class="mb-2 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="h-2 w-2 rounded-full bg-warning-500"></span>
+                <span class="text-theme-sm font-medium text-gray-700 dark:text-gray-300">Pending</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-theme-sm font-semibold text-gray-800 dark:text-white/90">{{ pending }}</span>
+                <span class="w-10 text-right text-xs text-gray-400 dark:text-gray-600">{{ percent(pending) }}</span>
+              </div>
+            </div>
+            <div class="h-2 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
+              <div class="h-full rounded-full bg-warning-500 transition-all duration-700"
+                   [style.width]="percent(pending)"></div>
+            </div>
+          </div>
+
+          <!-- Discharged bar -->
+          <div>
+            <div class="mb-2 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="h-2 w-2 rounded-full bg-gray-400"></span>
+                <span class="text-theme-sm font-medium text-gray-700 dark:text-gray-300">Discharged</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-theme-sm font-semibold text-gray-800 dark:text-white/90">{{ discharged }}</span>
+                <span class="w-10 text-right text-xs text-gray-400 dark:text-gray-600">{{ percent(discharged) }}</span>
+              </div>
+            </div>
+            <div class="h-2 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
+              <div class="h-full rounded-full bg-gray-400 transition-all duration-700"
+                   [style.width]="percent(discharged)"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Avg stay -->
+        <div class="mt-6 flex items-center gap-3 rounded-xl border border-gray-100 bg-gray-50 px-4 py-3 dark:border-gray-800 dark:bg-white/[0.02]">
+          <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-50 dark:bg-brand-500/[0.12]">
+            <svg class="h-4 w-4 text-brand-500 dark:text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </span>
+          <div>
+            <p class="text-xs text-gray-500 dark:text-gray-400">Average Stay Duration</p>
+            <p class="text-theme-sm font-semibold text-gray-800 dark:text-white/90">
+              {{ avgStayDays > 0 ? avgStayDays + ' days' : 'N/A' }}
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>

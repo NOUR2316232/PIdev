@@ -7,15 +7,16 @@ import { LabelComponent } from '../../form/label/label.component';
 import { ModalComponent } from '../../ui/modal/modal.component';
 
 @Component({
-  selector: 'app-user-info-card',
-  imports: [
-    InputFieldComponent,
-    ButtonComponent,
-    LabelComponent,
-    ModalComponent
-],
-  templateUrl: './user-info-card.component.html',
-  styles: ``
+    selector: 'app-user-info-card',
+    imports: [
+        InputFieldComponent,
+        ButtonComponent,
+        LabelComponent,
+        ModalComponent
+    ],
+    templateUrl: './user-info-card.component.html',
+    standalone: true,
+    styles: ``
 })
 export class UserInfoCardComponent {
 

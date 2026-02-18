@@ -12,8 +12,9 @@ import { UserAddressCardComponent } from '../../shared/components/user-profile/u
     UserMetaCardComponent,
     UserInfoCardComponent,
     UserAddressCardComponent
-],
+  ],
   templateUrl: './profile.component.html',
+  standalone: true,
   styles: ``
 })
 export class ProfileComponent {

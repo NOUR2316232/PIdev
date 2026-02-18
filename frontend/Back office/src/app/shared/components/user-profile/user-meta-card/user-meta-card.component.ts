@@ -6,14 +6,15 @@ import { ModalComponent } from '../../ui/modal/modal.component';
 import { ButtonComponent } from '../../ui/button/button.component';
 
 @Component({
-  selector: 'app-user-meta-card',
-  imports: [
-    ModalComponent,
-    InputFieldComponent,
-    ButtonComponent
-],
-  templateUrl: './user-meta-card.component.html',
-  styles: ``
+    selector: 'app-user-meta-card',
+    imports: [
+        ModalComponent,
+        InputFieldComponent,
+        ButtonComponent
+    ],
+    templateUrl: './user-meta-card.component.html',
+    standalone: true,
+    styles: ``
 })
 export class UserMetaCardComponent {
 
