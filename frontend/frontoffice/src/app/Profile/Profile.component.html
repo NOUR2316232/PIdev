@@ -1,0 +1,253 @@
+<div class="profile-page">
+  <div class="container-fluid py-5">
+    <div class="container" style="max-width: 900px;">
+
+      <!-- ══════════ LOADING ══════════ -->
+      <div *ngIf="loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="text-muted mt-3 small">Loading your profile…</p>
+      </div>
+
+      <ng-container *ngIf="!loading && profile">
+
+        <!-- ══════════ PROFILE HERO ══════════ -->
+        <div class="profile-hero mb-4">
+          <div class="hero-bg"></div>
+          <div class="hero-content d-flex align-items-end gap-4 flex-wrap">
+
+            <div class="avatar-wrap">
+              <div class="avatar-circle">{{ initials }}</div>
+              <span class="avatar-status" [class.verified]="emailVerified"
+                    [title]="emailVerified ? 'Email verified' : 'Email not verified'">
+                <i class="bi" [class.bi-check-lg]="emailVerified" [class.bi-exclamation-lg]="!emailVerified"></i>
+              </span>
+            </div>
+
+            <div class="hero-info flex-grow-1">
+              <div class="hero-name">{{ fullName }}</div>
+              <div class="d-flex align-items-center gap-3 flex-wrap mt-1">
+                <span class="hero-role-badge">{{ primaryRole }}</span>
+                <span class="hero-meta"><i class="bi bi-envelope me-1"></i>{{ profile.email || '—' }}</span>
+                <span class="hero-meta"><i class="bi bi-person me-1"></i>{{ profile.username }}</span>
+              </div>
+            </div>
+
+            <div *ngIf="!emailVerified" class="verify-chip">
+              <i class="bi bi-shield-exclamation me-1"></i>Email not verified
+            </div>
+            <div *ngIf="emailVerified" class="verified-chip">
+              <i class="bi bi-shield-check me-1"></i>Verified
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ══════════ TABS ══════════ -->
+        <div class="profile-tabs mb-4">
+          <button class="profile-tab" [class.active]="activeTab === 'info'"     (click)="activeTab = 'info'">
+            <i class="bi bi-person-fill me-2"></i>My Information
+          </button>
+          <button class="profile-tab" [class.active]="activeTab === 'password'" (click)="activeTab = 'password'">
+            <i class="bi bi-lock-fill me-2"></i>Change Password
+          </button>
+          <button class="profile-tab" [class.active]="activeTab === 'security'" (click)="activeTab = 'security'">
+            <i class="bi bi-shield-fill me-2"></i>Security
+          </button>
+        </div>
+
+        <!-- ══════════ TAB: MY INFORMATION ══════════ -->
+        <div *ngIf="activeTab === 'info'" class="profile-card animate-in">
+          <div class="profile-card-header">
+            <i class="bi bi-person-lines-fill me-2"></i>Account Details
+          </div>
+          <div class="profile-card-body">
+            <div class="row g-4">
+
+              <div class="col-md-6">
+                <div class="info-field">
+                  <div class="info-label"><i class="bi bi-type me-1"></i>First Name</div>
+                  <div class="info-value">{{ profile.firstName || '—' }}</div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="info-field">
+                  <div class="info-label"><i class="bi bi-type me-1"></i>Last Name</div>
+                  <div class="info-value">{{ profile.lastName || '—' }}</div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="info-field">
+                  <div class="info-label"><i class="bi bi-at me-1"></i>Username</div>
+                  <div class="info-value">{{ profile.username }}</div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="info-field">
+                  <div class="info-label"><i class="bi bi-envelope me-1"></i>Email</div>
+                  <div class="info-value d-flex align-items-center gap-2 flex-wrap">
+                    {{ profile.email || '—' }}
+                    <span *ngIf="emailVerified"  class="badge-inline badge-verified">✓ Verified</span>
+                    <span *ngIf="!emailVerified" class="badge-inline badge-unverified">⚠ Unverified</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="info-field">
+                  <div class="info-label"><i class="bi bi-fingerprint me-1"></i>User ID</div>
+                  <div class="info-value mono">{{ profile.id }}</div>
+                </div>
+              </div>
+
+              <div class="col-12" *ngIf="roles.length > 0">
+                <div class="info-field">
+                  <div class="info-label"><i class="bi bi-shield me-1"></i>Assigned Roles</div>
+                  <div class="d-flex flex-wrap gap-2 mt-1">
+                    <span *ngFor="let r of roles" class="role-pill">{{ r }}</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ══════════ TAB: CHANGE PASSWORD ══════════ -->
+        <div *ngIf="activeTab === 'password'" class="profile-card animate-in">
+          <div class="profile-card-header">
+            <i class="bi bi-lock-fill me-2"></i>Change Password
+          </div>
+          <div class="profile-card-body">
+
+            <!-- Explanation card -->
+            <div class="pw-redirect-card">
+              <div class="pw-redirect-icon">
+                <i class="bi bi-shield-lock-fill"></i>
+              </div>
+              <div class="pw-redirect-content">
+                <div class="pw-redirect-title">Secure Password Change</div>
+                <div class="pw-redirect-desc">
+                  To keep your account secure, password changes are handled through
+                  the Keycloak Account Console. You'll be asked to enter your
+                  current password before setting a new one.
+                </div>
+                <div class="d-flex gap-3 flex-wrap mt-4">
+                  <button class="btn-primary-custom" (click)="openPasswordChange()">
+                    <i class="bi bi-box-arrow-up-right me-2"></i>Change Password
+                  </button>
+                  <a [href]="keycloakAccountUrl" target="_blank" rel="noopener" class="btn-secondary-custom">
+                    <i class="bi bi-person-gear me-2"></i>Manage Account
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- What to expect steps -->
+            <div class="steps-card mt-4">
+              <div class="steps-title">What to expect</div>
+              <div class="steps-list">
+                <div class="step-item">
+                  <div class="step-number">1</div>
+                  <div class="step-text">A new tab opens with the Keycloak Account Console</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-number">2</div>
+                  <div class="step-text">Click <strong>Signing In</strong> → <strong>Update</strong> next to Password</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-number">3</div>
+                  <div class="step-text">Enter your current password then set your new password</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-number">4</div>
+                  <div class="step-text">Return here — your new password is active immediately</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ══════════ TAB: SECURITY ══════════ -->
+        <div *ngIf="activeTab === 'security'" class="profile-card animate-in">
+          <div class="profile-card-header">
+            <i class="bi bi-shield-fill me-2"></i>Security & Verification
+          </div>
+          <div class="profile-card-body">
+
+            <!-- Email verification -->
+            <div class="security-section">
+              <div class="security-section-icon"
+                   [class.icon-verified]="emailVerified"
+                   [class.icon-warning]="!emailVerified">
+                <i class="bi"
+                   [class.bi-envelope-check-fill]="emailVerified"
+                   [class.bi-envelope-exclamation-fill]="!emailVerified"></i>
+              </div>
+              <div class="flex-grow-1">
+                <div class="security-section-title">Email Verification</div>
+                <div class="security-section-desc">
+                  <span *ngIf="emailVerified" class="text-success">
+                    Your email <strong>{{ profile.email }}</strong> has been verified.
+                  </span>
+                  <span *ngIf="!emailVerified" class="text-warning-custom">
+                    Your email <strong>{{ profile.email }}</strong> is not verified.
+                    Please verify it to secure your account.
+                  </span>
+                </div>
+
+                <div *ngIf="verifyMsg" class="feedback-banner mt-3"
+                     [class.feedback-success]="verifyMsg!.type === 'success'"
+                     [class.feedback-error]="verifyMsg!.type === 'error'">
+                  <i class="bi me-2"
+                     [class.bi-check-circle-fill]="verifyMsg!.type === 'success'"
+                     [class.bi-x-circle-fill]="verifyMsg!.type === 'error'"></i>
+                  {{ verifyMsg!.text }}
+                  <button class="btn-close-banner" (click)="dismissVerifyMsg()"><i class="bi bi-x"></i></button>
+                </div>
+
+                <button *ngIf="!emailVerified" class="btn-primary-custom mt-3"
+                        (click)="sendVerificationEmail()" [disabled]="sendingVerify">
+                  <span *ngIf="!sendingVerify"><i class="bi bi-send me-2"></i>Send Verification Email</span>
+                  <span *ngIf="sendingVerify">
+                    <span class="spinner-border spinner-border-sm me-2"></span>Sending…
+                  </span>
+                </button>
+
+                <div *ngIf="emailVerified" class="verified-badge-large mt-3">
+                  <i class="bi bi-patch-check-fill me-2"></i>Email Verified
+                </div>
+              </div>
+            </div>
+
+            <hr class="section-divider">
+
+            <!-- Account status -->
+            <div class="security-section">
+              <div class="security-section-icon icon-verified">
+                <i class="bi bi-person-check-fill"></i>
+              </div>
+              <div class="flex-grow-1">
+                <div class="security-section-title">Account Status</div>
+                <div class="security-section-desc">Your account is <strong>active</strong> and in good standing.</div>
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                  <div class="status-chip chip-active">
+                    <i class="bi bi-circle-fill me-1" style="font-size:.5rem"></i>Active
+                  </div>
+                  <div class="status-chip chip-role" *ngFor="let r of roles">
+                    <i class="bi bi-shield me-1"></i>{{ r }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </ng-container>
+    </div>
+  </div>
+</div>

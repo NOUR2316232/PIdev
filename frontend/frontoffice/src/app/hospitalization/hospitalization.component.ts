@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { HospitalizationService } from '../services/hospitalization.service';
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-hospitalization',
@@ -19,10 +20,14 @@ export class HospitalizationComponent implements OnInit {
   sortField: string                = 'date-desc';
   criticalCount: number            = 0;
 
+  private currentUserId: string | null = null;
+  isDoctor = false;   // ← tracks whether the logged-in user is a doctor
+
   constructor(
     private service: HospitalizationService,
     private fb: FormBuilder,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private keycloakService: KeycloakService
   ) {
     this.form = this.fb.group({
       admissionDate:     [''],
@@ -35,7 +40,18 @@ export class HospitalizationComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    try {
+      const profile = await this.keycloakService.loadUserProfile();
+      this.currentUserId = profile.id ?? null;
+    } catch (err) {
+      console.error('Failed to load Keycloak user profile', err);
+      this.currentUserId = null;
+    }
+
+    // Check role AFTER profile is loaded
+    this.isDoctor = this.keycloakService.isUserInRole('doctor');
+
     this.loadAll();
   }
 
@@ -43,7 +59,15 @@ export class HospitalizationComponent implements OnInit {
   loadAll(): void {
     this.service.getAll().subscribe({
       next: (data: any[]) => {
-        this.hospitalizations = data || [];
+        if (this.isDoctor) {
+          // Doctors see ALL hospitalizations with all vital signs
+          this.hospitalizations = data || [];
+        } else {
+          // Patients see only their own records
+          this.hospitalizations = (data || []).filter(h =>
+            String(h.userId) === String(this.currentUserId)
+          );
+        }
         this.applyFilters();
         this.updateCriticalCount();
         this.cdr.detectChanges();
@@ -100,9 +124,9 @@ export class HospitalizationComponent implements OnInit {
   }
 
   clearFilters(): void {
-    this.searchTerm  = '';
+    this.searchTerm   = '';
     this.activeFilter = 'all';
-    this.sortField   = 'date-desc';
+    this.sortField    = 'date-desc';
     this.applyFilters();
   }
 
@@ -124,10 +148,10 @@ export class HospitalizationComponent implements OnInit {
 
   isVsCritical(vs: any): boolean {
     return (
-      (vs.temperature     != null && (vs.temperature > 39 || vs.temperature < 35)) ||
-      (vs.heartRate       != null && (vs.heartRate > 120   || vs.heartRate < 45))  ||
-      (vs.oxygenSaturation!= null &&  vs.oxygenSaturation < 92)                   ||
-      (vs.respiratoryRate != null && (vs.respiratoryRate > 25 || vs.respiratoryRate < 8))
+      (vs.temperature      != null && (vs.temperature > 39    || vs.temperature < 35))    ||
+      (vs.heartRate        != null && (vs.heartRate > 120      || vs.heartRate < 45))      ||
+      (vs.oxygenSaturation != null &&  vs.oxygenSaturation < 92)                          ||
+      (vs.respiratoryRate  != null && (vs.respiratoryRate > 25 || vs.respiratoryRate < 8))
     );
   }
 
@@ -138,10 +162,10 @@ export class HospitalizationComponent implements OnInit {
 
   private isVsAbnormal(vs: any): boolean {
     return (
-      (vs.temperature      != null && (vs.temperature > 38 || vs.temperature < 36))    ||
-      (vs.heartRate        != null && (vs.heartRate > 100   || vs.heartRate < 60))      ||
-      (vs.oxygenSaturation != null &&  vs.oxygenSaturation < 95)                        ||
-      (vs.respiratoryRate  != null && (vs.respiratoryRate > 20 || vs.respiratoryRate < 12))
+      (vs.temperature      != null && (vs.temperature > 38     || vs.temperature < 36))     ||
+      (vs.heartRate        != null && (vs.heartRate > 100       || vs.heartRate < 60))       ||
+      (vs.oxygenSaturation != null &&  vs.oxygenSaturation < 95)                             ||
+      (vs.respiratoryRate  != null && (vs.respiratoryRate > 20  || vs.respiratoryRate < 12))
     );
   }
 
@@ -157,7 +181,7 @@ export class HospitalizationComponent implements OnInit {
 
   getProgressPercent(h: any): number {
     if (!h.admissionDate) return 0;
-    if (!h.dischargeDate) return 100;  // ongoing = full bar
+    if (!h.dischargeDate) return 100;
     const start   = new Date(h.admissionDate).getTime();
     const end     = new Date(h.dischargeDate).getTime();
     const elapsed = Date.now() - start;
@@ -168,10 +192,10 @@ export class HospitalizationComponent implements OnInit {
 
   getVsPosition(h: any, vs: any): number {
     if (!h.admissionDate || !vs.recordDate) return 0;
-    const start   = new Date(h.admissionDate).getTime();
-    const end     = h.dischargeDate ? new Date(h.dischargeDate).getTime() : Date.now();
-    const vsTime  = new Date(vs.recordDate).getTime();
-    const total   = end - start;
+    const start  = new Date(h.admissionDate).getTime();
+    const end    = h.dischargeDate ? new Date(h.dischargeDate).getTime() : Date.now();
+    const vsTime = new Date(vs.recordDate).getTime();
+    const total  = end - start;
     if (total <= 0) return 0;
     return Math.min(95, Math.max(5, Math.round(((vsTime - start) / total) * 100)));
   }

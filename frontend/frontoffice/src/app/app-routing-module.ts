@@ -4,7 +4,8 @@ import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './guards/auth-guard';
 import {DiagnosticComponent} from './diagnostic/diagnostic.component';
 import {HospitalizationComponent} from './hospitalization/hospitalization.component';
-
+import { NotificationsComponent } from './Notifications/Notifications.component';
+import { ProfileComponent } from './Profile/Profile.component';
 
 
 const routes: Routes = [
@@ -21,6 +22,13 @@ const routes: Routes = [
     path: 'hospitalization',
     component: HospitalizationComponent
   },
+  { path: 'notifications', 
+    component: NotificationsComponent 
+  },
+  { path: 'profile', 
+    component: ProfileComponent 
+  },
+  
   {
     path: '**',
     redirectTo: ''

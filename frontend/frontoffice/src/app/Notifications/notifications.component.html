@@ -1,0 +1,149 @@
+<div class="hosp-page">
+  <div class="container-fluid py-5">
+    <div class="container">
+
+      <!-- ══════════ HEADER ══════════ -->
+      <div class="d-flex align-items-start justify-content-between mb-4 flex-wrap gap-3">
+        <div>
+          <p class="portal-label">Medical Alerts</p>
+          <h1 class="page-title d-flex align-items-center gap-2">
+            <i class="bi bi-bell-fill text-danger" style="font-size:1.8rem"></i>
+            Notifications
+          </h1>
+          <p class="page-subtitle">Critical and abnormal vital sign alerts for your patients</p>
+        </div>
+        <button *ngIf="notifications.length > 0" class="btn btn-outline-danger btn-sm rounded-pill" (click)="clearAll()">
+          <i class="bi bi-trash me-1"></i>Clear all
+        </button>
+      </div>
+
+      <!-- ══════════ SUMMARY BANNER ══════════ -->
+      <div class="row g-3 mb-4" *ngIf="notifications.length > 0">
+        <div class="col-6 col-md-3">
+          <div class="stat-card stat-total">
+            <div class="stat-value">{{ notifications.length }}</div>
+            <div class="stat-label">Total Alerts</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-card" style="border-left:3px solid #ef4444;">
+            <div class="stat-value text-danger">{{ criticalCount }}</div>
+            <div class="stat-label">Critical</div>
+            <div class="stat-dot" style="background:#ef4444;"></div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-card stat-pending">
+            <div class="stat-value">{{ warningCount }}</div>
+            <div class="stat-label">Warnings</div>
+            <div class="stat-dot" style="background:#ffc107;"></div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-card stat-active">
+            <div class="stat-value">{{ unreadCount }}</div>
+            <div class="stat-label">Unread</div>
+            <div class="stat-dot" style="background:#20c997;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════ FILTER PILLS ══════════ -->
+      <div class="d-flex gap-2 flex-wrap mb-4" *ngIf="notifications.length > 0">
+        <button class="filter-pill" [class.active]="filterType === 'all'"      (click)="filterType = 'all'">All</button>
+        <button class="filter-pill filter-pill-critical" [class.active]="filterType === 'critical'" (click)="filterType = 'critical'">
+          🔴 Critical
+        </button>
+        <button class="filter-pill filter-pill-pending" [class.active]="filterType === 'warning'"  (click)="filterType = 'warning'">
+          ⚠️ Warnings
+        </button>
+        <button class="filter-pill" [class.active]="filterType === 'unread'"   (click)="filterType = 'unread'">
+          🔵 Unread
+        </button>
+      </div>
+
+      <!-- ══════════ EMPTY STATE ══════════ -->
+      <div *ngIf="notifications.length === 0" class="empty-state text-center py-5">
+        <div class="empty-icon-wrap mb-4">
+          <i class="bi bi-bell-slash" style="font-size:2rem;color:#94a3b8;"></i>
+        </div>
+        <h5 class="text-muted mb-2">No notifications</h5>
+        <p class="text-muted small">All patients are stable. Alerts will appear here automatically when critical vitals are detected.</p>
+      </div>
+
+      <!-- ══════════ NOTIFICATION CARDS ══════════ -->
+      <div class="row g-3" *ngIf="filtered.length > 0">
+        <div class="col-12" *ngFor="let n of filtered">
+          <div class="notif-card" [class.notif-critical]="n.severity === 'critical'" [class.notif-acknowledged]="n.acknowledged">
+
+            <!-- Left accent bar -->
+            <div class="notif-accent" [style.background]="n.severity === 'critical' ? '#ef4444' : '#f59e0b'"></div>
+
+            <div class="notif-body">
+
+              <!-- Top row -->
+              <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+                <div class="d-flex align-items-center gap-3">
+                  <!-- Icon -->
+                  <div class="notif-icon-wrap" [class.notif-icon-critical]="n.severity === 'critical'" [class.notif-icon-warning]="n.severity === 'warning'">
+                    <i class="bi" [class]="getIcon(n.type)"></i>
+                    <span *ngIf="n.severity === 'critical'" class="notif-icon-pulse"></span>
+                  </div>
+                  <!-- Title -->
+                  <div>
+                    <div class="notif-title">{{ n.message }}</div>
+                    <div class="notif-meta">
+                      <span><i class="bi bi-door-open me-1"></i>Room {{ n.roomNumber }}</span>
+                      <span class="mx-2">·</span>
+                      <span><i class="bi bi-person me-1"></i>Patient #{{ n.patientId }}</span>
+                      <span class="mx-2">·</span>
+                      <span><i class="bi bi-clock me-1"></i>{{ getTimeAgo(n.timestamp) }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Severity badge + actions -->
+                <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                  <span class="notif-severity-badge" [class.badge-critical]="n.severity === 'critical'" [class.badge-warning]="n.severity === 'warning'">
+                    {{ n.severity === 'critical' ? '🔴 Critical' : '⚠️ Warning' }}
+                  </span>
+                  <span *ngIf="n.acknowledged" class="notif-ack-badge">
+                    <i class="bi bi-check2-circle me-1"></i>Acknowledged
+                  </span>
+                </div>
+              </div>
+
+              <!-- Detail alerts list -->
+              <div class="notif-details mt-3">
+                <div *ngFor="let detail of n.details" class="notif-detail-item">
+                  <i class="bi bi-arrow-right-short me-1"></i>{{ detail }}
+                </div>
+              </div>
+
+              <!-- Action buttons -->
+              <div class="d-flex gap-2 mt-3 flex-wrap">
+                <button class="btn-notif-action btn-view" (click)="goToPatient(n.hospitalizationId)">
+                  <i class="bi bi-eye me-1"></i>View Patient
+                </button>
+                <button *ngIf="!n.acknowledged" class="btn-notif-action btn-ack" (click)="acknowledge(n.id)">
+                  <i class="bi bi-check2 me-1"></i>Acknowledge
+                </button>
+                <span *ngIf="n.acknowledged" class="notif-ack-text">
+                  <i class="bi bi-check2-all me-1"></i>Acknowledged
+                </span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- No results for filter -->
+      <div *ngIf="filtered.length === 0 && notifications.length > 0" class="text-center py-5 text-muted">
+        <p class="small">No notifications match this filter.</p>
+        <button class="btn btn-link btn-sm p-0" (click)="filterType = 'all'">Show all</button>
+      </div>
+
+    </div>
+  </div>
+</div>

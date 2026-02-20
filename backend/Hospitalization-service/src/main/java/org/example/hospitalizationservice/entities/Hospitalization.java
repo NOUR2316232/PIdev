@@ -44,12 +44,12 @@ public class    Hospitalization {
     @Pattern(regexp = "^(pending|active|discharged)$", message = "Status must be 'pending', 'active' or 'discharged'")
     private String status;
 
-    // After
-    @NotNull(message = "User ID is required")
-    private Long userId;
+    // ✅ After
+    @NotBlank(message = "User ID is required")
+    private String userId;
 
-    @NotNull(message = "Attending doctor ID is required")
-    private Long attendingDoctorId;
+    @NotBlank(message = "Attending doctor ID is required")
+    private String attendingDoctorId;
 
     // One Hospitalization has many VitalSigns
     @OneToMany(mappedBy = "hospitalization", cascade = CascadeType.ALL, orphanRemoval = true)

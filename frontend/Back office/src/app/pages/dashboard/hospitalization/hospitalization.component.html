@@ -2,19 +2,34 @@
     <div class="mx-auto max-w-7xl">
 
         <!-- ── PAGE HEADER ── -->
-        <div class="mb-8">
-            <p class="text-theme-sm font-medium uppercase tracking-widest text-brand-500 mb-1">
-                Patient Management
-            </p>
-            <h1 class="text-title-md font-semibold text-gray-900 dark:text-white/90">
-                Hospitalization Records
-            </h1>
+        <div class="mb-8 flex flex-wrap items-start justify-between gap-4">
+            <div>
+                <p class="text-theme-sm font-medium uppercase tracking-widest text-brand-500 mb-1">
+                    Patient Management
+                </p>
+                <h1 class="text-title-md font-semibold text-gray-900 dark:text-white/90">
+                    Hospitalization Records
+                </h1>
+            </div>
+
+            <!-- Current user badge (doctor) -->
+            <div class="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-2.5 shadow-theme-xs dark:border-gray-800 dark:bg-white/[0.03]">
+                <div class="flex h-8 w-8 items-center justify-center rounded-full bg-brand-500 text-xs font-bold text-white flex-shrink-0">
+                    {{ currentUserName | slice:0:1 }}
+                </div>
+                <div>
+                    <div class="text-theme-sm font-semibold text-gray-800 dark:text-white/90">{{ currentUserName }}</div>
+                    <div class="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
+                        <span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span>
+                        {{ currentUserRole || 'user' | titlecase }}
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- ══════════════════ FORM CARD ══════════════════ -->
         <div class="mb-8 rounded-2xl border border-gray-200 bg-white shadow-theme-sm dark:border-gray-800 dark:bg-white/[0.03]">
 
-            <!-- Card Header -->
             <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-5 dark:border-gray-800">
                 <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-50 dark:bg-brand-500/[0.12]">
                     <svg class="h-5 w-5 text-brand-500 dark:text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
@@ -27,20 +42,17 @@
                 </h2>
             </div>
 
-            <!-- Card Body -->
             <div class="p-6">
                 <form [formGroup]="form" (ngSubmit)="save()">
 
                     <!-- Row 1 – Dates -->
                     <div class="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
 
-                        <!-- Admission Date -->
                         <div>
                             <label class="mb-1.5 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">
                                 Admission Date <span class="text-error-500">*</span>
                             </label>
-                            <input type="datetime-local" formControlName="admissionDate"
-                                   [max]="todayIso"
+                            <input type="datetime-local" formControlName="admissionDate" [max]="todayIso"
                                    [ngClass]="fieldError('admissionDate','required')
                                      ? 'border-error-300 ring-4 ring-error-500/10 dark:border-error-600'
                                      : 'border-gray-200 dark:border-gray-700'"
@@ -56,7 +68,6 @@
                             </p>
                         </div>
 
-                        <!-- Discharge Date -->
                         <div>
                             <label class="mb-1.5 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">
                                 Discharge Date
@@ -82,7 +93,6 @@
                     <!-- Row 2 – Room / Reason -->
                     <div class="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
 
-                        <!-- Room Number -->
                         <div>
                             <label class="mb-1.5 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">
                                 Room Number <span class="text-error-500">*</span>
@@ -110,7 +120,6 @@
                             </p>
                         </div>
 
-                        <!-- Admission Reason -->
                         <div>
                             <label class="mb-1.5 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">
                                 Admission Reason <span class="text-error-500">*</span>
@@ -129,18 +138,11 @@
                                 </svg>
                                 Admission reason is required
                             </p>
-                            <p *ngIf="fieldError('admissionReason','maxlength')"
-                               class="mt-1.5 flex items-center gap-1 text-xs text-error-600 dark:text-error-400">
-                                <svg class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
-                                </svg>
-                                Maximum 255 characters
-                            </p>
                         </div>
 
                     </div>
 
-                    <!-- Row 3 – Status / Patient ID / Doctor ID -->
+                    <!-- Row 3 – Status / Patient dropdown / Doctor auto-filled -->
                     <div class="mb-7 grid grid-cols-1 gap-5 sm:grid-cols-3">
 
                         <!-- Status -->
@@ -169,46 +171,163 @@
                             </p>
                         </div>
 
-                        <!-- Patient ID -->
+                        <!-- ═══ PATIENT DROPDOWN (from Keycloak users with "patient" role) ═══ -->
                         <div>
                             <label class="mb-1.5 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">
-                                Patient ID <span class="text-error-500">*</span>
+                                Patient <span class="text-error-500">*</span>
                             </label>
-                            <input type="number" formControlName="userId" placeholder="Patient ID" min="1"
-                                   [ngClass]="(fieldError('userId','required') || fieldError('userId','min'))
-                                     ? 'border-error-300 ring-4 ring-error-500/10 dark:border-error-600'
-                                     : 'border-gray-200 dark:border-gray-700'"
-                                   class="w-full rounded-xl bg-gray-50 px-4 py-2.5 text-theme-sm text-gray-800
-                                          placeholder-gray-400 outline-none transition focus:border-brand-300 focus:bg-white focus:ring-4 focus:ring-brand-500/10
-                                          dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 dark:focus:bg-white/[0.03]"/>
-                            <p *ngIf="fieldError('userId','required') || fieldError('userId','min')"
+
+                            <!-- Hidden form control -->
+                            <input type="hidden" formControlName="userId"/>
+
+                            <!-- Loading state -->
+                            <div *ngIf="patientsLoading"
+                                 class="flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-theme-sm text-gray-400 dark:border-gray-700 dark:bg-gray-900">
+                                <svg class="h-4 w-4 animate-spin text-brand-400" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                                </svg>
+                                Loading patients…
+                            </div>
+
+                            <!-- Dropdown trigger: show selected patient or placeholder -->
+                            <div *ngIf="!patientsLoading" class="relative">
+
+                                <!-- Selected patient display -->
+                                <button *ngIf="selectedPatient" type="button"
+                                        (click)="openDropdown()"
+                                        class="flex w-full items-center gap-3 rounded-xl border border-brand-300 bg-brand-50 px-4 py-2.5
+                                               text-left transition hover:bg-brand-100 focus:outline-none focus:ring-4 focus:ring-brand-500/10
+                                               dark:border-brand-700 dark:bg-brand-500/10 dark:hover:bg-brand-500/20">
+                                    <div class="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-brand-500 text-xs font-bold text-white">
+                                        {{ getInitials(selectedPatient) }}
+                                    </div>
+                                    <div class="min-w-0 flex-1 text-left">
+                                        <div class="text-theme-sm font-semibold text-gray-800 dark:text-white/90 truncate">
+                                            {{ patientDisplayName(selectedPatient) }}
+                                        </div>
+                                        <div class="font-mono text-xs text-gray-400 dark:text-gray-500 truncate">
+                                            {{ selectedPatient.email || selectedPatient.username }}
+                                        </div>
+                                    </div>
+                                    <button type="button" (click)="$event.stopPropagation(); clearPatient()"
+                                            class="flex-shrink-0 rounded-full p-0.5 text-gray-400 hover:bg-error-100 hover:text-error-500 transition">
+                                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                    </button>
+                                </button>
+
+                                <!-- No patient selected: open dropdown -->
+                                <button *ngIf="!selectedPatient && !dropdownOpen" type="button"
+                                        (click)="openDropdown()"
+                                        [ngClass]="fieldError('userId','required')
+                                          ? 'border-error-300 ring-4 ring-error-500/10 dark:border-error-600'
+                                          : 'border-gray-200 dark:border-gray-700'"
+                                        class="flex w-full items-center gap-3 rounded-xl bg-gray-50 px-4 py-2.5
+                                               text-left text-gray-400 transition hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-brand-500/10
+                                               dark:bg-gray-900 dark:text-white/30 dark:hover:bg-gray-800">
+                                    <svg class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                    </svg>
+                                    <span class="text-theme-sm">Select a patient…</span>
+                                    <svg class="ml-auto h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </button>
+
+                                <!-- Open dropdown panel -->
+                                <div *ngIf="dropdownOpen"
+                                     class="absolute left-0 right-0 top-0 z-50 overflow-hidden rounded-xl border border-brand-200 bg-white shadow-lg dark:border-brand-700 dark:bg-gray-900">
+
+                                    <!-- Search inside dropdown -->
+                                    <div class="border-b border-gray-100 p-2 dark:border-gray-800">
+                                        <div class="relative">
+                                            <svg class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
+                                                 fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 115 11a6 6 0 0112 0z"/>
+                                            </svg>
+                                            <input type="text" [(ngModel)]="patientSearch" [ngModelOptions]="{standalone: true}"
+                                                   placeholder="Search patients…" autofocus
+                                                   class="w-full rounded-lg bg-gray-50 py-2 pl-9 pr-4 text-theme-sm text-gray-700
+                                                          placeholder-gray-400 outline-none focus:bg-white dark:bg-gray-800 dark:text-white/90 dark:placeholder:text-white/30"/>
+                                        </div>
+                                    </div>
+
+                                    <!-- Patient list -->
+                                    <div class="max-h-52 overflow-y-auto">
+
+                                        <div *ngIf="filteredPatients.length === 0"
+                                             class="px-4 py-6 text-center text-sm text-gray-400 dark:text-gray-600">
+                                            No patients found
+                                        </div>
+
+                                        <button *ngFor="let u of filteredPatients"
+                                                type="button"
+                                                (click)="selectPatient(u)"
+                                                class="flex w-full items-center gap-3 px-4 py-2.5 text-left transition
+                                                       hover:bg-brand-50 dark:hover:bg-brand-500/10">
+                                            <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-brand-500 text-xs font-bold text-white">
+                                                {{ getInitials(u) }}
+                                            </div>
+                                            <div class="min-w-0">
+                                                <div class="text-theme-sm font-semibold text-gray-800 dark:text-white/90 truncate">
+                                                    {{ patientDisplayName(u) }}
+                                                </div>
+                                                <div class="text-xs text-gray-400 dark:text-gray-500 truncate">
+                                                    {{ u.email || u.username }}
+                                                </div>
+                                            </div>
+                                        </button>
+
+                                    </div>
+
+                                    <!-- Close -->
+                                    <div class="border-t border-gray-100 p-2 dark:border-gray-800">
+                                        <button type="button" (click)="dropdownOpen = false"
+                                                class="w-full rounded-lg py-1.5 text-center text-xs text-gray-400 hover:text-gray-600 transition dark:text-gray-600 dark:hover:text-gray-400">
+                                            Close
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <p *ngIf="fieldError('userId','required')"
                                class="mt-1.5 flex items-center gap-1 text-xs text-error-600 dark:text-error-400">
                                 <svg class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
                                 </svg>
-                                Valid patient ID required (≥ 1)
+                                Please select a patient
                             </p>
                         </div>
 
-                        <!-- Doctor ID -->
+                        <!-- ═══ ATTENDING DOCTOR — auto-filled from Keycloak login ═══ -->
                         <div>
                             <label class="mb-1.5 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">
-                                Attending Doctor ID <span class="text-error-500">*</span>
+                                Attending Doctor
                             </label>
-                            <input type="number" formControlName="attendingDoctorId" placeholder="Doctor ID" min="1"
-                                   [ngClass]="(fieldError('attendingDoctorId','required') || fieldError('attendingDoctorId','min'))
-                                     ? 'border-error-300 ring-4 ring-error-500/10 dark:border-error-600'
-                                     : 'border-gray-200 dark:border-gray-700'"
-                                   class="w-full rounded-xl bg-gray-50 px-4 py-2.5 text-theme-sm text-gray-800
-                                          placeholder-gray-400 outline-none transition focus:border-brand-300 focus:bg-white focus:ring-4 focus:ring-brand-500/10
-                                          dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 dark:focus:bg-white/[0.03]"/>
-                            <p *ngIf="fieldError('attendingDoctorId','required') || fieldError('attendingDoctorId','min')"
-                               class="mt-1.5 flex items-center gap-1 text-xs text-error-600 dark:text-error-400">
-                                <svg class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
+                            <!-- Read-only display -->
+                            <div class="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-100 px-4 py-2.5
+                                        dark:border-gray-700 dark:bg-gray-800">
+                                <div class="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-brand-500 text-xs font-bold text-white">
+                                    {{ currentUserName | slice:0:1 }}
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <div class="truncate text-theme-sm font-semibold text-gray-800 dark:text-white/90">
+                                        Dr. {{ currentUserName }}
+                                    </div>
+                                    <div class="truncate font-mono text-xs text-gray-400 dark:text-gray-500">
+                                        {{ currentUserId || '—' }}
+                                    </div>
+                                </div>
+                                <!-- Lock icon -->
+                                <svg class="h-4 w-4 flex-shrink-0 text-gray-400 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                 </svg>
-                                Valid doctor ID required (≥ 1)
-                            </p>
+                            </div>
+                            <!-- Hidden control -->
+                            <input type="hidden" formControlName="attendingDoctorId"/>
                         </div>
 
                     </div>
@@ -216,7 +335,6 @@
                     <!-- ══════════ VITAL SIGNS SECTION ══════════ -->
                     <div class="mb-7">
 
-                        <!-- Section header -->
                         <div class="flex items-center justify-between mb-4">
                             <div class="flex items-center gap-2">
                                 <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-50 dark:bg-brand-500/[0.12]">
@@ -241,7 +359,6 @@
                             </button>
                         </div>
 
-                        <!-- Empty vital signs state -->
                         <div *ngIf="vitalSigns.length === 0"
                              class="flex flex-col items-center justify-center rounded-xl border border-dashed border-gray-200 py-8 dark:border-gray-700">
                             <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-100 mb-3 dark:bg-gray-800">
@@ -254,20 +371,21 @@
                             <p class="text-xs text-gray-400 dark:text-gray-600 mt-1">Click "Add Vital Sign" to record one</p>
                         </div>
 
-                        <!-- Vital sign entries -->
                         <div formArrayName="vitalSignsRecords" class="space-y-4">
                             <div *ngFor="let vs of vitalSigns.controls; let i = index"
                                  [formGroupName]="i"
                                  class="rounded-xl border border-gray-200 bg-gray-50/50 p-5 dark:border-gray-700 dark:bg-white/[0.02]">
 
-                                <!-- Entry header -->
                                 <div class="flex items-center justify-between mb-4">
-                                    <span class="flex items-center gap-2 text-theme-sm font-semibold text-gray-700 dark:text-gray-300">
+                                    <div class="flex items-center gap-2">
                                         <span class="flex h-6 w-6 items-center justify-center rounded-full bg-brand-500 text-xs font-bold text-white dark:bg-brand-400">
                                             {{ i + 1 }}
                                         </span>
-                                        Vital Sign Record
-                                    </span>
+                                        <span class="text-theme-sm font-semibold text-gray-700 dark:text-gray-300">Vital Sign Record</span>
+                                        <span class="hidden sm:inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-500 dark:bg-white/[0.06] dark:text-gray-400">
+                                            by {{ vsField(i,'recordedBy')?.value || currentUserName }}
+                                        </span>
+                                    </div>
                                     <button type="button" (click)="removeVitalSign(i)"
                                             class="inline-flex items-center gap-1 rounded-lg border border-error-100 bg-error-50 px-2.5 py-1 text-xs
                                                    font-medium text-error-600 transition hover:bg-error-100
@@ -279,22 +397,15 @@
                                     </button>
                                 </div>
 
-                                <!-- Row 1: Record Date + Recorded By -->
                                 <div class="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-
-                                    <!-- Record Date -->
                                     <div>
                                         <label class="mb-1.5 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">
                                             Record Date <span class="text-error-500">*</span>
                                         </label>
-                                        <input type="datetime-local" formControlName="recordDate"
-                                               [max]="todayIso"
-                                               [ngClass]="vsHasError(i,'recordDate','required')
-                                                 ? 'border-error-300 ring-4 ring-error-500/10 dark:border-error-600'
-                                                 : 'border-gray-200 dark:border-gray-700'"
-                                               class="w-full rounded-xl bg-white px-4 py-2.5 text-theme-sm text-gray-800
-                                                      outline-none transition focus:border-brand-300 focus:ring-4 focus:ring-brand-500/10
-                                                      dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"/>
+                                        <input type="datetime-local" formControlName="recordDate" [max]="todayIso"
+                                               [ngClass]="vsHasError(i,'recordDate','required') ? 'border-error-300 ring-4 ring-error-500/10' : 'border-gray-200 dark:border-gray-700'"
+                                               class="w-full rounded-xl bg-white px-4 py-2.5 text-theme-sm text-gray-800 outline-none transition
+                                                      focus:border-brand-300 focus:ring-4 focus:ring-brand-500/10 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"/>
                                         <p *ngIf="vsHasError(i,'recordDate','required')"
                                            class="mt-1.5 flex items-center gap-1 text-xs text-error-600 dark:text-error-400">
                                             <svg class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -303,199 +414,69 @@
                                             Record date is required
                                         </p>
                                     </div>
-
-                                    <!-- Recorded By -->
                                     <div>
-                                        <label class="mb-1.5 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">
-                                            Recorded By
-                                        </label>
-                                        <input type="text" formControlName="recordedBy" placeholder="Nurse / Doctor name"
+                                        <label class="mb-1.5 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">Recorded By</label>
+                                        <input type="text" formControlName="recordedBy" [placeholder]="currentUserName"
                                                class="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-theme-sm text-gray-800
                                                       placeholder-gray-400 outline-none transition focus:border-brand-300 focus:ring-4 focus:ring-brand-500/10
                                                       dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"/>
                                     </div>
-
                                 </div>
 
-                                <!-- Row 2: Temperature / Blood Pressure / Heart Rate -->
                                 <div class="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
-
-                                    <!-- Temperature -->
                                     <div>
-                                        <label class="mb-1.5 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">
-                                            Temperature (°C) <span class="text-error-500">*</span>
-                                        </label>
-                                        <input type="number" formControlName="temperature" placeholder="e.g. 37.2"
-                                               step="0.1" min="30" max="45"
-                                               [ngClass]="(vsHasError(i,'temperature','required') || vsHasError(i,'temperature','min') || vsHasError(i,'temperature','max'))
-                                                 ? 'border-error-300 ring-4 ring-error-500/10 dark:border-error-600'
-                                                 : 'border-gray-200 dark:border-gray-700'"
-                                               class="w-full rounded-xl bg-white px-4 py-2.5 text-theme-sm text-gray-800
-                                                      placeholder-gray-400 outline-none transition focus:border-brand-300 focus:ring-4 focus:ring-brand-500/10
-                                                      dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"/>
-                                        <p *ngIf="vsHasError(i,'temperature','required')"
-                                           class="mt-1.5 flex items-center gap-1 text-xs text-error-600 dark:text-error-400">
-                                            <svg class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
-                                            </svg>
-                                            Temperature is required
-                                        </p>
-                                        <p *ngIf="vsHasError(i,'temperature','min') || vsHasError(i,'temperature','max')"
-                                           class="mt-1.5 flex items-center gap-1 text-xs text-error-600 dark:text-error-400">
-                                            <svg class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
-                                            </svg>
-                                            Must be between 30 °C and 45 °C
-                                        </p>
+                                        <label class="mb-1.5 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">Temperature (°C) <span class="text-error-500">*</span></label>
+                                        <input type="number" formControlName="temperature" placeholder="e.g. 37.2" step="0.1" min="30" max="45"
+                                               [ngClass]="(vsHasError(i,'temperature','required')||vsHasError(i,'temperature','min')||vsHasError(i,'temperature','max')) ? 'border-error-300 ring-4 ring-error-500/10' : 'border-gray-200 dark:border-gray-700'"
+                                               class="w-full rounded-xl bg-white px-4 py-2.5 text-theme-sm text-gray-800 placeholder-gray-400 outline-none transition focus:border-brand-300 focus:ring-4 focus:ring-brand-500/10 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"/>
+                                        <p *ngIf="vsHasError(i,'temperature','required')" class="mt-1.5 text-xs text-error-600 dark:text-error-400">Required</p>
+                                        <p *ngIf="vsHasError(i,'temperature','min')||vsHasError(i,'temperature','max')" class="mt-1.5 text-xs text-error-600 dark:text-error-400">Must be 30–45°C</p>
                                     </div>
-
-                                    <!-- Blood Pressure -->
                                     <div>
-                                        <label class="mb-1.5 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">
-                                            Blood Pressure <span class="text-error-500">*</span>
-                                        </label>
+                                        <label class="mb-1.5 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">Blood Pressure <span class="text-error-500">*</span></label>
                                         <input type="text" formControlName="bloodPressure" placeholder="e.g. 120/80"
-                                               [ngClass]="(vsHasError(i,'bloodPressure','required') || vsHasError(i,'bloodPressure','bloodPressureFormat'))
-                                                 ? 'border-error-300 ring-4 ring-error-500/10 dark:border-error-600'
-                                                 : 'border-gray-200 dark:border-gray-700'"
-                                               class="w-full rounded-xl bg-white px-4 py-2.5 text-theme-sm text-gray-800
-                                                      placeholder-gray-400 outline-none transition focus:border-brand-300 focus:ring-4 focus:ring-brand-500/10
-                                                      dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"/>
-                                        <p *ngIf="vsHasError(i,'bloodPressure','required')"
-                                           class="mt-1.5 flex items-center gap-1 text-xs text-error-600 dark:text-error-400">
-                                            <svg class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
-                                            </svg>
-                                            Blood pressure is required
-                                        </p>
-                                        <p *ngIf="vsHasError(i,'bloodPressure','bloodPressureFormat')"
-                                           class="mt-1.5 flex items-center gap-1 text-xs text-error-600 dark:text-error-400">
-                                            <svg class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
-                                            </svg>
-                                            Format required: systolic/diastolic (e.g. 120/80)
-                                        </p>
+                                               [ngClass]="(vsHasError(i,'bloodPressure','required')||vsHasError(i,'bloodPressure','bloodPressureFormat')) ? 'border-error-300 ring-4 ring-error-500/10' : 'border-gray-200 dark:border-gray-700'"
+                                               class="w-full rounded-xl bg-white px-4 py-2.5 text-theme-sm text-gray-800 placeholder-gray-400 outline-none transition focus:border-brand-300 focus:ring-4 focus:ring-brand-500/10 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"/>
+                                        <p *ngIf="vsHasError(i,'bloodPressure','required')" class="mt-1.5 text-xs text-error-600 dark:text-error-400">Required</p>
+                                        <p *ngIf="vsHasError(i,'bloodPressure','bloodPressureFormat')" class="mt-1.5 text-xs text-error-600 dark:text-error-400">Format: 120/80</p>
                                     </div>
-
-                                    <!-- Heart Rate -->
                                     <div>
-                                        <label class="mb-1.5 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">
-                                            Heart Rate (bpm) <span class="text-error-500">*</span>
-                                        </label>
-                                        <input type="number" formControlName="heartRate" placeholder="e.g. 72"
-                                               min="20" max="300"
-                                               [ngClass]="(vsHasError(i,'heartRate','required') || vsHasError(i,'heartRate','min') || vsHasError(i,'heartRate','max'))
-                                                 ? 'border-error-300 ring-4 ring-error-500/10 dark:border-error-600'
-                                                 : 'border-gray-200 dark:border-gray-700'"
-                                               class="w-full rounded-xl bg-white px-4 py-2.5 text-theme-sm text-gray-800
-                                                      placeholder-gray-400 outline-none transition focus:border-brand-300 focus:ring-4 focus:ring-brand-500/10
-                                                      dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"/>
-                                        <p *ngIf="vsHasError(i,'heartRate','required')"
-                                           class="mt-1.5 flex items-center gap-1 text-xs text-error-600 dark:text-error-400">
-                                            <svg class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
-                                            </svg>
-                                            Heart rate is required
-                                        </p>
-                                        <p *ngIf="vsHasError(i,'heartRate','min') || vsHasError(i,'heartRate','max')"
-                                           class="mt-1.5 flex items-center gap-1 text-xs text-error-600 dark:text-error-400">
-                                            <svg class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
-                                            </svg>
-                                            Must be between 20 and 300 bpm
-                                        </p>
+                                        <label class="mb-1.5 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">Heart Rate (bpm) <span class="text-error-500">*</span></label>
+                                        <input type="number" formControlName="heartRate" placeholder="e.g. 72" min="20" max="300"
+                                               [ngClass]="(vsHasError(i,'heartRate','required')||vsHasError(i,'heartRate','min')||vsHasError(i,'heartRate','max')) ? 'border-error-300 ring-4 ring-error-500/10' : 'border-gray-200 dark:border-gray-700'"
+                                               class="w-full rounded-xl bg-white px-4 py-2.5 text-theme-sm text-gray-800 placeholder-gray-400 outline-none transition focus:border-brand-300 focus:ring-4 focus:ring-brand-500/10 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"/>
+                                        <p *ngIf="vsHasError(i,'heartRate','required')" class="mt-1.5 text-xs text-error-600 dark:text-error-400">Required</p>
+                                        <p *ngIf="vsHasError(i,'heartRate','min')||vsHasError(i,'heartRate','max')" class="mt-1.5 text-xs text-error-600 dark:text-error-400">Must be 20–300 bpm</p>
                                     </div>
-
                                 </div>
 
-                                <!-- Row 3: Respiratory Rate / Oxygen Saturation -->
                                 <div class="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-
-                                    <!-- Respiratory Rate -->
                                     <div>
-                                        <label class="mb-1.5 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">
-                                            Respiratory Rate (/min) <span class="text-error-500">*</span>
-                                        </label>
-                                        <input type="number" formControlName="respiratoryRate" placeholder="e.g. 16"
-                                               min="1" max="100"
-                                               [ngClass]="(vsHasError(i,'respiratoryRate','required') || vsHasError(i,'respiratoryRate','min') || vsHasError(i,'respiratoryRate','max'))
-                                                 ? 'border-error-300 ring-4 ring-error-500/10 dark:border-error-600'
-                                                 : 'border-gray-200 dark:border-gray-700'"
-                                               class="w-full rounded-xl bg-white px-4 py-2.5 text-theme-sm text-gray-800
-                                                      placeholder-gray-400 outline-none transition focus:border-brand-300 focus:ring-4 focus:ring-brand-500/10
-                                                      dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"/>
-                                        <p *ngIf="vsHasError(i,'respiratoryRate','required')"
-                                           class="mt-1.5 flex items-center gap-1 text-xs text-error-600 dark:text-error-400">
-                                            <svg class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
-                                            </svg>
-                                            Respiratory rate is required
-                                        </p>
-                                        <p *ngIf="vsHasError(i,'respiratoryRate','min') || vsHasError(i,'respiratoryRate','max')"
-                                           class="mt-1.5 flex items-center gap-1 text-xs text-error-600 dark:text-error-400">
-                                            <svg class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
-                                            </svg>
-                                            Must be between 1 and 100 /min
-                                        </p>
+                                        <label class="mb-1.5 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">Respiratory Rate (/min) <span class="text-error-500">*</span></label>
+                                        <input type="number" formControlName="respiratoryRate" placeholder="e.g. 16" min="1" max="100"
+                                               [ngClass]="vsHasError(i,'respiratoryRate','required') ? 'border-error-300 ring-4 ring-error-500/10' : 'border-gray-200 dark:border-gray-700'"
+                                               class="w-full rounded-xl bg-white px-4 py-2.5 text-theme-sm text-gray-800 placeholder-gray-400 outline-none transition focus:border-brand-300 focus:ring-4 focus:ring-brand-500/10 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"/>
+                                        <p *ngIf="vsHasError(i,'respiratoryRate','required')" class="mt-1.5 text-xs text-error-600 dark:text-error-400">Required</p>
                                     </div>
-
-                                    <!-- Oxygen Saturation -->
                                     <div>
-                                        <label class="mb-1.5 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">
-                                            Oxygen Saturation (%) <span class="text-error-500">*</span>
-                                        </label>
-                                        <input type="number" formControlName="oxygenSaturation" placeholder="e.g. 98"
-                                               min="0" max="100"
-                                               [ngClass]="(vsHasError(i,'oxygenSaturation','required') || vsHasError(i,'oxygenSaturation','min') || vsHasError(i,'oxygenSaturation','max'))
-                                                 ? 'border-error-300 ring-4 ring-error-500/10 dark:border-error-600'
-                                                 : 'border-gray-200 dark:border-gray-700'"
-                                               class="w-full rounded-xl bg-white px-4 py-2.5 text-theme-sm text-gray-800
-                                                      placeholder-gray-400 outline-none transition focus:border-brand-300 focus:ring-4 focus:ring-brand-500/10
-                                                      dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"/>
-                                        <p *ngIf="vsHasError(i,'oxygenSaturation','required')"
-                                           class="mt-1.5 flex items-center gap-1 text-xs text-error-600 dark:text-error-400">
-                                            <svg class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
-                                            </svg>
-                                            Oxygen saturation is required
-                                        </p>
-                                        <p *ngIf="vsHasError(i,'oxygenSaturation','min') || vsHasError(i,'oxygenSaturation','max')"
-                                           class="mt-1.5 flex items-center gap-1 text-xs text-error-600 dark:text-error-400">
-                                            <svg class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
-                                            </svg>
-                                            Must be between 0% and 100%
-                                        </p>
+                                        <label class="mb-1.5 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">Oxygen Saturation (%) <span class="text-error-500">*</span></label>
+                                        <input type="number" formControlName="oxygenSaturation" placeholder="e.g. 98" min="0" max="100"
+                                               [ngClass]="(vsHasError(i,'oxygenSaturation','required')||vsHasError(i,'oxygenSaturation','min')||vsHasError(i,'oxygenSaturation','max')) ? 'border-error-300 ring-4 ring-error-500/10' : 'border-gray-200 dark:border-gray-700'"
+                                               class="w-full rounded-xl bg-white px-4 py-2.5 text-theme-sm text-gray-800 placeholder-gray-400 outline-none transition focus:border-brand-300 focus:ring-4 focus:ring-brand-500/10 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"/>
+                                        <p *ngIf="vsHasError(i,'oxygenSaturation','required')" class="mt-1.5 text-xs text-error-600 dark:text-error-400">Required</p>
+                                        <p *ngIf="vsHasError(i,'oxygenSaturation','min')||vsHasError(i,'oxygenSaturation','max')" class="mt-1.5 text-xs text-error-600 dark:text-error-400">Must be 0–100%</p>
                                     </div>
-
                                 </div>
 
-                                <!-- Notes -->
                                 <div>
-                                    <label class="mb-1.5 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">
-                                        Notes
-                                    </label>
+                                    <label class="mb-1.5 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">Notes</label>
                                     <textarea formControlName="notes" rows="2" placeholder="Optional clinical notes..."
-                                              [ngClass]="vsHasError(i,'notes','maxlength')
-                                                ? 'border-error-300 ring-4 ring-error-500/10 dark:border-error-600'
-                                                : 'border-gray-200 dark:border-gray-700'"
-                                              class="w-full rounded-xl bg-white px-4 py-2.5 text-theme-sm text-gray-800
+                                              class="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-theme-sm text-gray-800
                                                      placeholder-gray-400 outline-none transition focus:border-brand-300 focus:ring-4 focus:ring-brand-500/10
-                                                     dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30
-                                                     dark:focus:border-brand-800 resize-none"></textarea>
-                                    <div class="mt-1 flex items-center justify-between">
-                                        <p *ngIf="vsHasError(i,'notes','maxlength')"
-                                           class="flex items-center gap-1 text-xs text-error-600 dark:text-error-400">
-                                            <svg class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
-                                            </svg>
-                                            Maximum 255 characters
-                                        </p>
-                                        <p class="ml-auto text-xs text-gray-400 dark:text-gray-600">
-                                            {{ vsField(i,'notes')?.value?.length || 0 }}/255
-                                        </p>
-                                    </div>
+                                                     dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 resize-none"></textarea>
+                                    <p class="mt-1 ml-auto w-fit text-xs text-gray-400 dark:text-gray-600">
+                                        {{ vsField(i,'notes')?.value?.length || 0 }}/255
+                                    </p>
                                 </div>
 
                             </div>
@@ -505,10 +486,8 @@
                     <!-- Actions -->
                     <div class="flex items-center gap-3">
                         <button type="submit"
-                                [disabled]="form.invalid"
                                 class="inline-flex items-center gap-2 rounded-xl bg-brand-500 px-6 py-2.5 text-theme-sm font-medium
-                                       text-white shadow-theme-xs transition hover:bg-brand-600 focus:outline-none focus:ring-4 focus:ring-brand-500/20
-                                       disabled:cursor-not-allowed disabled:opacity-50">
+                                       text-white shadow-theme-xs transition hover:bg-brand-600 focus:outline-none focus:ring-4 focus:ring-brand-500/20">
                             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                             </svg>
@@ -516,7 +495,7 @@
                         </button>
                         <button type="button" (click)="cancel()"
                                 class="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-6 py-2.5 text-theme-sm
-                                       font-medium text-gray-700 shadow-theme-xs transition hover:bg-gray-50 focus:outline-none focus:ring-4 focus:ring-gray-200
+                                       font-medium text-gray-700 shadow-theme-xs transition hover:bg-gray-50
                                        dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03]">
                             Cancel
                         </button>
@@ -529,7 +508,6 @@
         <!-- ══════════════════ TABLE CARD ══════════════════ -->
         <div class="rounded-2xl border border-gray-200 bg-white shadow-theme-sm dark:border-gray-800 dark:bg-white/[0.03]">
 
-            <!-- Card Header -->
             <div class="flex flex-col gap-4 border-b border-gray-100 px-6 py-5 sm:flex-row sm:items-center sm:justify-between dark:border-gray-800">
                 <div class="flex items-center gap-3">
                     <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-50 dark:bg-brand-500/[0.12]">
@@ -540,10 +518,7 @@
                     </span>
                     <h2 class="text-lg font-semibold text-gray-800 dark:text-white/90">Current Hospitalizations</h2>
                 </div>
-
                 <div class="flex items-center gap-3">
-
-                    <!-- Statistics button -->
                     <a routerLink="/statistique-hospitalization"
                        class="inline-flex items-center gap-1.5 rounded-lg border border-brand-200 bg-brand-50 px-3 py-2 text-xs
                               font-medium text-brand-600 shadow-theme-xs transition hover:bg-brand-100 whitespace-nowrap
@@ -554,11 +529,9 @@
                         </svg>
                         Statistics
                     </a>
-
-                    <!-- Search -->
                     <div class="relative w-full sm:w-64">
                         <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center">
-                            <svg class="h-4 w-4 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 115 11a6 6 0 0112 0z"/>
                             </svg>
                         </span>
@@ -567,25 +540,22 @@
                                name="search" [ngModelOptions]="{standalone: true}"
                                class="w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 pl-9 pr-4 text-theme-sm text-gray-700
                                       placeholder-gray-400 outline-none transition focus:border-brand-300 focus:bg-white focus:ring-4 focus:ring-brand-500/10
-                                      dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30
-                                      dark:focus:border-brand-800 dark:focus:bg-white/[0.03]"/>
+                                      dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 dark:focus:bg-white/[0.03]"/>
                     </div>
-
                 </div>
             </div>
 
-            <!-- Table -->
             <div class="overflow-x-auto custom-scrollbar">
                 <table class="w-full text-left text-theme-sm">
                     <thead>
                         <tr class="border-b border-gray-100 bg-gray-50 dark:border-gray-800 dark:bg-gray-900/60">
                             <th class="px-5 py-3.5 font-medium text-gray-500 whitespace-nowrap dark:text-gray-400">ID</th>
+                            <th class="px-5 py-3.5 font-medium text-gray-500 whitespace-nowrap dark:text-gray-400">Patient</th>
                             <th class="px-5 py-3.5 font-medium text-gray-500 whitespace-nowrap dark:text-gray-400">Admission Date</th>
                             <th class="px-5 py-3.5 font-medium text-gray-500 whitespace-nowrap dark:text-gray-400">Discharge Date</th>
                             <th class="px-5 py-3.5 font-medium text-gray-500 whitespace-nowrap dark:text-gray-400">Room</th>
                             <th class="px-5 py-3.5 font-medium text-gray-500 whitespace-nowrap dark:text-gray-400">Reason</th>
                             <th class="px-5 py-3.5 font-medium text-gray-500 whitespace-nowrap dark:text-gray-400">Status</th>
-                            <th class="px-5 py-3.5 font-medium text-gray-500 whitespace-nowrap dark:text-gray-400">Patient ID</th>
                             <th class="px-5 py-3.5 font-medium text-gray-500 whitespace-nowrap dark:text-gray-400">Doctor ID</th>
                             <th class="px-5 py-3.5 font-medium text-gray-500 whitespace-nowrap dark:text-gray-400">Vital Signs</th>
                             <th class="px-5 py-3.5 text-center font-medium text-gray-500 whitespace-nowrap dark:text-gray-400">Actions</th>
@@ -599,46 +569,52 @@
 
                             <td class="px-5 py-4 font-mono text-xs font-medium text-gray-500 dark:text-gray-400">#{{ h.id }}</td>
 
+                            <!-- Patient: avatar + resolved name -->
+                            <td class="px-5 py-4">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-brand-500 text-xs font-bold text-white">
+                                        {{ getPatientInitials(h.userId) }}
+                                    </div>
+                                    <div>
+                                        <div class="whitespace-nowrap text-theme-sm font-semibold text-gray-800 dark:text-white/90">
+                                            {{ getPatientDisplayName(h.userId) }}
+                                        </div>
+                                        <div class="font-mono text-xs text-gray-400 dark:text-gray-500">{{ h.userId }}</div>
+                                    </div>
+                                </div>
+                            </td>
+
                             <td class="px-5 py-4 text-gray-700 whitespace-nowrap dark:text-gray-300">
                                 {{ h.admissionDate ? (h.admissionDate | date:'yyyy-MM-dd HH:mm') : '—' }}
                             </td>
-
                             <td class="px-5 py-4 text-gray-700 whitespace-nowrap dark:text-gray-300">
                                 {{ h.dischargeDate ? (h.dischargeDate | date:'yyyy-MM-dd HH:mm') : '—' }}
                             </td>
-
                             <td class="px-5 py-4 font-medium text-gray-800 dark:text-white/90">{{ h.roomNumber }}</td>
                             <td class="px-5 py-4 text-gray-700 dark:text-gray-300">{{ h.admissionReason }}</td>
 
-                            <!-- Status badge -->
                             <td class="px-5 py-4">
                                 <span *ngIf="h.status === 'active'"
-                                      class="inline-flex items-center gap-1.5 rounded-full bg-success-50 px-2.5 py-0.5 text-xs font-medium text-success-700
-                                             dark:bg-success-500/15 dark:text-success-400">
-                                    <span class="h-1.5 w-1.5 rounded-full bg-success-500 dark:bg-success-400"></span>Active
+                                      class="inline-flex items-center gap-1.5 rounded-full bg-success-50 px-2.5 py-0.5 text-xs font-medium text-success-700 dark:bg-success-500/15 dark:text-success-400">
+                                    <span class="h-1.5 w-1.5 rounded-full bg-success-500"></span>Active
                                 </span>
                                 <span *ngIf="h.status === 'discharged'"
-                                      class="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600
-                                             dark:bg-white/[0.08] dark:text-gray-400">
+                                      class="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600 dark:bg-white/[0.08] dark:text-gray-400">
                                     <span class="h-1.5 w-1.5 rounded-full bg-gray-400"></span>Discharged
                                 </span>
                                 <span *ngIf="h.status === 'pending'"
-                                      class="inline-flex items-center gap-1.5 rounded-full bg-warning-50 px-2.5 py-0.5 text-xs font-medium text-warning-700
-                                             dark:bg-warning-500/15 dark:text-warning-400">
-                                    <span class="h-1.5 w-1.5 rounded-full bg-warning-500 dark:bg-warning-400"></span>Pending
+                                      class="inline-flex items-center gap-1.5 rounded-full bg-warning-50 px-2.5 py-0.5 text-xs font-medium text-warning-700 dark:bg-warning-500/15 dark:text-warning-400">
+                                    <span class="h-1.5 w-1.5 rounded-full bg-warning-500"></span>Pending
                                 </span>
                                 <span *ngIf="h.status !== 'active' && h.status !== 'discharged' && h.status !== 'pending'"
                                       class="text-gray-400 dark:text-gray-600">—</span>
                             </td>
 
-                            <td class="px-5 py-4 text-gray-700 dark:text-gray-300">{{ h.userId }}</td>
-                            <td class="px-5 py-4 text-gray-700 dark:text-gray-300">{{ h.attendingDoctorId }}</td>
+                            <td class="px-5 py-4 text-gray-700 dark:text-gray-300 font-mono text-xs">{{ h.attendingDoctorId }}</td>
 
-                            <!-- Vital Signs count badge -->
                             <td class="px-5 py-4">
                                 <span *ngIf="h.vitalSignsRecords?.length > 0"
-                                      class="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-medium text-brand-600
-                                             dark:bg-brand-500/15 dark:text-brand-400">
+                                      class="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-medium text-brand-600 dark:bg-brand-500/15 dark:text-brand-400">
                                     <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round"
                                               d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
@@ -648,13 +624,11 @@
                                 <span *ngIf="!h.vitalSignsRecords?.length" class="text-gray-400 dark:text-gray-600">—</span>
                             </td>
 
-                            <!-- Action buttons -->
                             <td class="px-5 py-4">
                                 <div class="flex items-center justify-center gap-2">
                                     <button (click)="edit(h)"
-                                            class="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5
-                                                   text-xs font-medium text-gray-700 shadow-theme-xs transition
-                                                   hover:border-brand-300 hover:text-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500/20
+                                            class="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-700
+                                                   shadow-theme-xs transition hover:border-brand-300 hover:text-brand-600
                                                    dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:border-brand-800 dark:hover:text-brand-400">
                                         <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -663,9 +637,8 @@
                                         Edit
                                     </button>
                                     <button (click)="delete(h.id)"
-                                            class="inline-flex items-center gap-1.5 rounded-lg border border-error-100 bg-error-50 px-3 py-1.5
-                                                   text-xs font-medium text-error-600 shadow-theme-xs transition
-                                                   hover:bg-error-100 hover:text-error-700 focus:outline-none focus:ring-2 focus:ring-error-500/20
+                                            class="inline-flex items-center gap-1.5 rounded-lg border border-error-100 bg-error-50 px-3 py-1.5 text-xs font-medium text-error-600
+                                                   shadow-theme-xs transition hover:bg-error-100 hover:text-error-700
                                                    dark:border-error-500/20 dark:bg-error-500/10 dark:text-error-400 dark:hover:bg-error-500/20">
                                         <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -678,7 +651,6 @@
 
                         </tr>
 
-                        <!-- Empty state -->
                         <tr *ngIf="filteredHospitalizations.length === 0">
                             <td colspan="10" class="px-5 py-16 text-center">
                                 <div class="flex flex-col items-center gap-3">
@@ -696,7 +668,6 @@
                     </tbody>
                 </table>
             </div>
-
         </div>
     </div>
 </div>

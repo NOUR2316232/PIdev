@@ -1,6 +1,8 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
+import { Subscription } from 'rxjs';
+import { NotificationService } from '../../services/Notification.service';
 
 @Component({
   selector: 'app-navbar',
@@ -8,25 +10,28 @@ import { KeycloakService } from 'keycloak-angular';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
 
   username: string      = '';
   userEmail: string     = '';
   userFirstName: string = '';
   userLastName: string  = '';
   userRoles: string[]   = [];
-  dropdownOpen: boolean = false;
-  scrolled: boolean     = false;
+  dropdownOpen: boolean  = false;
+  scrolled: boolean      = false;
+  unreadCount: number    = 0;
+  hasCritical: boolean   = false;
+
+  private notifSub?: Subscription;
 
   constructor(
     private router: Router,
-    private keycloakService: KeycloakService
+    private keycloakService: KeycloakService,
+    public notifService: NotificationService
   ) {}
 
   ngOnInit() {
-    // Read directly from the JWT token — no HTTP call needed
     const token: any = this.keycloakService.getKeycloakInstance().tokenParsed;
-
     if (token) {
       this.username      = token['preferred_username'] || '';
       this.userFirstName = token['given_name']         || '';
@@ -34,6 +39,15 @@ export class NavbarComponent implements OnInit {
       this.userEmail     = token['email']              || '';
       this.userRoles     = this.keycloakService.getUserRoles();
     }
+
+    this.notifSub = this.notifService.notifications.subscribe(notifs => {
+      this.unreadCount = notifs.filter(n => !n.read).length;
+      this.hasCritical = notifs.some(n => !n.read && n.severity === 'critical');
+    });
+  }
+
+  ngOnDestroy() {
+    this.notifSub?.unsubscribe();
   }
 
   @HostListener('window:scroll')
@@ -68,6 +82,11 @@ export class NavbarComponent implements OnInit {
     const ignored = ['offline_access', 'uma_authorization', 'default-roles-nephro-realm'];
     const role = this.userRoles.find(r => !ignored.includes(r));
     return role ? role.charAt(0).toUpperCase() + role.slice(1) : 'Patient';
+  }
+
+  goToNotifications() {
+    this.dropdownOpen = false;
+    this.router.navigate(['/notifications']);
   }
 
   goTo(path: string) {
