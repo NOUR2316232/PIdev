@@ -43,19 +43,32 @@ export class HospitalizationComponent implements OnInit {
   searchTerm: string              = '';
   todayIso = new Date().toISOString().slice(0, 16);
 
-  // ── Keycloak current user (doctor) ───────────────────────
+  // ── Keycloak current user ────────────────────────────────────
   currentUserId:   string = '';
   currentUserName: string = '';
   currentUserRole: string = '';
 
   get isDoctor():  boolean { return this.currentUserRole === 'doctor'; }
   get isPatient(): boolean { return this.currentUserRole === 'patient'; }
+  get isNurse():   boolean { return this.currentUserRole === 'nurse'; }
+  get isAdmin():   boolean { return this.currentUserRole === 'admin'; }
 
-  // ── Patients loaded from Keycloak Admin API ───────────────
+  /** Nurses can only edit existing records — they cannot create new ones or delete */
+  get canCreate(): boolean { return !this.isNurse; }
+  get canDelete(): boolean { return !this.isNurse; }
+
+  /** True when the form is open in a mode the current user is allowed to use */
+  get formVisible(): boolean {
+    // Nurses only see the form when they are actively editing a record
+    if (this.isNurse) return this.editingId !== null;
+    return true;
+  }
+
+  // ── Patients loaded from Keycloak Admin API ──────────────────
   patientUsers: KeycloakUser[]   = [];
   patientsLoading                = false;
 
-  // ── Patient search / dropdown state ──────────────────────
+  // ── Patient search / dropdown state ─────────────────────────
   patientSearch     = '';
   dropdownOpen      = false;
   selectedPatient: KeycloakUser | null = null;
@@ -74,6 +87,12 @@ export class HospitalizationComponent implements OnInit {
     'offline_access', 'uma_authorization', 'default-roles-nephro-realm'
   ];
 
+  /** Fields a nurse is NOT allowed to modify — locked on edit */
+  private readonly NURSE_LOCKED_FIELDS = [
+    'admissionDate', 'dischargeDate', 'roomNumber',
+    'admissionReason', 'status', 'userId', 'attendingDoctorId'
+  ];
+
   constructor(
     private service: HospitalizationService,
     private adminService: KeycloakAdminService,
@@ -89,7 +108,7 @@ export class HospitalizationComponent implements OnInit {
   }
 
   // ══════════════════════════════════════════════
-  //  KEYCLOAK — current user (the logged-in doctor)
+  //  KEYCLOAK — current user (logged-in)
   // ══════════════════════════════════════════════
   private loadKeycloakUser(): void {
     const token: any = this.keycloakService.getKeycloakInstance().tokenParsed;
@@ -98,9 +117,21 @@ export class HospitalizationComponent implements OnInit {
     this.currentUserId   = token['sub'] || '';
     this.currentUserName = this.buildName(token);
 
-    const roles: string[] = this.keycloakService.getUserRoles() || [];
-    const primary = roles.find(r => !this.IGNORED_ROLES.includes(r)) || '';
-    this.currentUserRole = primary.toLowerCase();
+    // Collect ALL roles: realm roles + every client's roles from the token directly
+    const realmRoles: string[] = token['realm_access']?.roles || [];
+    const clientAccess: any    = token['resource_access'] || {};
+    const clientRoles: string[] = Object.values(clientAccess)
+      .flatMap((c: any) => c?.roles || []);
+
+    const allRoles = [...realmRoles, ...clientRoles].map((r: string) => r.toLowerCase());
+
+    console.debug('[RoleDetect] All roles found:', allRoles); // remove after debugging
+
+    // Priority order: first match wins
+    const ROLE_PRIORITY = ['admin', 'doctor', 'nurse', 'patient'];
+    this.currentUserRole = ROLE_PRIORITY.find(r => allRoles.includes(r)) || '';
+
+    console.debug('[RoleDetect] Resolved role:', this.currentUserRole); // remove after debugging
   }
 
   private buildName(token: any): string {
@@ -110,6 +141,9 @@ export class HospitalizationComponent implements OnInit {
     return full || token['preferred_username'] || 'Unknown';
   }
 
+  // ── Fallback: patient names extracted from hospitalization records themselves
+  private patientNameCache: Map<string, string> = new Map();
+
   // ══════════════════════════════════════════════
   //  KEYCLOAK ADMIN — load patients list
   // ══════════════════════════════════════════════
@@ -117,15 +151,44 @@ export class HospitalizationComponent implements OnInit {
     this.patientsLoading = true;
     this.adminService.getUsersByRole('patient').subscribe({
       next: users => {
-        this.patientUsers = users;
+        this.patientUsers    = users;
         this.patientsLoading = false;
+        // Build cache from Keycloak users too
+        users.forEach(u => this.patientNameCache.set(u.id, KeycloakAdminService.displayName(u)));
       },
-      error: () => { this.patientsLoading = false; }
+      error: (err) => {
+        this.patientsLoading = false;
+        console.warn('[loadPatients] Could not load patient list (likely 403 for non-admin role):', err?.status, err?.message);
+        // For nurses: fall back to names embedded in hospitalization records
+        this.buildPatientCacheFromHospitalizations();
+      }
+    });
+  }
+
+  /**
+   * When the Keycloak Admin API is inaccessible (e.g. nurse role),
+   * extract whatever patient info the backend already returns in each
+   * hospitalization record (patientFirstName / patientLastName / patientName / userName).
+   */
+  private buildPatientCacheFromHospitalizations(): void {
+    this.hospitalizations.forEach(h => {
+      if (!h.userId) return;
+      // Try common field names your backend might return
+      const name =
+        (h.patientFirstName && h.patientLastName
+          ? `${h.patientFirstName} ${h.patientLastName}`.trim()
+          : null) ||
+        h.patientName ||
+        h.patientFullName ||
+        h.userName ||
+        null;
+      if (name) this.patientNameCache.set(h.userId, name);
     });
   }
 
   // ── Patient dropdown interactions ─────────────
   openDropdown(): void {
+    if (this.isNurse) return; // nurses cannot change patient assignment
     this.dropdownOpen  = true;
     this.patientSearch = '';
   }
@@ -138,6 +201,7 @@ export class HospitalizationComponent implements OnInit {
   }
 
   clearPatient(): void {
+    if (this.isNurse) return; // nurses cannot clear patient assignment
     this.selectedPatient = null;
     this.form.get('userId')?.setValue('');
   }
@@ -163,12 +227,29 @@ export class HospitalizationComponent implements OnInit {
         roomNumber:        ['', [Validators.required, Validators.maxLength(20)]],
         admissionReason:   ['', [Validators.required, Validators.maxLength(255)]],
         status:            ['', Validators.required],
-        userId:            ['', Validators.required],              // filled by patient dropdown
-        attendingDoctorId: [{ value: this.currentUserId, disabled: false }, Validators.required], // auto-filled with doctor's Keycloak ID
+        userId:            ['', Validators.required],
+        attendingDoctorId: [{ value: this.currentUserId, disabled: false }, Validators.required],
         vitalSignsRecords: this.fb.array([])
       },
       { validators: dischargeDateValidator }
     );
+  }
+
+  /**
+   * Lock or unlock form fields based on role.
+   * Nurses: only vitalSignsRecords is editable — all other fields are disabled.
+   * Doctors / Admins: all fields enabled.
+   */
+  private applyRolePermissions(): void {
+    if (this.isNurse) {
+      this.NURSE_LOCKED_FIELDS.forEach(field => {
+        this.form.get(field)?.disable();
+      });
+    } else {
+      this.NURSE_LOCKED_FIELDS.forEach(field => {
+        this.form.get(field)?.enable();
+      });
+    }
   }
 
   // ══════════════════════════════════════════════
@@ -187,7 +268,8 @@ export class HospitalizationComponent implements OnInit {
       respiratoryRate:  [vs?.respiratoryRate  || '', [Validators.required, Validators.min(1),  Validators.max(100)]],
       oxygenSaturation: [vs?.oxygenSaturation || '', [Validators.required, Validators.min(0),  Validators.max(100)]],
       notes:            [vs?.notes            || '', Validators.maxLength(255)],
-      recordedBy:       [vs?.recordedBy       || this.currentUserName]
+      // Existing VS: preserve original recorder name. New VS: stamp with current user.
+      recordedBy:       [{ value: vs?.recordedBy || this.currentUserName, disabled: true }]
     });
   }
 
@@ -210,6 +292,8 @@ export class HospitalizationComponent implements OnInit {
       next: (data: any[]) => {
         this.hospitalizations = data || [];
         this.filterHospitalizations();
+        // Build name cache from embedded data (works for nurses who can't call admin API)
+        this.buildPatientCacheFromHospitalizations();
       },
       error: err => console.error('Error loading hospitalizations', err)
     });
@@ -219,7 +303,7 @@ export class HospitalizationComponent implements OnInit {
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
 
-    const raw = this.form.getRawValue();   // includes disabled attendingDoctorId
+    const raw = this.form.getRawValue(); // includes disabled fields
     const payload = {
       ...raw,
       admissionDate: raw.admissionDate ? raw.admissionDate + ':00' : null,
@@ -239,7 +323,6 @@ export class HospitalizationComponent implements OnInit {
   edit(h: any): void {
     this.editingId = h.id;
 
-    // Restore selected patient from the list
     this.selectedPatient = this.patientUsers.find(u => u.id === h.userId) || null;
 
     this.form.patchValue({
@@ -247,15 +330,22 @@ export class HospitalizationComponent implements OnInit {
       admissionDate:     this.formatDateForInput(h.admissionDate),
       dischargeDate:     this.formatDateForInput(h.dischargeDate),
       status:            h.status?.toLowerCase(),
-      attendingDoctorId: this.currentUserId   // always the logged-in doctor
+      // Preserve the ORIGINAL attending doctor — never overwrite with the current user
+      // (a nurse editing vital signs must not replace the doctor's ID)
+      attendingDoctorId: h.attendingDoctorId || this.currentUserId
     });
 
     this.vitalSigns.clear();
     (h.vitalSignsRecords || []).forEach((vs: any) => this.addVitalSign(vs));
+
+    // Apply role-based field locking AFTER patching values
+    this.applyRolePermissions();
   }
 
   delete(id?: number): void {
-    if (!id || !confirm('Delete this hospitalization record?')) return;
+    if (!id) return;
+    if (this.isNurse) return; // guard: nurses cannot delete
+    if (!confirm('Delete this hospitalization record?')) return;
     this.service.delete(id).subscribe({
       next: () => this.loadAll(),
       error: err => console.error('Error deleting hospitalization', err)
@@ -266,9 +356,10 @@ export class HospitalizationComponent implements OnInit {
     this.editingId       = null;
     this.selectedPatient = null;
     this.form.reset();
-    // Re-apply doctor ID after reset
     this.form.get('attendingDoctorId')?.setValue(this.currentUserId);
     this.vitalSigns.clear();
+    // Re-enable all fields on cancel (nurse fields stay locked only during edit)
+    this.NURSE_LOCKED_FIELDS.forEach(f => this.form.get(f)?.enable());
   }
 
   filterHospitalizations(): void {
@@ -285,13 +376,27 @@ export class HospitalizationComponent implements OnInit {
 
   // ── Table display helpers ─────────────────────
   getPatientDisplayName(userId: string): string {
+    if (!userId) return '—';
+    // 1. Try Keycloak user list (doctors/admins)
     const found = this.patientUsers.find(u => u.id === userId);
-    return found ? KeycloakAdminService.displayName(found) : `User #${userId}`;
+    if (found) return KeycloakAdminService.displayName(found);
+    // 2. Try name cache (nurses / fallback from hospitalization data)
+    if (this.patientNameCache.has(userId)) return this.patientNameCache.get(userId)!;
+    // 3. Loading or truly unknown
+    return this.patientsLoading ? 'Loading…' : `Patient #${userId.slice(0, 8)}`;
   }
 
   getPatientInitials(userId: string): string {
-    const found = this.patientUsers.find(u => u.id === userId);
-    return this.getInitials(found || null);
+    const name = this.getPatientDisplayName(userId);
+    if (!name || name.startsWith('Patient #') || name === 'Loading…') return '?';
+    return name.split(' ').filter(Boolean).map(p => p[0]).slice(0, 2).join('').toUpperCase();
+  }
+
+  /** Role-aware title prefix shown in the UI (e.g. "Dr.", "Nurse") */
+  get currentUserTitle(): string {
+    if (this.isNurse)  return 'Nurse';
+    if (this.isDoctor) return 'Dr.';
+    return '';
   }
 
   private formatDateForInput(date: string | null): string | null {
