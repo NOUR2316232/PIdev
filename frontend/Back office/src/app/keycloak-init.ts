@@ -8,6 +8,8 @@ export function initializeKeycloak(keycloak: KeycloakService) {
             initOptions: {
                 onLoad: 'login-required',
                 checkLoginIframe: false,
+                redirectUri: 'http://localhost:4369/',
             },
+            bearerExcludedUrls: ['/assets/', '/keycloak/']
         });
 }

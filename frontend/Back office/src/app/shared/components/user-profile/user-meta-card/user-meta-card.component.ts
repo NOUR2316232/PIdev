@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { InputFieldComponent } from './../../form/input/input-field.component';
 import { ModalService } from '../../../services/modal.service';
+import { UserService } from '../../../../services/user.service';
+import { KeycloakService } from 'keycloak-angular';
 
 import { ModalComponent } from '../../ui/modal/modal.component';
 import { ButtonComponent } from '../../ui/button/button.component';
@@ -16,31 +18,59 @@ import { ButtonComponent } from '../../ui/button/button.component';
     standalone: true,
     styles: ``
 })
-export class UserMetaCardComponent {
+export class UserMetaCardComponent implements OnInit {
 
-  constructor(public modal: ModalService) {}
+  constructor(
+    public modal: ModalService,
+    private userService: UserService,
+    private keycloakService: KeycloakService
+  ) {}
 
   isOpen = false;
   openModal() { this.isOpen = true; }
   closeModal() { this.isOpen = false; }
 
-  // Example user data (could be made dynamic)
   user = {
-    firstName: 'Musharof',
-    lastName: 'Chowdhury',
-    role: 'Team Manager',
-    location: 'Arizona, United States',
+    firstName: '',
+    lastName: '',
+    role: 'User',
+    location: 'N/A',
     avatar: '/images/user/owner.jpg',
     social: {
-      facebook: 'https://www.facebook.com/PimjoHQ',
-      x: 'https://x.com/PimjoHQ',
-      linkedin: 'https://www.linkedin.com/company/pimjo',
-      instagram: 'https://instagram.com/PimjoHQ',
+      facebook: '#',
+      x: '#',
+      linkedin: '#',
+      instagram: '#',
     },
-    email: 'randomuser@pimjo.com',
-    phone: '+09 363 398 46',
-    bio: 'Team Manager',
+    email: '',
+    phone: 'N/A',
+    bio: 'N/A',
   };
+
+  async ngOnInit(): Promise<void> {
+    try {
+      const [profile, keycloakProfile] = await Promise.all([
+        this.userService.getProfile(),
+        this.keycloakService.loadUserProfile()
+      ]);
+
+      this.user.firstName = keycloakProfile.firstName ?? '';
+      this.user.lastName = keycloakProfile.lastName ?? '';
+      this.user.email = profile?.email ?? keycloakProfile.email ?? '';
+      this.user.role = profile?.role ? String(profile.role) : 'User';
+      this.user.bio = this.user.role;
+    } catch (error) {
+      console.error('Failed to load user meta profile', error);
+      try {
+        const keycloakProfile = await this.keycloakService.loadUserProfile();
+        this.user.firstName = keycloakProfile.firstName ?? '';
+        this.user.lastName = keycloakProfile.lastName ?? '';
+        this.user.email = keycloakProfile.email ?? '';
+      } catch (fallbackError) {
+        console.error('Failed to load Keycloak profile fallback', fallbackError);
+      }
+    }
+  }
 
   handleSave() {
     // Handle save logic here

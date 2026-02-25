@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ModalService } from '../../../services/modal.service';
+import { UserService } from '../../../../services/user.service';
+import { KeycloakService } from 'keycloak-angular';
 
 import { InputFieldComponent } from '../../form/input/input-field.component';
 import { ButtonComponent } from '../../ui/button/button.component';
@@ -18,27 +20,55 @@ import { ModalComponent } from '../../ui/modal/modal.component';
     standalone: true,
     styles: ``
 })
-export class UserInfoCardComponent {
+export class UserInfoCardComponent implements OnInit {
 
-  constructor(public modal: ModalService) {}
+  constructor(
+    public modal: ModalService,
+    private userService: UserService,
+    private keycloakService: KeycloakService
+  ) {}
 
   isOpen = false;
   openModal() { this.isOpen = true; }
   closeModal() { this.isOpen = false; }
 
   user = {
-    firstName: 'Musharof',
-    lastName: 'Chowdhury',
-    email: 'randomuser@pimjo.com',
-    phone: '+09 363 398 46',
-    bio: 'Team Manager',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: 'N/A',
+    bio: 'N/A',
     social: {
-      facebook: 'https://www.facebook.com/PimjoHQ',
-      x: 'https://x.com/PimjoHQ',
-      linkedin: 'https://www.linkedin.com/company/pimjo',
-      instagram: 'https://instagram.com/PimjoHQ',
+      facebook: '#',
+      x: '#',
+      linkedin: '#',
+      instagram: '#',
     },
   };
+
+  async ngOnInit(): Promise<void> {
+    try {
+      const [profile, keycloakProfile] = await Promise.all([
+        this.userService.getProfile(),
+        this.keycloakService.loadUserProfile()
+      ]);
+
+      this.user.firstName = keycloakProfile.firstName ?? '';
+      this.user.lastName = keycloakProfile.lastName ?? '';
+      this.user.email = profile?.email ?? keycloakProfile.email ?? '';
+      this.user.bio = profile?.role ? String(profile.role) : 'User';
+    } catch (error) {
+      console.error('Failed to load user info profile', error);
+      try {
+        const keycloakProfile = await this.keycloakService.loadUserProfile();
+        this.user.firstName = keycloakProfile.firstName ?? '';
+        this.user.lastName = keycloakProfile.lastName ?? '';
+        this.user.email = keycloakProfile.email ?? '';
+      } catch (fallbackError) {
+        console.error('Failed to load Keycloak profile fallback', fallbackError);
+      }
+    }
+  }
 
   handleSave() {
     // Handle save logic here

@@ -1,0 +1,50 @@
+[
+    {
+        "service":  "discovery-service",
+        "pid":  20084,
+        "log":  "C:\\Users\\chife\\IdeaProjects\\PIdev\\PIdev\\backend\\.run\\20260222-151532\\discovery-service.log",
+        "err":  "C:\\Users\\chife\\IdeaProjects\\PIdev\\PIdev\\backend\\.run\\20260222-151532\\discovery-service.err.log"
+    },
+    {
+        "service":  "Api-Gateway",
+        "pid":  1420,
+        "log":  "C:\\Users\\chife\\IdeaProjects\\PIdev\\PIdev\\backend\\.run\\20260222-151532\\Api-Gateway.log",
+        "err":  "C:\\Users\\chife\\IdeaProjects\\PIdev\\PIdev\\backend\\.run\\20260222-151532\\Api-Gateway.err.log"
+    },
+    {
+        "service":  "user-service",
+        "pid":  33428,
+        "log":  "C:\\Users\\chife\\IdeaProjects\\PIdev\\PIdev\\backend\\.run\\20260222-151532\\user-service.log",
+        "err":  "C:\\Users\\chife\\IdeaProjects\\PIdev\\PIdev\\backend\\.run\\20260222-151532\\user-service.err.log"
+    },
+    {
+        "service":  "clinical",
+        "pid":  25792,
+        "log":  "C:\\Users\\chife\\IdeaProjects\\PIdev\\PIdev\\backend\\.run\\20260222-151532\\clinical.log",
+        "err":  "C:\\Users\\chife\\IdeaProjects\\PIdev\\PIdev\\backend\\.run\\20260222-151532\\clinical.err.log"
+    },
+    {
+        "service":  "diagnostic-service",
+        "pid":  27544,
+        "log":  "C:\\Users\\chife\\IdeaProjects\\PIdev\\PIdev\\backend\\.run\\20260222-151532\\diagnostic-service.log",
+        "err":  "C:\\Users\\chife\\IdeaProjects\\PIdev\\PIdev\\backend\\.run\\20260222-151532\\diagnostic-service.err.log"
+    },
+    {
+        "service":  "dialysis-service",
+        "pid":  22028,
+        "log":  "C:\\Users\\chife\\IdeaProjects\\PIdev\\PIdev\\backend\\.run\\20260222-151532\\dialysis-service.log",
+        "err":  "C:\\Users\\chife\\IdeaProjects\\PIdev\\PIdev\\backend\\.run\\20260222-151532\\dialysis-service.err.log"
+    },
+    {
+        "service":  "Hospitalization-service",
+        "pid":  24952,
+        "log":  "C:\\Users\\chife\\IdeaProjects\\PIdev\\PIdev\\backend\\.run\\20260222-151532\\Hospitalization-service.log",
+        "err":  "C:\\Users\\chife\\IdeaProjects\\PIdev\\PIdev\\backend\\.run\\20260222-151532\\Hospitalization-service.err.log"
+    },
+    {
+        "service":  "pharmacy-service",
+        "pid":  8372,
+        "log":  "C:\\Users\\chife\\IdeaProjects\\PIdev\\PIdev\\backend\\.run\\20260222-151532\\pharmacy-service.log",
+        "err":  "C:\\Users\\chife\\IdeaProjects\\PIdev\\PIdev\\backend\\.run\\20260222-151532\\pharmacy-service.err.log"
+    }
+]

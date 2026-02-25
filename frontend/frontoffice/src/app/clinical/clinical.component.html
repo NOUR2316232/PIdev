@@ -1,0 +1,158 @@
+<div class="clinical-container">
+  <!-- Success Alert -->
+  <div *ngIf="success" class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+    <i class="bi bi-check-circle me-2"></i>
+    {{ success }}
+    <button type="button" class="btn-close" (click)="success = null"></button>
+  </div>
+
+  <!-- Error Alert -->
+  <div *ngIf="error" class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+    <i class="bi bi-exclamation-circle me-2"></i>
+    {{ error }}
+    <button type="button" class="btn-close" (click)="error = null"></button>
+  </div>
+
+  <!-- Header Section -->
+  <div class="clinical-header mb-5">
+    <div class="row align-items-center">
+      <div class="col-12">
+        <h1 class="clinical-title mb-2">New Consultation</h1>
+        <p class="clinical-subtitle text-muted">Submit a new consultation request</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Section -->
+  <div class="card clinical-card mb-5 shadow-sm">
+    <div class="card-header bg-gradient">
+      <h5 class="mb-0">
+        <i class="bi bi-pencil-square me-2"></i>
+        Add Consultation
+      </h5>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="form" (ngSubmit)="saveConsultation()">
+        <div *ngIf="currentPatientId != null" class="alert alert-info mb-3" role="alert">
+          <i class="bi bi-person-check me-2"></i>
+          Patient account is set automatically from your login session.
+        </div>
+        <div class="row">
+          <div *ngIf="currentPatientId == null" class="col-md-6 mb-3">
+            <label for="patientId" class="form-label">Patient ID</label>
+            <select
+              id="patientId"
+              class="form-control"
+              formControlName="patientId"
+            >
+              <option [ngValue]="null" disabled>Select patient ID</option>
+              <option *ngFor="let patientId of availablePatientIds" [ngValue]="patientId">
+                {{ patientId }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="doctorId" class="form-label">Doctor ID</label>
+            <select
+              id="doctorId"
+              class="form-control"
+              formControlName="doctorId"
+            >
+              <option [ngValue]="null" disabled>Select doctor ID</option>
+              <option *ngFor="let doctorId of availableDoctorIds" [ngValue]="doctorId">
+                {{ doctorId }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="consultationDate" class="form-label">Consultation Date</label>
+            <input
+              id="consultationDate"
+              type="datetime-local"
+              class="form-control"
+              formControlName="consultationDate"
+            />
+          </div>
+
+          <div class="col-12 mb-3">
+            <label for="diagnosis" class="form-label">Diagnosis</label>
+            <input
+              id="diagnosis"
+              type="text"
+              class="form-control"
+              placeholder="Enter diagnosis"
+              formControlName="diagnosis"
+            />
+          </div>
+
+          <div class="col-12 mb-3">
+            <label for="treatmentPlan" class="form-label">Treatment Plan</label>
+            <textarea
+              id="treatmentPlan"
+              class="form-control"
+              placeholder="Enter treatment plan"
+              formControlName="treatmentPlan"
+              rows="3"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions mt-4 d-flex gap-2">
+          <button type="submit" class="btn btn-primary" [disabled]="loadingProfile">
+            <i class="bi bi-check-circle me-2"></i>
+            Create
+          </button>
+          <button type="button" class="btn btn-outline-secondary" (click)="openMedicalHistoryModal()">
+            <i class="bi bi-file-medical me-2"></i>
+            Add Medical History
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div *ngIf="showMedicalHistoryModal" class="modal d-block" tabindex="-1" role="dialog" style="background: rgba(0,0,0,0.4);">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Create Medical History</h5>
+          <button type="button" class="btn-close" (click)="closeMedicalHistoryModal()"></button>
+        </div>
+        <form [formGroup]="medicalHistoryForm" (ngSubmit)="saveMedicalHistory()">
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="mh-allergies" class="form-label">Allergies</label>
+                <input id="mh-allergies" type="text" class="form-control" formControlName="allergies" />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="mh-diagnosis" class="form-label">Diagnosis</label>
+                <input id="mh-diagnosis" type="text" class="form-control" formControlName="diagnosis" />
+              </div>
+              <div class="col-12 mb-3">
+                <label for="mh-chronic" class="form-label">Chronic Conditions</label>
+                <textarea id="mh-chronic" rows="2" class="form-control" formControlName="chronicConditions"></textarea>
+              </div>
+              <div class="col-12 mb-3">
+                <label for="mh-family" class="form-label">Family History</label>
+                <textarea id="mh-family" rows="2" class="form-control" formControlName="familyHistory"></textarea>
+              </div>
+              <div class="col-12 mb-1">
+                <label for="mh-notes" class="form-label">Notes</label>
+                <textarea id="mh-notes" rows="3" class="form-control" formControlName="notes"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="closeMedicalHistoryModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary" [disabled]="savingMedicalHistory">
+              {{ savingMedicalHistory ? 'Saving...' : 'Save Medical History' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

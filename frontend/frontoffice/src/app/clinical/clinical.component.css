@@ -1,0 +1,345 @@
+/* Clinical Component Styles */
+
+.clinical-container {
+  padding: 2rem 0;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header Styles */
+.clinical-header {
+  border-bottom: 2px solid var(--primary, #13C5DD);
+  padding-bottom: 1.5rem;
+}
+
+.clinical-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--dark, #1D2A4D);
+  letter-spacing: -0.5px;
+}
+
+.clinical-subtitle {
+  font-size: 0.95rem;
+  color: #666;
+}
+
+/* Card Styles */
+.clinical-card {
+  border: 0;
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
+  margin-bottom: 2rem;
+}
+
+.clinical-card:hover {
+  box-shadow: 0 8px 16px rgba(19, 197, 221, 0.15) !important;
+}
+
+.clinical-card .card-header {
+  background: linear-gradient(135deg, var(--primary, #13C5DD) 0%, #0da8b5 100%);
+  border: none;
+  padding: 1.25rem 1.5rem;
+  border-radius: 0.75rem 0.75rem 0 0;
+}
+
+.clinical-card .card-header h5 {
+  color: white;
+  font-weight: 600;
+  margin: 0;
+}
+
+.clinical-card .card-header i {
+  font-size: 1.1rem;
+}
+
+.clinical-card .card-body {
+  padding: 1.75rem;
+  background-color: #fafbfc;
+}
+
+/* Form Styles */
+.form-label {
+  font-weight: 600;
+  color: var(--dark, #1D2A4D);
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.form-control,
+.form-select {
+  border: 1px solid #e0e5e8;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background-color: white;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--primary, #13C5DD);
+  box-shadow: 0 0 0 0.2rem rgba(19, 197, 221, 0.15);
+  background-color: white;
+}
+
+.form-control::placeholder {
+  color: #999;
+  font-style: italic;
+}
+
+textarea.form-control {
+  resize: vertical;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Form Actions */
+.form-actions {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e0e5e8;
+}
+
+.form-actions .btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.form-actions .btn-primary {
+  background: linear-gradient(135deg, var(--primary, #13C5DD) 0%, #0da8b5 100%);
+  border: none;
+}
+
+.form-actions .btn-primary:hover {
+  background: linear-gradient(135deg, #0da8b5 0%, #088a95 100%);
+  transform: translateY(-2px);
+}
+
+.form-actions .btn-secondary {
+  background-color: #e9ecef;
+  color: #495057;
+  border: none;
+}
+
+.form-actions .btn-secondary:hover {
+  background-color: #dee2e6;
+  transform: translateY(-2px);
+}
+
+/* Table Styles */
+.table {
+  margin-bottom: 0;
+  font-size: 0.95rem;
+}
+
+.table thead.table-light {
+  background-color: #f8f9fa;
+}
+
+.table th {
+  padding: 1rem 1rem;
+  font-weight: 600;
+  border-bottom: 2px solid #e0e5e8;
+  background-color: #f8f9fa;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.table tbody tr {
+  border-bottom: 1px solid #e0e5e8;
+  transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.table tbody td {
+  padding: 1rem 1rem;
+  vertical-align: middle;
+}
+
+.table tbody td.fw-bold {
+  color: var(--primary, #13C5DD);
+}
+
+/* Badge Styles */
+.badge {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 0.375rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge.bg-info {
+  background-color: #cfe2ff !important;
+  color: #084298;
+}
+
+.badge.bg-warning {
+  background-color: #fff3cd !important;
+  color: #664d03;
+}
+
+.badge.bg-success {
+  background-color: #d1e7dd !important;
+  color: #0f5132;
+}
+
+.badge.bg-danger {
+  background-color: #f8d7da !important;
+  color: #842029;
+}
+
+.badge.bg-secondary {
+  background-color: #e2e3e5 !important;
+  color: #383d41;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.action-buttons .btn {
+  padding: 0.4rem 0.6rem;
+  font-size: 0.85rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-primary {
+  color: var(--primary, #13C5DD);
+  border-color: var(--primary, #13C5DD);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary, #13C5DD);
+  border-color: var(--primary, #13C5DD);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.btn-outline-danger {
+  color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* Empty State */
+.table tbody tr td[colspan] {
+  background-color: #fafbfc;
+}
+
+.table tbody tr td[colspan] i {
+  color: #999;
+  margin-right: 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .clinical-container {
+    padding: 1rem 0;
+  }
+
+  .clinical-header {
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .clinical-title {
+    font-size: 1.5rem;
+  }
+
+  .clinical-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-actions .btn {
+    width: 100%;
+  }
+
+  .table-responsive {
+    font-size: 0.85rem;
+  }
+
+  .table th,
+  .table td {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .action-buttons {
+    flex-wrap: wrap;
+  }
+
+  .action-buttons .btn {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .clinical-card .card-body {
+    padding: 1rem;
+  }
+
+  .form-label {
+    font-size: 0.85rem;
+  }
+
+  .form-control,
+  .form-select {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .clinical-title {
+    font-size: 1.25rem;
+  }
+
+  .table th,
+  .table td {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.75rem;
+  }
+
+  .badge {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.7rem;
+  }
+}
+
+/* Animation */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.clinical-container {
+  animation: slideIn 0.4s ease-out;
+}

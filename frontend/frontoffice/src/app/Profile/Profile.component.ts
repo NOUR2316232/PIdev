@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { from, switchMap } from 'rxjs';
 import { KeycloakService } from 'keycloak-angular';
 import keycloakConfig from '../keycloak.config';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -31,20 +32,38 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private keycloakService: KeycloakService,
+    private userService: UserService,
     private http: HttpClient,
     private cdr: ChangeDetectorRef
   ) {}
 
   async ngOnInit(): Promise<void> {
     try {
-      this.profile = await this.keycloakService.loadUserProfile();
-      this.userId  = this.profile.id ?? null;
+      const [keycloakProfile, userProfile] = await Promise.all([
+        this.keycloakService.loadUserProfile(),
+        this.userService.getProfile().catch(() => null)
+      ]);
+
+      this.profile = {
+        ...keycloakProfile,
+        id: userProfile?.id ?? keycloakProfile?.id ?? null,
+        email: userProfile?.email ?? keycloakProfile?.email ?? null
+      };
+
+      this.userId  = keycloakProfile?.id ?? null;
 
       const tokenParsed = this.keycloakService.getKeycloakInstance().tokenParsed as any;
       const allRoles: string[] = tokenParsed?.realm_access?.roles ?? [];
       this.roles = allRoles.filter(r =>
         !['offline_access', 'uma_authorization', `default-roles-${keycloakConfig.realm}`].includes(r)
       );
+
+      if (userProfile?.role) {
+        const normalizedRole = String(userProfile.role).toLowerCase();
+        if (!this.roles.includes(normalizedRole)) {
+          this.roles = [normalizedRole, ...this.roles];
+        }
+      }
     } catch (err) {
       console.error('Failed to load profile', err);
     } finally {

@@ -1,23 +1,72 @@
-<div class="grid grid-cols-12 gap-4 md:gap-6">
-  <div class="col-span-12 space-y-6 xl:col-span-7">
-    <div><app-ecommerce-metrics /></div>
+<div class="space-y-6">
+  <section class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+    <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-[0.16em] text-brand-600 dark:text-brand-400">Back Office Command</p>
+        <h1 class="mt-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">NephroCare Project Operations</h1>
+        <p class="mt-2 max-w-3xl text-sm text-gray-600 dark:text-gray-300">
+          Central supervision page for clinical, hospitalization, dialysis and diagnostic workflows.
+          Use this dashboard to access active modules and keep service operations aligned.
+        </p>
+      </div>
+      <div class="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-medium text-gray-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200">
+        {{ today | date: 'EEEE, MMM d, y' }}
+      </div>
+    </div>
+  </section>
 
-    <div><app-monthly-sales-chart /></div>
-  </div>
+  <section class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+    @for (module of projectModules; track module.name) {
+      <article class="rounded-2xl border border-gray-200 bg-white p-5 shadow-theme-xs dark:border-gray-800 dark:bg-white/[0.03]">
+        <div class="mb-3 flex items-center justify-between">
+          <h2 class="text-base font-semibold text-gray-900 dark:text-white">{{ module.name }}</h2>
+          <span
+            class="rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide"
+            [ngClass]="module.status === 'active'
+              ? 'bg-success-100 text-success-700 dark:bg-success-500/20 dark:text-success-400'
+              : 'bg-warning-100 text-warning-700 dark:bg-warning-500/20 dark:text-warning-400'">
+            {{ module.status }}
+          </span>
+        </div>
+        <p class="min-h-[56px] text-sm leading-6 text-gray-600 dark:text-gray-300">{{ module.description }}</p>
+        <a
+          [routerLink]="module.route"
+          class="mt-4 inline-flex items-center rounded-xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700">
+          Open Module
+        </a>
+      </article>
+    }
+  </section>
 
-  <div class="col-span-12 xl:col-span-5">
-    <app-monthly-target />
-  </div>
+  <section class="grid grid-cols-1 gap-4 xl:grid-cols-3">
+    <article class="rounded-2xl border border-gray-200 bg-white p-5 xl:col-span-2 dark:border-gray-800 dark:bg-white/[0.03]">
+      <h3 class="text-base font-semibold text-gray-900 dark:text-white">Role-Based Responsibilities</h3>
+      <div class="mt-4 space-y-3">
+        @for (area of roleAreas; track area.role) {
+          <div class="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-900">
+            <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ area.role }}</p>
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-300">{{ area.responsibilities }}</p>
+          </div>
+        }
+      </div>
+    </article>
 
-  <div class="col-span-12">
-    <app-statics-chart />
-  </div>
-
-  <div class="col-span-12 xl:col-span-5">
-    <app-demographic-card />
-  </div>
-
-  <div class="col-span-12 xl:col-span-7">
-    <app-recent-orders/>
-  </div>
+    <article class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
+      <h3 class="text-base font-semibold text-gray-900 dark:text-white">Quick Actions</h3>
+      <div class="mt-4 grid gap-3">
+        <a routerLink="/clinical" class="rounded-xl border border-gray-200 px-4 py-3 text-sm font-semibold text-gray-700 transition hover:border-brand-400 hover:text-brand-700 dark:border-gray-700 dark:text-gray-200 dark:hover:border-brand-500 dark:hover:text-brand-400">
+          Launch Clinical Queue
+        </a>
+        <a routerLink="/hospitalization" class="rounded-xl border border-gray-200 px-4 py-3 text-sm font-semibold text-gray-700 transition hover:border-brand-400 hover:text-brand-700 dark:border-gray-700 dark:text-gray-200 dark:hover:border-brand-500 dark:hover:text-brand-400">
+          Review In-Patient Cases
+        </a>
+        <a routerLink="/consultations-calendar" class="rounded-xl border border-gray-200 px-4 py-3 text-sm font-semibold text-gray-700 transition hover:border-brand-400 hover:text-brand-700 dark:border-gray-700 dark:text-gray-200 dark:hover:border-brand-500 dark:hover:text-brand-400">
+          Open Consultations Calendar
+        </a>
+        <a routerLink="/profile" class="rounded-xl border border-gray-200 px-4 py-3 text-sm font-semibold text-gray-700 transition hover:border-brand-400 hover:text-brand-700 dark:border-gray-700 dark:text-gray-200 dark:hover:border-brand-500 dark:hover:text-brand-400">
+          Manage Access Profile
+        </a>
+      </div>
+    </article>
+  </section>
 </div>

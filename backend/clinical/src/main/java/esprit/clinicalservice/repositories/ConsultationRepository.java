@@ -2,18 +2,24 @@ package esprit.clinicalservice.repositories;
 
 import esprit.clinicalservice.entities.Consultation;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.UUID;
 
 @Repository
-public interface ConsultationRepository extends JpaRepository<Consultation, UUID> {
+public interface ConsultationRepository extends JpaRepository<Consultation, Long> {
 
-    List<Consultation> findByPatientId(UUID patientId);
+    List<Consultation> findByPatientId(Long patientId);
 
-    List<Consultation> findByDoctorId(UUID doctorId);
+    List<Consultation> findByDoctorId(Long doctorId);
 
-    List<Consultation> findByMedicalHistoryId(UUID medicalHistoryId);
+    List<Consultation> findByMedicalHistoryId(Long medicalHistoryId);
+
+    @Query("SELECT DISTINCT c.patientId FROM Consultation c ORDER BY c.patientId")
+    List<Long> findDistinctPatientIds();
+
+    @Query("SELECT DISTINCT c.doctorId FROM Consultation c ORDER BY c.doctorId")
+    List<Long> findDistinctDoctorIds();
 }
 

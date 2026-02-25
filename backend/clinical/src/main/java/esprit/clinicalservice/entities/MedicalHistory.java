@@ -7,20 +7,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import java.util.UUID;
-
 @Entity
 @Table(name = "medical_histories")
 public class MedicalHistory {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", columnDefinition = "CHAR(36)")
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
     // Direct reference to user identifier (no User entity)
-    @Column(name = "user_id", nullable = false, unique = true, columnDefinition = "CHAR(36)")
-    private UUID userId;
+    @Column(name = "user_id", nullable = false, unique = true)
+    private Long userId;
 
     @Column(columnDefinition = "TEXT")
     private String diagnosis;
@@ -40,19 +38,19 @@ public class MedicalHistory {
     public MedicalHistory() {
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public UUID getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(UUID userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

@@ -1,0 +1,33 @@
+{
+  "realm": "nephro-realm",
+  "enabled": true,
+  "displayName": "Nephro Realm",
+  "registrationAllowed": false,
+  "rememberMe": true,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": false,
+  "sslRequired": "external",
+  "clients": [
+    {
+      "clientId": "nephro-client",
+      "name": "Nephro Client",
+      "enabled": true,
+      "publicClient": true,
+      "protocol": "openid-connect",
+      "directAccessGrantsEnabled": true,
+      "standardFlowEnabled": true,
+      "serviceAccountsEnabled": false,
+      "redirectUris": [
+        "http://localhost:4200/*",
+        "http://localhost:8080/*",
+        "http://localhost:8082/*"
+      ],
+      "webOrigins": [
+        "*"
+      ]
+    }
+  ]
+}

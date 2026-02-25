@@ -1,7 +1,11 @@
 package esprit.clinicalservice.controllers;
 
-import esprit.clinicalservice.entities.Consultation;
+import esprit.clinicalservice.dtos.ConsultationDTO;
 import esprit.clinicalservice.services.ConsultationService;
+import esprit.clinicalservice.utils.MapperUtil;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/consultations")
@@ -25,37 +29,62 @@ public class ConsultationController {
     }
 
     @PostMapping
-    public Consultation create(@RequestBody Consultation consultation) {
-        return consultationService.create(consultation);
+    public ResponseEntity<ConsultationDTO> create(@Valid @RequestBody ConsultationDTO consultationDTO) {
+        var consultation = MapperUtil.toConsultation(consultationDTO);
+        var saved = consultationService.create(consultation);
+        return ResponseEntity.status(HttpStatus.CREATED).body(MapperUtil.toConsultationDTO(saved));
     }
 
     @PutMapping("/{id}")
-    public Consultation update(@PathVariable UUID id, @RequestBody Consultation consultation) {
-        return consultationService.update(id, consultation);
+    public ResponseEntity<ConsultationDTO> update(@PathVariable Long id, @Valid @RequestBody ConsultationDTO consultationDTO) {
+        var consultation = MapperUtil.toConsultation(consultationDTO);
+        var updated = consultationService.update(id, consultation);
+        return ResponseEntity.ok(MapperUtil.toConsultationDTO(updated));
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable UUID id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         consultationService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
-    public Consultation getById(@PathVariable UUID id) {
-        return consultationService.getById(id);
+    public ResponseEntity<ConsultationDTO> getById(@PathVariable Long id) {
+        var consultation = consultationService.getById(id);
+        return ResponseEntity.ok(MapperUtil.toConsultationDTO(consultation));
     }
 
     @GetMapping
-    public List<Consultation> getAll() {
-        return consultationService.getAll();
+    public ResponseEntity<List<ConsultationDTO>> getAll() {
+        var consultations = consultationService.getAll();
+        return ResponseEntity.ok(consultations.stream()
+                .map(MapperUtil::toConsultationDTO)
+                .collect(Collectors.toList()));
     }
 
     @GetMapping("/patient/{patientId}")
-    public List<Consultation> getByPatientId(@PathVariable UUID patientId) {
-        return consultationService.getByPatientId(patientId);
+    public ResponseEntity<List<ConsultationDTO>> getByPatientId(@PathVariable Long patientId) {
+        var consultations = consultationService.getByPatientId(patientId);
+        return ResponseEntity.ok(consultations.stream()
+                .map(MapperUtil::toConsultationDTO)
+                .collect(Collectors.toList()));
     }
 
     @GetMapping("/doctor/{doctorId}")
-    public List<Consultation> getByDoctorId(@PathVariable UUID doctorId) {
-        return consultationService.getByDoctorId(doctorId);
+    public ResponseEntity<List<ConsultationDTO>> getByDoctorId(@PathVariable Long doctorId) {
+        var consultations = consultationService.getByDoctorId(doctorId);
+        return ResponseEntity.ok(consultations.stream()
+                .map(MapperUtil::toConsultationDTO)
+                .collect(Collectors.toList()));
+    }
+
+    @GetMapping("/patient-ids")
+    public ResponseEntity<List<Long>> getAvailablePatientIds() {
+        return ResponseEntity.ok(consultationService.getAvailablePatientIds());
+    }
+
+    @GetMapping("/doctor-ids")
+    public ResponseEntity<List<Long>> getAvailableDoctorIds() {
+        return ResponseEntity.ok(consultationService.getAvailableDoctorIds());
     }
 }

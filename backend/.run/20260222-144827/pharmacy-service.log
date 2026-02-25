@@ -1,0 +1,101 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ----------------------< esprit:pharmacy-service >-----------------------
+[INFO] Building pharmacy-service 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.1.12:run (default-cli) > test-compile @ pharmacy-service >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ pharmacy-service ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.10.1:compile (default-compile) @ pharmacy-service ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 13 source files to C:\Users\chife\IdeaProjects\PIdev\PIdev\backend\pharmacy-service\target\classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ pharmacy-service ---
+[INFO] skip non existing resourceDirectory C:\Users\chife\IdeaProjects\PIdev\PIdev\backend\pharmacy-service\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.10.1:testCompile (default-testCompile) @ pharmacy-service ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 1 source file to C:\Users\chife\IdeaProjects\PIdev\PIdev\backend\pharmacy-service\target\test-classes
+[INFO] 
+[INFO] <<< spring-boot:3.1.12:run (default-cli) < test-compile @ pharmacy-service <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.1.12:run (default-cli) @ pharmacy-service ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v3.1.12)
+
+2026-02-22T14:49:37.045+01:00  INFO 26696 --- [           main] e.p.PharmacyServiceApplication           : Starting PharmacyServiceApplication using Java 17.0.18 with PID 26696 (C:\Users\chife\IdeaProjects\PIdev\PIdev\backend\pharmacy-service\target\classes started by chife in C:\Users\chife\IdeaProjects\PIdev\PIdev\backend\pharmacy-service)
+2026-02-22T14:49:37.047+01:00  INFO 26696 --- [           main] e.p.PharmacyServiceApplication           : No active profile set, falling back to 1 default profile: "default"
+2026-02-22T14:49:37.513+01:00  INFO 26696 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-02-22T14:49:37.617+01:00  INFO 26696 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 98 ms. Found 2 JPA repository interfaces.
+2026-02-22T14:49:37.777+01:00  INFO 26696 --- [           main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=3c6bd0b7-1476-31e3-8048-28df3d92c78e
+2026-02-22T14:49:39.310+01:00  INFO 26696 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8087 (http)
+2026-02-22T14:49:39.362+01:00  INFO 26696 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-02-22T14:49:39.366+01:00  INFO 26696 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.24]
+2026-02-22T14:49:39.747+01:00  INFO 26696 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-02-22T14:49:39.752+01:00  INFO 26696 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2672 ms
+2026-02-22T14:49:40.366+01:00  INFO 26696 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-02-22T14:49:40.549+01:00  INFO 26696 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.25.Final
+2026-02-22T14:49:40.567+01:00  INFO 26696 --- [           main] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2026-02-22T14:49:47.238+01:00  INFO 26696 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-02-22T14:49:47.297+01:00  INFO 26696 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-02-22T14:49:47.673+01:00  INFO 26696 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@709d86a2
+2026-02-22T14:49:47.678+01:00  INFO 26696 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-02-22T14:49:47.793+01:00  WARN 26696 --- [           main] org.hibernate.dialect.Dialect            : HHH000511: The 5.5.0 version for [org.hibernate.dialect.MySQLDialect] is no longer supported, hence certain features may not work properly. The minimum supported version is 5.7.0. Check the community dialects project for available legacy versions.
+2026-02-22T14:49:50.344+01:00  INFO 26696 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: create table Medication (id varchar(255) not null, dosage varchar(255), duration integer, endDate date, frequency integer, medicationName varchar(255), quantity integer, route enum ('IM','IV','ORAL','SC','TOPICAL'), startDate date, prescription_id varchar(255), primary key (id)) engine=InnoDB
+Hibernate: create table Prescription (id varchar(255) not null, consultationId varchar(255), instructions TEXT, prescribedBy varchar(255), prescriptionDate date, status enum ('APPROVED','CANCELLED','COMPLETED','DISPENSED','PENDING'), userId varchar(255), validUntil date, primary key (id)) engine=InnoDB
+Hibernate: alter table Medication add constraint FKco8i0u3tasi98wpec1vujt9w0 foreign key (prescription_id) references Prescription (id)
+2026-02-22T14:49:50.536+01:00  INFO 26696 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-02-22T14:49:51.136+01:00  WARN 26696 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-02-22T14:49:56.871+01:00  INFO 26696 --- [           main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2026-02-22T14:49:56.989+01:00  INFO 26696 --- [           main] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestTemplate.
+2026-02-22T14:49:59.308+01:00  INFO 26696 --- [           main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2026-02-22T14:49:59.419+01:00  WARN 26696 --- [           main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2026-02-22T14:49:59.461+01:00  INFO 26696 --- [           main] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
+2026-02-22T14:49:59.612+01:00  INFO 26696 --- [           main] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
+2026-02-22T14:49:59.620+01:00  INFO 26696 --- [           main] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2026-02-22T14:49:59.668+01:00  INFO 26696 --- [           main] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2026-02-22T14:49:59.668+01:00  INFO 26696 --- [           main] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2026-02-22T14:49:59.668+01:00  INFO 26696 --- [           main] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2026-02-22T14:49:59.669+01:00  INFO 26696 --- [           main] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2026-02-22T14:49:59.669+01:00  INFO 26696 --- [           main] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2026-02-22T14:49:59.671+01:00  INFO 26696 --- [           main] com.netflix.discovery.DiscoveryClient    : Application version is -1: true
+2026-02-22T14:49:59.671+01:00  INFO 26696 --- [           main] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2026-02-22T14:50:00.535+01:00  INFO 26696 --- [           main] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2026-02-22T14:50:00.557+01:00  INFO 26696 --- [           main] com.netflix.discovery.DiscoveryClient    : Starting heartbeat executor: renew interval is: 30
+2026-02-22T14:50:00.591+01:00  INFO 26696 --- [           main] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4
+2026-02-22T14:50:00.608+01:00  INFO 26696 --- [           main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1771768200605 with initial instances count: 4
+2026-02-22T14:50:00.620+01:00  INFO 26696 --- [           main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application PHARMACY-SERVICE with eureka with status UP
+2026-02-22T14:50:00.622+01:00  INFO 26696 --- [           main] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1771768200622, current=UP, previous=STARTING]
+2026-02-22T14:50:00.635+01:00  INFO 26696 --- [nfoReplicator-0] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_PHARMACY-SERVICE/localhost:pharmacy-service:8087: registering service...
+2026-02-22T14:50:00.705+01:00  INFO 26696 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8087 (http) with context path ''
+2026-02-22T14:50:00.706+01:00  INFO 26696 --- [           main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 8087
+2026-02-22T14:50:00.733+01:00  INFO 26696 --- [nfoReplicator-0] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_PHARMACY-SERVICE/localhost:pharmacy-service:8087 - registration status: 204
+2026-02-22T14:50:03.887+01:00  INFO 26696 --- [           main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2026-02-22T14:50:03.967+01:00  INFO 26696 --- [           main] e.p.PharmacyServiceApplication           : Started PharmacyServiceApplication in 28.676 seconds (process running for 29.031)
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  02:39 min
+[INFO] Finished at: 2026-02-22T14:51:52+01:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.springframework.boot:spring-boot-maven-plugin:3.1.12:run (default-cli) on project pharmacy-service: Process terminated with exit code: -1 -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException

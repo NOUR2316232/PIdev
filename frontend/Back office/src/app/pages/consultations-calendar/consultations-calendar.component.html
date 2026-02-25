@@ -1,0 +1,175 @@
+<div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+  <!-- Success State -->
+  <div *ngIf="success" class="mx-6 mt-6 p-4 bg-green-100 text-green-800 rounded-lg">
+    {{ success }}
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="p-8 text-center">
+    <p class="text-gray-500 dark:text-gray-400">Loading consultations...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="p-8">
+    <div class="p-4 bg-red-100 text-red-800 rounded-lg">
+      {{ error }}
+    </div>
+  </div>
+
+  <!-- Calendar -->
+  <div *ngIf="!loading && !error" class="custom-calendar p-6">
+    <h1 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Consultations Calendar</h1>
+    <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+  </div>
+
+  <!-- Consultations List -->
+  <div *ngIf="!loading && !error" class="px-6 pb-6">
+    <div class="mb-4 flex items-center justify-between">
+      <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Consultations List</h2>
+      <span class="inline-flex rounded-full bg-primary px-3 py-1 text-sm font-medium text-white">
+        {{ consultations.length }} Total
+      </span>
+    </div>
+
+    <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
+      <table class="min-w-full table-auto">
+        <thead class="bg-gray-50 dark:bg-gray-800/50">
+          <tr>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-300">Patient</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-300">Doctor</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-300">Date</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-300">Follow-up Date</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-300">Diagnosis</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-300">Current Status</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-300">Update</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-300">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="consultations.length === 0" class="border-t border-gray-200 dark:border-gray-700">
+            <td colspan="8" class="px-4 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
+              No consultations found
+            </td>
+          </tr>
+
+          <tr *ngFor="let consultation of consultations" class="border-t border-gray-200 dark:border-gray-700">
+            <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-200">{{ consultation.patientId }}</td>
+            <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-200">{{ consultation.doctorId }}</td>
+            <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-200">{{ consultation.consultationDate | date: 'yyyy-MM-dd HH:mm' }}</td>
+            <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-200">
+              {{ consultation.followUpDate ? (consultation.followUpDate | date: 'yyyy-MM-dd HH:mm') : 'N/A' }}
+            </td>
+            <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-200">
+              <span class="line-clamp-1" [title]="consultation.diagnosis || 'N/A'">{{ consultation.diagnosis || 'N/A' }}</span>
+            </td>
+            <td class="px-4 py-3">
+              <span [ngClass]="getStatusBadgeClass(consultation.status)" class="inline-block rounded-full px-2.5 py-1 text-xs font-medium">
+                {{ consultation.status | uppercase }}
+              </span>
+            </td>
+            <td class="px-4 py-3">
+              <div class="flex items-center gap-2">
+                <input
+                  type="datetime-local"
+                  class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 outline-none focus:border-primary dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
+                  [value]="consultation.id ? editableFollowUpDates[consultation.id] : ''"
+                  (input)="consultation.id && (editableFollowUpDates[consultation.id] = $any($event.target).value)"
+                />
+                <select
+                  #statusSelect
+                  [value]="consultation.status"
+                  class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 outline-none focus:border-primary dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
+                >
+                  <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
+                </select>
+                <button
+                  type="button"
+                  (click)="updateConsultationStatus(consultation, statusSelect.value, consultation.id ? editableFollowUpDates[consultation.id] : '')"
+                  [disabled]="updatingStatusId === consultation.id"
+                  class="rounded-lg bg-sky-500 px-3 py-2 text-sm font-medium text-white hover:bg-sky-600 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {{ updatingStatusId === consultation.id ? 'Saving...' : 'Save' }}
+                </button>
+              </div>
+            </td>
+            <td class="px-4 py-3">
+              <button
+                type="button"
+                (click)="deleteConsultation(consultation.id)"
+                class="rounded-lg bg-red-500 px-3 py-2 text-sm font-medium text-white hover:bg-red-600"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal for Consultation Details -->
+  <app-modal
+    [isOpen]="isOpen"
+    (close)="closeModal()"
+    className="max-w-[700px] p-6 lg:p-10"
+  >
+    <div *ngIf="selectedConsultation" class="flex flex-col px-2 overflow-y-auto custom-scrollbar">
+      <div>
+        <h5 class="mb-2 font-semibold text-gray-800 modal-title text-theme-xl dark:text-white/90 lg:text-2xl">
+          Consultation Details
+        </h5>
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          Full information about this consultation
+        </p>
+      </div>
+
+      <div class="mt-8 space-y-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Status</label>
+          <span [ngClass]="getStatusBadgeClass(selectedConsultation.status)" class="inline-block px-3 py-1 rounded-full text-sm font-medium">
+            {{ selectedConsultation.status | uppercase }}
+          </span>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Consultation Date</label>
+          <p class="text-gray-800 dark:text-white">{{ selectedConsultation.consultationDate | date: 'yyyy-MM-dd HH:mm' }}</p>
+        </div>
+
+        <div *ngIf="selectedConsultation.followUpDate">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Follow-up Date</label>
+          <p class="text-gray-800 dark:text-white">{{ selectedConsultation.followUpDate | date: 'yyyy-MM-dd HH:mm' }}</p>
+        </div>
+
+        <div *ngIf="selectedConsultation.diagnosis">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Diagnosis</label>
+          <p class="text-gray-800 dark:text-white">{{ selectedConsultation.diagnosis }}</p>
+        </div>
+
+        <div *ngIf="selectedConsultation.treatmentPlan">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Treatment Plan</label>
+          <p class="text-gray-800 dark:text-white whitespace-pre-wrap">{{ selectedConsultation.treatmentPlan }}</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Patient ID</label>
+          <p class="text-gray-800 dark:text-white">{{ selectedConsultation.patientId }}</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Doctor ID</label>
+          <p class="text-gray-800 dark:text-white">{{ selectedConsultation.doctorId }}</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 mt-8 modal-footer sm:justify-end">
+        <button
+          (click)="closeModal()"
+          class="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-8 py-2.5 text-center font-medium text-gray-800 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </app-modal>
+</div>

@@ -14,24 +14,23 @@ import jakarta.persistence.Table;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "consultations")
 public class Consultation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", columnDefinition = "CHAR(36)")
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
     // Patient receiving the consultation (no User entity, just the ID)
-    @Column(name = "patient_id", nullable = false, columnDefinition = "CHAR(36)")
-    private UUID patientId;
+    @Column(name = "patient_id", nullable = false)
+    private Long patientId;
 
     // Doctor conducting the consultation (no User entity, just the ID)
-    @Column(name = "doctor_id", nullable = false, columnDefinition = "CHAR(36)")
-    private UUID doctorId;
+    @Column(name = "doctor_id", nullable = false)
+    private Long doctorId;
 
     @ManyToOne
     @JoinColumn(name = "medical_history_id")
@@ -52,27 +51,27 @@ public class Consultation {
     public Consultation() {
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public UUID getPatientId() {
+    public Long getPatientId() {
         return patientId;
     }
 
-    public void setPatientId(UUID patientId) {
+    public void setPatientId(Long patientId) {
         this.patientId = patientId;
     }
 
-    public UUID getDoctorId() {
+    public Long getDoctorId() {
         return doctorId;
     }
 
-    public void setDoctorId(UUID doctorId) {
+    public void setDoctorId(Long doctorId) {
         this.doctorId = doctorId;
     }
 

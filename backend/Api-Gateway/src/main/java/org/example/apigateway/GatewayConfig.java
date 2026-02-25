@@ -14,10 +14,7 @@ public class GatewayConfig {
     @Bean
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedOrigins(Arrays.asList(
-                "http://localhost:4200", // Angular dev server
-                "http://localhost:4369"  // Back office
-        ));
+        corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:4200")); // Angular dev server
         corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         corsConfig.setAllowedHeaders(Arrays.asList("*"));
         corsConfig.setAllowCredentials(true); // important if you use cookies or auth headers

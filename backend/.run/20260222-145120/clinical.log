@@ -1,0 +1,1054 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ----------------------< esprit:clinical-service >-----------------------
+[INFO] Building clinical-service 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.2.5:run (default-cli) > test-compile @ clinical-service >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ clinical-service ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ clinical-service ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ clinical-service ---
+[INFO] skip non existing resourceDirectory C:\Users\chife\IdeaProjects\PIdev\PIdev\backend\clinical\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ clinical-service ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] <<< spring-boot:3.2.5:run (default-cli) < test-compile @ clinical-service <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.2.5:run (default-cli) @ clinical-service ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.5)
+
+2026-02-22T14:52:09.526+01:00  INFO 25628 --- [clinical-service] [           main] e.c.ClinicalServiceApplication           : Starting ClinicalServiceApplication using Java 17.0.18 with PID 25628 (C:\Users\chife\IdeaProjects\PIdev\PIdev\backend\clinical\target\classes started by chife in C:\Users\chife\IdeaProjects\PIdev\PIdev\backend\clinical)
+2026-02-22T14:52:09.529+01:00  INFO 25628 --- [clinical-service] [           main] e.c.ClinicalServiceApplication           : No active profile set, falling back to 1 default profile: "default"
+2026-02-22T14:52:10.247+01:00  INFO 25628 --- [clinical-service] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-02-22T14:52:10.420+01:00  INFO 25628 --- [clinical-service] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 161 ms. Found 5 JPA repository interfaces.
+2026-02-22T14:52:10.619+01:00  INFO 25628 --- [clinical-service] [           main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=eda5eed6-c17c-32a4-a620-a13ee8aecb6f
+2026-02-22T14:52:10.741+01:00  WARN 25628 --- [clinical-service] [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2026-02-22T14:52:10.743+01:00  WARN 25628 --- [clinical-service] [           main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2026-02-22T14:52:10.972+01:00  INFO 25628 --- [clinical-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8079 (http)
+2026-02-22T14:52:10.982+01:00  INFO 25628 --- [clinical-service] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-02-22T14:52:10.983+01:00  INFO 25628 --- [clinical-service] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2026-02-22T14:52:11.039+01:00  INFO 25628 --- [clinical-service] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-02-22T14:52:11.040+01:00  INFO 25628 --- [clinical-service] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1461 ms
+2026-02-22T14:52:11.148+01:00  INFO 25628 --- [clinical-service] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-02-22T14:52:11.190+01:00  INFO 25628 --- [clinical-service] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-02-22T14:52:11.216+01:00  INFO 25628 --- [clinical-service] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-02-22T14:52:11.380+01:00  INFO 25628 --- [clinical-service] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-02-22T14:52:11.403+01:00  INFO 25628 --- [clinical-service] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-02-22T14:52:11.518+01:00  INFO 25628 --- [clinical-service] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@573a078
+2026-02-22T14:52:11.520+01:00  INFO 25628 --- [clinical-service] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-02-22T14:52:11.537+01:00  WARN 25628 --- [clinical-service] [           main] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-02-22T14:52:11.538+01:00  WARN 25628 --- [clinical-service] [           main] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-02-22T14:52:12.238+01:00  INFO 25628 --- [clinical-service] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-02-22T14:52:12.334+01:00  INFO 25628 --- [clinical-service] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-02-22T14:52:12.677+01:00  WARN 25628 --- [clinical-service] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-02-22T14:52:14.694+01:00  INFO 25628 --- [clinical-service] [           main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2026-02-22T14:52:16.341+01:00  INFO 25628 --- [clinical-service] [           main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2026-02-22T14:52:16.361+01:00  INFO 25628 --- [clinical-service] [           main] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestTemplate.
+2026-02-22T14:52:16.392+01:00  WARN 25628 --- [clinical-service] [           main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2026-02-22T14:52:16.410+01:00  INFO 25628 --- [clinical-service] [           main] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
+2026-02-22T14:52:16.471+01:00  INFO 25628 --- [clinical-service] [           main] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
+2026-02-22T14:52:16.474+01:00  INFO 25628 --- [clinical-service] [           main] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2026-02-22T14:52:16.493+01:00  INFO 25628 --- [clinical-service] [           main] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2026-02-22T14:52:16.494+01:00  INFO 25628 --- [clinical-service] [           main] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2026-02-22T14:52:16.494+01:00  INFO 25628 --- [clinical-service] [           main] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2026-02-22T14:52:16.494+01:00  INFO 25628 --- [clinical-service] [           main] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2026-02-22T14:52:16.494+01:00  INFO 25628 --- [clinical-service] [           main] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2026-02-22T14:52:16.494+01:00  INFO 25628 --- [clinical-service] [           main] com.netflix.discovery.DiscoveryClient    : Application version is -1: true
+2026-02-22T14:52:16.494+01:00  INFO 25628 --- [clinical-service] [           main] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2026-02-22T14:52:16.778+01:00  INFO 25628 --- [clinical-service] [           main] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2026-02-22T14:52:16.780+01:00  INFO 25628 --- [clinical-service] [           main] com.netflix.discovery.DiscoveryClient    : Starting heartbeat executor: renew interval is: 30
+2026-02-22T14:52:16.782+01:00  INFO 25628 --- [clinical-service] [           main] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4
+2026-02-22T14:52:16.786+01:00  INFO 25628 --- [clinical-service] [           main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1771768336785 with initial instances count: 0
+2026-02-22T14:52:16.788+01:00  INFO 25628 --- [clinical-service] [           main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application CLINICAL-SERVICE with eureka with status UP
+2026-02-22T14:52:16.789+01:00  INFO 25628 --- [clinical-service] [           main] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1771768336789, current=UP, previous=STARTING]
+2026-02-22T14:52:16.790+01:00  INFO 25628 --- [clinical-service] [nfoReplicator-0] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_CLINICAL-SERVICE/localhost:clinical-service:8079: registering service...
+2026-02-22T14:52:16.807+01:00  INFO 25628 --- [clinical-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8079 (http) with context path ''
+2026-02-22T14:52:16.808+01:00  INFO 25628 --- [clinical-service] [           main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 8079
+2026-02-22T14:52:16.896+01:00  INFO 25628 --- [clinical-service] [nfoReplicator-0] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_CLINICAL-SERVICE/localhost:clinical-service:8079 - registration status: 204
+2026-02-22T14:52:18.409+01:00  INFO 25628 --- [clinical-service] [           main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2026-02-22T14:52:18.418+01:00  INFO 25628 --- [clinical-service] [           main] e.c.ClinicalServiceApplication           : Started ClinicalServiceApplication in 11.338 seconds (process running for 11.915)
+Hibernate: 
+    select
+        tqi1_0.id,
+        tqi1_0.assessment_id,
+        tqi1_0.assigned_doctor_id,
+        tqi1_0.completed_at,
+        tqi1_0.created_at,
+        tqi1_0.deadline_at,
+        tqi1_0.last_escalation_at,
+        tqi1_0.last_escalation_type,
+        tqi1_0.manual_override,
+        tqi1_0.max_wait_minutes,
+        tqi1_0.override_reason,
+        tqi1_0.priority_rank,
+        tqi1_0.started_at,
+        tqi1_0.status,
+        tqi1_0.triage_level,
+        tqi1_0.updated_at 
+    from
+        triage_queue_items tqi1_0 
+    where
+        tqi1_0.status=? 
+        and tqi1_0.deadline_at<?
+2026-02-22T14:52:46.793+01:00  INFO 25628 --- [clinical-service] [freshExecutor-0] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2026-02-22T14:52:46.797+01:00  INFO 25628 --- [clinical-service] [freshExecutor-0] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2026-02-22T14:52:46.799+01:00  INFO 25628 --- [clinical-service] [freshExecutor-0] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2026-02-22T14:52:46.800+01:00  INFO 25628 --- [clinical-service] [freshExecutor-0] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2026-02-22T14:52:46.804+01:00  INFO 25628 --- [clinical-service] [freshExecutor-0] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2026-02-22T14:52:46.807+01:00  INFO 25628 --- [clinical-service] [freshExecutor-0] com.netflix.discovery.DiscoveryClient    : Application version is -1: false
+2026-02-22T14:52:46.808+01:00  INFO 25628 --- [clinical-service] [freshExecutor-0] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2026-02-22T14:52:46.854+01:00  INFO 25628 --- [clinical-service] [freshExecutor-0] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2026-02-22T14:52:48.600+01:00  INFO 25628 --- [clinical-service] [nio-8079-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-02-22T14:52:48.601+01:00  INFO 25628 --- [clinical-service] [nio-8079-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-02-22T14:52:48.605+01:00  INFO 25628 --- [clinical-service] [nio-8079-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.consultation_date,
+        c1_0.diagnosis,
+        c1_0.doctor_id,
+        c1_0.follow_up_date,
+        c1_0.medical_history_id,
+        c1_0.patient_id,
+        c1_0.status,
+        c1_0.treatment_plan 
+    from
+        consultations c1_0
+Hibernate: 
+    select
+        mh1_0.id,
+        mh1_0.allergies,
+        mh1_0.chronic_conditions,
+        mh1_0.diagnosis,
+        mh1_0.family_history,
+        mh1_0.notes,
+        mh1_0.user_id 
+    from
+        medical_histories mh1_0
+Hibernate: 
+    select
+        tqi1_0.id,
+        tqi1_0.assessment_id,
+        tqi1_0.assigned_doctor_id,
+        tqi1_0.completed_at,
+        tqi1_0.created_at,
+        tqi1_0.deadline_at,
+        tqi1_0.last_escalation_at,
+        tqi1_0.last_escalation_type,
+        tqi1_0.manual_override,
+        tqi1_0.max_wait_minutes,
+        tqi1_0.override_reason,
+        tqi1_0.priority_rank,
+        tqi1_0.started_at,
+        tqi1_0.status,
+        tqi1_0.triage_level,
+        tqi1_0.updated_at 
+    from
+        triage_queue_items tqi1_0 
+    where
+        tqi1_0.status in (?, ?) 
+    order by
+        tqi1_0.priority_rank,
+        tqi1_0.deadline_at,
+        tqi1_0.created_at
+Hibernate: 
+    select
+        ta1_0.id,
+        ta1_0.age,
+        ta1_0.arrival_time,
+        ta1_0.created_at,
+        ta1_0.heart_rate,
+        ta1_0.pain_score,
+        ta1_0.patient_id,
+        ta1_0.recommended_max_wait_minutes,
+        ta1_0.respiratory_distress,
+        ta1_0.score,
+        ta1_0.severe_comorbidity,
+        ta1_0.spo2,
+        ta1_0.systolic_bp,
+        ta1_0.triage_level 
+    from
+        triage_assessments ta1_0 
+    where
+        ta1_0.id=?
+Hibernate: 
+    select
+        tqi1_0.id,
+        tqi1_0.assessment_id,
+        tqi1_0.assigned_doctor_id,
+        tqi1_0.completed_at,
+        tqi1_0.created_at,
+        tqi1_0.deadline_at,
+        tqi1_0.last_escalation_at,
+        tqi1_0.last_escalation_type,
+        tqi1_0.manual_override,
+        tqi1_0.max_wait_minutes,
+        tqi1_0.override_reason,
+        tqi1_0.priority_rank,
+        tqi1_0.started_at,
+        tqi1_0.status,
+        tqi1_0.triage_level,
+        tqi1_0.updated_at 
+    from
+        triage_queue_items tqi1_0 
+    where
+        tqi1_0.status=? 
+        and tqi1_0.deadline_at<?
+Hibernate: 
+    select
+        tqi1_0.id,
+        tqi1_0.assessment_id,
+        tqi1_0.assigned_doctor_id,
+        tqi1_0.completed_at,
+        tqi1_0.created_at,
+        tqi1_0.deadline_at,
+        tqi1_0.last_escalation_at,
+        tqi1_0.last_escalation_type,
+        tqi1_0.manual_override,
+        tqi1_0.max_wait_minutes,
+        tqi1_0.override_reason,
+        tqi1_0.priority_rank,
+        tqi1_0.started_at,
+        tqi1_0.status,
+        tqi1_0.triage_level,
+        tqi1_0.updated_at 
+    from
+        triage_queue_items tqi1_0 
+    where
+        tqi1_0.status in (?, ?) 
+    order by
+        tqi1_0.priority_rank,
+        tqi1_0.deadline_at,
+        tqi1_0.created_at
+Hibernate: 
+    select
+        ta1_0.id,
+        ta1_0.age,
+        ta1_0.arrival_time,
+        ta1_0.created_at,
+        ta1_0.heart_rate,
+        ta1_0.pain_score,
+        ta1_0.patient_id,
+        ta1_0.recommended_max_wait_minutes,
+        ta1_0.respiratory_distress,
+        ta1_0.score,
+        ta1_0.severe_comorbidity,
+        ta1_0.spo2,
+        ta1_0.systolic_bp,
+        ta1_0.triage_level 
+    from
+        triage_assessments ta1_0 
+    where
+        ta1_0.id=?
+Hibernate: 
+    select
+        tqi1_0.id,
+        tqi1_0.assessment_id,
+        a1_0.id,
+        a1_0.age,
+        a1_0.arrival_time,
+        a1_0.created_at,
+        a1_0.heart_rate,
+        a1_0.pain_score,
+        a1_0.patient_id,
+        a1_0.recommended_max_wait_minutes,
+        a1_0.respiratory_distress,
+        a1_0.score,
+        a1_0.severe_comorbidity,
+        a1_0.spo2,
+        a1_0.systolic_bp,
+        a1_0.triage_level,
+        tqi1_0.assigned_doctor_id,
+        tqi1_0.completed_at,
+        tqi1_0.created_at,
+        tqi1_0.deadline_at,
+        tqi1_0.last_escalation_at,
+        tqi1_0.last_escalation_type,
+        tqi1_0.manual_override,
+        tqi1_0.max_wait_minutes,
+        tqi1_0.override_reason,
+        tqi1_0.priority_rank,
+        tqi1_0.started_at,
+        tqi1_0.status,
+        tqi1_0.triage_level,
+        tqi1_0.updated_at 
+    from
+        triage_queue_items tqi1_0 
+    join
+        triage_assessments a1_0 
+            on a1_0.id=tqi1_0.assessment_id 
+    where
+        tqi1_0.id=?
+Hibernate: 
+    update
+        triage_assessments 
+    set
+        age=?,
+        arrival_time=?,
+        created_at=?,
+        heart_rate=?,
+        pain_score=?,
+        patient_id=?,
+        recommended_max_wait_minutes=?,
+        respiratory_distress=?,
+        score=?,
+        severe_comorbidity=?,
+        spo2=?,
+        systolic_bp=?,
+        triage_level=? 
+    where
+        id=?
+Hibernate: 
+    update
+        triage_queue_items 
+    set
+        assessment_id=?,
+        assigned_doctor_id=?,
+        completed_at=?,
+        created_at=?,
+        deadline_at=?,
+        last_escalation_at=?,
+        last_escalation_type=?,
+        manual_override=?,
+        max_wait_minutes=?,
+        override_reason=?,
+        priority_rank=?,
+        started_at=?,
+        status=?,
+        triage_level=?,
+        updated_at=? 
+    where
+        id=?
+Hibernate: 
+    select
+        tqi1_0.id,
+        tqi1_0.assessment_id,
+        tqi1_0.assigned_doctor_id,
+        tqi1_0.completed_at,
+        tqi1_0.created_at,
+        tqi1_0.deadline_at,
+        tqi1_0.last_escalation_at,
+        tqi1_0.last_escalation_type,
+        tqi1_0.manual_override,
+        tqi1_0.max_wait_minutes,
+        tqi1_0.override_reason,
+        tqi1_0.priority_rank,
+        tqi1_0.started_at,
+        tqi1_0.status,
+        tqi1_0.triage_level,
+        tqi1_0.updated_at 
+    from
+        triage_queue_items tqi1_0 
+    where
+        tqi1_0.status in (?, ?) 
+    order by
+        tqi1_0.priority_rank,
+        tqi1_0.deadline_at,
+        tqi1_0.created_at
+Hibernate: 
+    select
+        ta1_0.id,
+        ta1_0.age,
+        ta1_0.arrival_time,
+        ta1_0.created_at,
+        ta1_0.heart_rate,
+        ta1_0.pain_score,
+        ta1_0.patient_id,
+        ta1_0.recommended_max_wait_minutes,
+        ta1_0.respiratory_distress,
+        ta1_0.score,
+        ta1_0.severe_comorbidity,
+        ta1_0.spo2,
+        ta1_0.systolic_bp,
+        ta1_0.triage_level 
+    from
+        triage_assessments ta1_0 
+    where
+        ta1_0.id=?
+Hibernate: 
+    select
+        tqi1_0.id,
+        tqi1_0.assessment_id,
+        tqi1_0.assigned_doctor_id,
+        tqi1_0.completed_at,
+        tqi1_0.created_at,
+        tqi1_0.deadline_at,
+        tqi1_0.last_escalation_at,
+        tqi1_0.last_escalation_type,
+        tqi1_0.manual_override,
+        tqi1_0.max_wait_minutes,
+        tqi1_0.override_reason,
+        tqi1_0.priority_rank,
+        tqi1_0.started_at,
+        tqi1_0.status,
+        tqi1_0.triage_level,
+        tqi1_0.updated_at 
+    from
+        triage_queue_items tqi1_0 
+    where
+        tqi1_0.status in (?, ?) 
+    order by
+        tqi1_0.priority_rank,
+        tqi1_0.deadline_at,
+        tqi1_0.created_at
+Hibernate: 
+    select
+        ta1_0.id,
+        ta1_0.age,
+        ta1_0.arrival_time,
+        ta1_0.created_at,
+        ta1_0.heart_rate,
+        ta1_0.pain_score,
+        ta1_0.patient_id,
+        ta1_0.recommended_max_wait_minutes,
+        ta1_0.respiratory_distress,
+        ta1_0.score,
+        ta1_0.severe_comorbidity,
+        ta1_0.spo2,
+        ta1_0.systolic_bp,
+        ta1_0.triage_level 
+    from
+        triage_assessments ta1_0 
+    where
+        ta1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.consultation_date,
+        c1_0.diagnosis,
+        c1_0.doctor_id,
+        c1_0.follow_up_date,
+        c1_0.medical_history_id,
+        c1_0.patient_id,
+        c1_0.status,
+        c1_0.treatment_plan 
+    from
+        consultations c1_0
+Hibernate: 
+    select
+        mh1_0.id,
+        mh1_0.allergies,
+        mh1_0.chronic_conditions,
+        mh1_0.diagnosis,
+        mh1_0.family_history,
+        mh1_0.notes,
+        mh1_0.user_id 
+    from
+        medical_histories mh1_0
+Hibernate: 
+    select
+        tqi1_0.id,
+        tqi1_0.assessment_id,
+        tqi1_0.assigned_doctor_id,
+        tqi1_0.completed_at,
+        tqi1_0.created_at,
+        tqi1_0.deadline_at,
+        tqi1_0.last_escalation_at,
+        tqi1_0.last_escalation_type,
+        tqi1_0.manual_override,
+        tqi1_0.max_wait_minutes,
+        tqi1_0.override_reason,
+        tqi1_0.priority_rank,
+        tqi1_0.started_at,
+        tqi1_0.status,
+        tqi1_0.triage_level,
+        tqi1_0.updated_at 
+    from
+        triage_queue_items tqi1_0 
+    where
+        tqi1_0.status in (?, ?) 
+    order by
+        tqi1_0.priority_rank,
+        tqi1_0.deadline_at,
+        tqi1_0.created_at
+Hibernate: 
+    select
+        ta1_0.id,
+        ta1_0.age,
+        ta1_0.arrival_time,
+        ta1_0.created_at,
+        ta1_0.heart_rate,
+        ta1_0.pain_score,
+        ta1_0.patient_id,
+        ta1_0.recommended_max_wait_minutes,
+        ta1_0.respiratory_distress,
+        ta1_0.score,
+        ta1_0.severe_comorbidity,
+        ta1_0.spo2,
+        ta1_0.systolic_bp,
+        ta1_0.triage_level 
+    from
+        triage_assessments ta1_0 
+    where
+        ta1_0.id=?
+Hibernate: 
+    select
+        tqi1_0.id,
+        tqi1_0.assessment_id,
+        a1_0.id,
+        a1_0.age,
+        a1_0.arrival_time,
+        a1_0.created_at,
+        a1_0.heart_rate,
+        a1_0.pain_score,
+        a1_0.patient_id,
+        a1_0.recommended_max_wait_minutes,
+        a1_0.respiratory_distress,
+        a1_0.score,
+        a1_0.severe_comorbidity,
+        a1_0.spo2,
+        a1_0.systolic_bp,
+        a1_0.triage_level,
+        tqi1_0.assigned_doctor_id,
+        tqi1_0.completed_at,
+        tqi1_0.created_at,
+        tqi1_0.deadline_at,
+        tqi1_0.last_escalation_at,
+        tqi1_0.last_escalation_type,
+        tqi1_0.manual_override,
+        tqi1_0.max_wait_minutes,
+        tqi1_0.override_reason,
+        tqi1_0.priority_rank,
+        tqi1_0.started_at,
+        tqi1_0.status,
+        tqi1_0.triage_level,
+        tqi1_0.updated_at 
+    from
+        triage_queue_items tqi1_0 
+    join
+        triage_assessments a1_0 
+            on a1_0.id=tqi1_0.assessment_id 
+    where
+        tqi1_0.id=?
+Hibernate: 
+    update
+        triage_queue_items 
+    set
+        assessment_id=?,
+        assigned_doctor_id=?,
+        completed_at=?,
+        created_at=?,
+        deadline_at=?,
+        last_escalation_at=?,
+        last_escalation_type=?,
+        manual_override=?,
+        max_wait_minutes=?,
+        override_reason=?,
+        priority_rank=?,
+        started_at=?,
+        status=?,
+        triage_level=?,
+        updated_at=? 
+    where
+        id=?
+Hibernate: 
+    select
+        tqi1_0.id,
+        tqi1_0.assessment_id,
+        tqi1_0.assigned_doctor_id,
+        tqi1_0.completed_at,
+        tqi1_0.created_at,
+        tqi1_0.deadline_at,
+        tqi1_0.last_escalation_at,
+        tqi1_0.last_escalation_type,
+        tqi1_0.manual_override,
+        tqi1_0.max_wait_minutes,
+        tqi1_0.override_reason,
+        tqi1_0.priority_rank,
+        tqi1_0.started_at,
+        tqi1_0.status,
+        tqi1_0.triage_level,
+        tqi1_0.updated_at 
+    from
+        triage_queue_items tqi1_0 
+    where
+        tqi1_0.status in (?, ?) 
+    order by
+        tqi1_0.priority_rank,
+        tqi1_0.deadline_at,
+        tqi1_0.created_at
+Hibernate: 
+    select
+        ta1_0.id,
+        ta1_0.age,
+        ta1_0.arrival_time,
+        ta1_0.created_at,
+        ta1_0.heart_rate,
+        ta1_0.pain_score,
+        ta1_0.patient_id,
+        ta1_0.recommended_max_wait_minutes,
+        ta1_0.respiratory_distress,
+        ta1_0.score,
+        ta1_0.severe_comorbidity,
+        ta1_0.spo2,
+        ta1_0.systolic_bp,
+        ta1_0.triage_level 
+    from
+        triage_assessments ta1_0 
+    where
+        ta1_0.id=?
+Hibernate: 
+    select
+        tqi1_0.id,
+        tqi1_0.assessment_id,
+        a1_0.id,
+        a1_0.age,
+        a1_0.arrival_time,
+        a1_0.created_at,
+        a1_0.heart_rate,
+        a1_0.pain_score,
+        a1_0.patient_id,
+        a1_0.recommended_max_wait_minutes,
+        a1_0.respiratory_distress,
+        a1_0.score,
+        a1_0.severe_comorbidity,
+        a1_0.spo2,
+        a1_0.systolic_bp,
+        a1_0.triage_level,
+        tqi1_0.assigned_doctor_id,
+        tqi1_0.completed_at,
+        tqi1_0.created_at,
+        tqi1_0.deadline_at,
+        tqi1_0.last_escalation_at,
+        tqi1_0.last_escalation_type,
+        tqi1_0.manual_override,
+        tqi1_0.max_wait_minutes,
+        tqi1_0.override_reason,
+        tqi1_0.priority_rank,
+        tqi1_0.started_at,
+        tqi1_0.status,
+        tqi1_0.triage_level,
+        tqi1_0.updated_at 
+    from
+        triage_queue_items tqi1_0 
+    join
+        triage_assessments a1_0 
+            on a1_0.id=tqi1_0.assessment_id 
+    where
+        tqi1_0.id=?
+Hibernate: 
+    select
+        tqi1_0.id,
+        tqi1_0.assessment_id,
+        tqi1_0.assigned_doctor_id,
+        tqi1_0.completed_at,
+        tqi1_0.created_at,
+        tqi1_0.deadline_at,
+        tqi1_0.last_escalation_at,
+        tqi1_0.last_escalation_type,
+        tqi1_0.manual_override,
+        tqi1_0.max_wait_minutes,
+        tqi1_0.override_reason,
+        tqi1_0.priority_rank,
+        tqi1_0.started_at,
+        tqi1_0.status,
+        tqi1_0.triage_level,
+        tqi1_0.updated_at 
+    from
+        triage_queue_items tqi1_0 
+    where
+        tqi1_0.status in (?, ?) 
+    order by
+        tqi1_0.priority_rank,
+        tqi1_0.deadline_at,
+        tqi1_0.created_at
+Hibernate: 
+    select
+        ta1_0.id,
+        ta1_0.age,
+        ta1_0.arrival_time,
+        ta1_0.created_at,
+        ta1_0.heart_rate,
+        ta1_0.pain_score,
+        ta1_0.patient_id,
+        ta1_0.recommended_max_wait_minutes,
+        ta1_0.respiratory_distress,
+        ta1_0.score,
+        ta1_0.severe_comorbidity,
+        ta1_0.spo2,
+        ta1_0.systolic_bp,
+        ta1_0.triage_level 
+    from
+        triage_assessments ta1_0 
+    where
+        ta1_0.id=?
+Hibernate: 
+    select
+        tqi1_0.id,
+        tqi1_0.assessment_id,
+        tqi1_0.assigned_doctor_id,
+        tqi1_0.completed_at,
+        tqi1_0.created_at,
+        tqi1_0.deadline_at,
+        tqi1_0.last_escalation_at,
+        tqi1_0.last_escalation_type,
+        tqi1_0.manual_override,
+        tqi1_0.max_wait_minutes,
+        tqi1_0.override_reason,
+        tqi1_0.priority_rank,
+        tqi1_0.started_at,
+        tqi1_0.status,
+        tqi1_0.triage_level,
+        tqi1_0.updated_at 
+    from
+        triage_queue_items tqi1_0 
+    where
+        tqi1_0.status=? 
+        and tqi1_0.deadline_at<?
+Hibernate: 
+    select
+        tqi1_0.id,
+        tqi1_0.assessment_id,
+        tqi1_0.assigned_doctor_id,
+        tqi1_0.completed_at,
+        tqi1_0.created_at,
+        tqi1_0.deadline_at,
+        tqi1_0.last_escalation_at,
+        tqi1_0.last_escalation_type,
+        tqi1_0.manual_override,
+        tqi1_0.max_wait_minutes,
+        tqi1_0.override_reason,
+        tqi1_0.priority_rank,
+        tqi1_0.started_at,
+        tqi1_0.status,
+        tqi1_0.triage_level,
+        tqi1_0.updated_at 
+    from
+        triage_queue_items tqi1_0 
+    where
+        tqi1_0.status in (?, ?) 
+    order by
+        tqi1_0.priority_rank,
+        tqi1_0.deadline_at,
+        tqi1_0.created_at
+Hibernate: 
+    select
+        ta1_0.id,
+        ta1_0.age,
+        ta1_0.arrival_time,
+        ta1_0.created_at,
+        ta1_0.heart_rate,
+        ta1_0.pain_score,
+        ta1_0.patient_id,
+        ta1_0.recommended_max_wait_minutes,
+        ta1_0.respiratory_distress,
+        ta1_0.score,
+        ta1_0.severe_comorbidity,
+        ta1_0.spo2,
+        ta1_0.systolic_bp,
+        ta1_0.triage_level 
+    from
+        triage_assessments ta1_0 
+    where
+        ta1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.consultation_date,
+        c1_0.diagnosis,
+        c1_0.doctor_id,
+        c1_0.follow_up_date,
+        c1_0.medical_history_id,
+        c1_0.patient_id,
+        c1_0.status,
+        c1_0.treatment_plan 
+    from
+        consultations c1_0
+Hibernate: 
+    select
+        mh1_0.id,
+        mh1_0.allergies,
+        mh1_0.chronic_conditions,
+        mh1_0.diagnosis,
+        mh1_0.family_history,
+        mh1_0.notes,
+        mh1_0.user_id 
+    from
+        medical_histories mh1_0
+Hibernate: 
+    select
+        tqi1_0.id,
+        tqi1_0.assessment_id,
+        tqi1_0.assigned_doctor_id,
+        tqi1_0.completed_at,
+        tqi1_0.created_at,
+        tqi1_0.deadline_at,
+        tqi1_0.last_escalation_at,
+        tqi1_0.last_escalation_type,
+        tqi1_0.manual_override,
+        tqi1_0.max_wait_minutes,
+        tqi1_0.override_reason,
+        tqi1_0.priority_rank,
+        tqi1_0.started_at,
+        tqi1_0.status,
+        tqi1_0.triage_level,
+        tqi1_0.updated_at 
+    from
+        triage_queue_items tqi1_0 
+    where
+        tqi1_0.status in (?, ?) 
+    order by
+        tqi1_0.priority_rank,
+        tqi1_0.deadline_at,
+        tqi1_0.created_at
+Hibernate: 
+    select
+        ta1_0.id,
+        ta1_0.age,
+        ta1_0.arrival_time,
+        ta1_0.created_at,
+        ta1_0.heart_rate,
+        ta1_0.pain_score,
+        ta1_0.patient_id,
+        ta1_0.recommended_max_wait_minutes,
+        ta1_0.respiratory_distress,
+        ta1_0.score,
+        ta1_0.severe_comorbidity,
+        ta1_0.spo2,
+        ta1_0.systolic_bp,
+        ta1_0.triage_level 
+    from
+        triage_assessments ta1_0 
+    where
+        ta1_0.id=?
+Hibernate: 
+    select
+        tqi1_0.id,
+        tqi1_0.assessment_id,
+        a1_0.id,
+        a1_0.age,
+        a1_0.arrival_time,
+        a1_0.created_at,
+        a1_0.heart_rate,
+        a1_0.pain_score,
+        a1_0.patient_id,
+        a1_0.recommended_max_wait_minutes,
+        a1_0.respiratory_distress,
+        a1_0.score,
+        a1_0.severe_comorbidity,
+        a1_0.spo2,
+        a1_0.systolic_bp,
+        a1_0.triage_level,
+        tqi1_0.assigned_doctor_id,
+        tqi1_0.completed_at,
+        tqi1_0.created_at,
+        tqi1_0.deadline_at,
+        tqi1_0.last_escalation_at,
+        tqi1_0.last_escalation_type,
+        tqi1_0.manual_override,
+        tqi1_0.max_wait_minutes,
+        tqi1_0.override_reason,
+        tqi1_0.priority_rank,
+        tqi1_0.started_at,
+        tqi1_0.status,
+        tqi1_0.triage_level,
+        tqi1_0.updated_at 
+    from
+        triage_queue_items tqi1_0 
+    join
+        triage_assessments a1_0 
+            on a1_0.id=tqi1_0.assessment_id 
+    where
+        tqi1_0.id=?
+Hibernate: 
+    update
+        triage_queue_items 
+    set
+        assessment_id=?,
+        assigned_doctor_id=?,
+        completed_at=?,
+        created_at=?,
+        deadline_at=?,
+        last_escalation_at=?,
+        last_escalation_type=?,
+        manual_override=?,
+        max_wait_minutes=?,
+        override_reason=?,
+        priority_rank=?,
+        started_at=?,
+        status=?,
+        triage_level=?,
+        updated_at=? 
+    where
+        id=?
+Hibernate: 
+    select
+        tqi1_0.id,
+        tqi1_0.assessment_id,
+        tqi1_0.assigned_doctor_id,
+        tqi1_0.completed_at,
+        tqi1_0.created_at,
+        tqi1_0.deadline_at,
+        tqi1_0.last_escalation_at,
+        tqi1_0.last_escalation_type,
+        tqi1_0.manual_override,
+        tqi1_0.max_wait_minutes,
+        tqi1_0.override_reason,
+        tqi1_0.priority_rank,
+        tqi1_0.started_at,
+        tqi1_0.status,
+        tqi1_0.triage_level,
+        tqi1_0.updated_at 
+    from
+        triage_queue_items tqi1_0 
+    where
+        tqi1_0.status in (?, ?) 
+    order by
+        tqi1_0.priority_rank,
+        tqi1_0.deadline_at,
+        tqi1_0.created_at
+Hibernate: 
+    select
+        tqi1_0.id,
+        tqi1_0.assessment_id,
+        tqi1_0.assigned_doctor_id,
+        tqi1_0.completed_at,
+        tqi1_0.created_at,
+        tqi1_0.deadline_at,
+        tqi1_0.last_escalation_at,
+        tqi1_0.last_escalation_type,
+        tqi1_0.manual_override,
+        tqi1_0.max_wait_minutes,
+        tqi1_0.override_reason,
+        tqi1_0.priority_rank,
+        tqi1_0.started_at,
+        tqi1_0.status,
+        tqi1_0.triage_level,
+        tqi1_0.updated_at 
+    from
+        triage_queue_items tqi1_0 
+    where
+        tqi1_0.status in (?, ?) 
+    order by
+        tqi1_0.priority_rank,
+        tqi1_0.deadline_at,
+        tqi1_0.created_at
+Hibernate: 
+    select
+        tqi1_0.id,
+        tqi1_0.assessment_id,
+        tqi1_0.assigned_doctor_id,
+        tqi1_0.completed_at,
+        tqi1_0.created_at,
+        tqi1_0.deadline_at,
+        tqi1_0.last_escalation_at,
+        tqi1_0.last_escalation_type,
+        tqi1_0.manual_override,
+        tqi1_0.max_wait_minutes,
+        tqi1_0.override_reason,
+        tqi1_0.priority_rank,
+        tqi1_0.started_at,
+        tqi1_0.status,
+        tqi1_0.triage_level,
+        tqi1_0.updated_at 
+    from
+        triage_queue_items tqi1_0 
+    where
+        tqi1_0.status=? 
+        and tqi1_0.deadline_at<?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.consultation_date,
+        c1_0.diagnosis,
+        c1_0.doctor_id,
+        c1_0.follow_up_date,
+        c1_0.medical_history_id,
+        c1_0.patient_id,
+        c1_0.status,
+        c1_0.treatment_plan 
+    from
+        consultations c1_0
+Hibernate: 
+    select
+        mh1_0.id,
+        mh1_0.allergies,
+        mh1_0.chronic_conditions,
+        mh1_0.diagnosis,
+        mh1_0.family_history,
+        mh1_0.notes,
+        mh1_0.user_id 
+    from
+        medical_histories mh1_0
+Hibernate: 
+    select
+        tqi1_0.id,
+        tqi1_0.assessment_id,
+        tqi1_0.assigned_doctor_id,
+        tqi1_0.completed_at,
+        tqi1_0.created_at,
+        tqi1_0.deadline_at,
+        tqi1_0.last_escalation_at,
+        tqi1_0.last_escalation_type,
+        tqi1_0.manual_override,
+        tqi1_0.max_wait_minutes,
+        tqi1_0.override_reason,
+        tqi1_0.priority_rank,
+        tqi1_0.started_at,
+        tqi1_0.status,
+        tqi1_0.triage_level,
+        tqi1_0.updated_at 
+    from
+        triage_queue_items tqi1_0 
+    where
+        tqi1_0.status in (?, ?) 
+    order by
+        tqi1_0.priority_rank,
+        tqi1_0.deadline_at,
+        tqi1_0.created_at
+Hibernate: 
+    select
+        tqi1_0.id,
+        tqi1_0.assessment_id,
+        tqi1_0.assigned_doctor_id,
+        tqi1_0.completed_at,
+        tqi1_0.created_at,
+        tqi1_0.deadline_at,
+        tqi1_0.last_escalation_at,
+        tqi1_0.last_escalation_type,
+        tqi1_0.manual_override,
+        tqi1_0.max_wait_minutes,
+        tqi1_0.override_reason,
+        tqi1_0.priority_rank,
+        tqi1_0.started_at,
+        tqi1_0.status,
+        tqi1_0.triage_level,
+        tqi1_0.updated_at 
+    from
+        triage_queue_items tqi1_0 
+    where
+        tqi1_0.status in (?, ?) 
+    order by
+        tqi1_0.priority_rank,
+        tqi1_0.deadline_at,
+        tqi1_0.created_at
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  03:56 min
+[INFO] Finished at: 2026-02-22T14:55:58+01:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.springframework.boot:spring-boot-maven-plugin:3.2.5:run (default-cli) on project clinical-service: Process terminated with exit code: -1 -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException

@@ -29,10 +29,10 @@ export class UserAddressCardComponent {
   closeModal() { this.isOpen = false; }
 
   address = {
-    country: 'United States.',
-    cityState: 'Phoenix, Arizona, United States.',
-    postalCode: 'ERT 2489',
-    taxId: 'AS4568384',
+    country: 'N/A',
+    cityState: 'N/A',
+    postalCode: 'N/A',
+    taxId: 'N/A',
   };
 
   handleSave() {

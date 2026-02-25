@@ -3,19 +3,18 @@ package esprit.clinicalservice.services;
 import esprit.clinicalservice.entities.MedicalHistory;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface MedicalHistoryService {
 
     MedicalHistory create(MedicalHistory medicalHistory);
 
-    MedicalHistory update(UUID id, MedicalHistory medicalHistory);
+    MedicalHistory update(Long id, MedicalHistory medicalHistory);
 
-    void delete(UUID id);
+    void delete(Long id);
 
-    MedicalHistory getById(UUID id);
+    MedicalHistory getById(Long id);
 
-    MedicalHistory getByUserId(UUID userId);
+    MedicalHistory getByUserId(Long userId);
 
     List<MedicalHistory> getAll();
 }

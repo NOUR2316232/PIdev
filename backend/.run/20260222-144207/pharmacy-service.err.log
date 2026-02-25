@@ -1,0 +1,11 @@
+Get-Content : Cannot find path 
+'C:\Users\chife\IdeaProjects\PIdev\PIdev\backend\pharmacy-service\.mvn\wrapper\maven-wrapper.properties' because it 
+does not exist.
+At line:54 char:21
++ ... utionUrl = (Get-Content -Raw "$scriptDir/.mvn/wrapper/maven-wrapper.p ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Users\chife\...pper.properties:String) [Get-Content], ItemNotFoundEx 
+   ception
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.GetContentCommand
+ 
+Cannot start maven from wrapper  

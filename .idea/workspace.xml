@@ -5,42 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5a0c9a50-1f51-4f4a-a42c-2b92825e8508" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/dialysis-service/.gitattributes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/dialysis-service/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/dialysis-service/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/dialysis-service/mvnw" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/dialysis-service/mvnw.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/dialysis-service/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/dialysis-service/src/main/java/esprit/dialysisservice/DialysisServiceApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/dialysis-service/src/main/resources/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/dialysis-service/src/test/java/esprit/dialysisservice/DialysisServiceApplicationTests.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/discovery-service/.gitattributes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/discovery-service/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/discovery-service/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/discovery-service/mvnw" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/discovery-service/mvnw.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/discovery-service/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/discovery-service/src/main/java/esprit/discoveryservice/DiscoveryServiceApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/discovery-service/src/main/resources/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/discovery-service/src/test/java/esprit/discoveryservice/DiscoveryServiceApplicationTests.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/gateway-service/.gitattributes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/gateway-service/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/gateway-service/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/gateway-service/mvnw" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/gateway-service/mvnw.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/gateway-service/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/gateway-service/src/main/java/esprit/gatewayservice/GatewayServiceApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/gateway-service/src/main/resources/application.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/gateway-service/src/test/java/esprit/gatewayservice/GatewayServiceApplicationTests.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/user-service/.gitattributes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/user-service/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/user-service/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/user-service/mvnw" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/user-service/mvnw.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/user-service/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/esprit/userservice/UserServiceApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/user-service/src/main/resources/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/user-service/src/test/java/esprit/userservice/UserServiceApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Api-Gateway/src/main/java/org/example/apigateway/GatewayConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Api-Gateway/src/main/java/org/example/apigateway/GatewayConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/clinical/src/main/java/esprit/clinicalservice/ClinicalServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/clinical/src/main/java/esprit/clinicalservice/ClinicalServiceApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/clinical/src/main/java/esprit/clinicalservice/config/CorsConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/clinical/src/main/java/esprit/clinicalservice/config/CorsConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/clinical/src/main/java/esprit/clinicalservice/exceptions/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/clinical/src/main/java/esprit/clinicalservice/exceptions/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/clinical/src/main/java/esprit/clinicalservice/utils/MapperUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/clinical/src/main/java/esprit/clinicalservice/utils/MapperUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/Back office/src/app/app.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/Back office/src/app/app.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/Back office/src/app/app.routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/Back office/src/app/app.routes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/Back office/src/app/guards/role.guard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/Back office/src/app/guards/role.guard.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/Back office/src/app/keycloak-init.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/Back office/src/app/keycloak-init.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/Back office/src/app/pages/clinical/clinical.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/Back office/src/app/pages/clinical/clinical.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/Back office/src/app/pages/clinical/clinical.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/Back office/src/app/pages/clinical/clinical.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/Back office/src/app/services/clinical.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/Back office/src/app/services/clinical.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/Back office/src/app/shared/components/header/user-dropdown/user-dropdown.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/Back office/src/app/shared/components/header/user-dropdown/user-dropdown.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/Back office/src/app/shared/layout/app-sidebar/app-sidebar.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/Back office/src/app/shared/layout/app-sidebar/app-sidebar.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/frontoffice/src/app/app-routing-module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/frontoffice/src/app/app-routing-module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/frontoffice/src/app/clinical/clinical.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/frontoffice/src/app/clinical/clinical.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/frontoffice/src/app/clinical/clinical.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/frontoffice/src/app/clinical/clinical.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/frontoffice/src/app/services/user.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/frontoffice/src/app/services/user.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,9 +34,6 @@
   <component name="ComposerSettings">
     <execution />
   </component>
-  <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="132" />
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -61,9 +42,12 @@
     <urls />
   </component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="$PROJECT_DIR$/../../../../php8.2/php.exe" />
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 0
-}]]></component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="39UZU9yYlSRPT5HyiPghteCwT7y" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -71,31 +55,45 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Downloaded.Files.Path.Enabled": "false",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
     "RunOnceActivity.MCP Project settings loaded": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/msi/4eme annee/PI_Pediatric_Nephrology",
+    "last_opened_file_path": "C:/Users/chife/IdeaProjects/PIdev/PIdev",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
     "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\chife\IdeaProjects\PIdev\frontend\frontoffice\src\app\services" />
+      <recent name="C:\Users\chife\IdeaProjects\PIdev\frontend\frontoffice\src\app" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
         <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.30387.90" />
-        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.30387.90" />
       </set>
     </attachedChunks>
   </component>
@@ -123,5 +121,12 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/backend/dialysis-service" />
+      <path value="$PROJECT_DIR$/backend/discovery-service" />
+      <path value="$PROJECT_DIR$/backend/user-service" />
+    </ignored-roots>
   </component>
 </project>

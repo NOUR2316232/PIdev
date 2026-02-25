@@ -1,16 +1,19 @@
 package esprit.clinicalservice.services.impl;
 
 import esprit.clinicalservice.entities.MedicalHistory;
+import esprit.clinicalservice.exceptions.ResourceNotFoundException;
 import esprit.clinicalservice.repositories.MedicalHistoryRepository;
 import esprit.clinicalservice.services.MedicalHistoryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class MedicalHistoryServiceImpl implements MedicalHistoryService {
 
+    private static final Logger logger = LoggerFactory.getLogger(MedicalHistoryServiceImpl.class);
     private final MedicalHistoryRepository medicalHistoryRepository;
 
     public MedicalHistoryServiceImpl(MedicalHistoryRepository medicalHistoryRepository) {
@@ -19,31 +22,34 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
 
     @Override
     public MedicalHistory create(MedicalHistory medicalHistory) {
+        logger.info("Creating medical history for user: {}", medicalHistory.getUserId());
         return medicalHistoryRepository.save(medicalHistory);
     }
 
     @Override
-    public MedicalHistory update(UUID id, MedicalHistory medicalHistory) {
+    public MedicalHistory update(Long id, MedicalHistory medicalHistory) {
         MedicalHistory existing = getById(id);
         medicalHistory.setId(existing.getId());
         return medicalHistoryRepository.save(medicalHistory);
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         medicalHistoryRepository.deleteById(id);
     }
 
     @Override
-    public MedicalHistory getById(UUID id) {
+    public MedicalHistory getById(Long id) {
+        logger.info("Fetching medical history with id: {}", id);
         return medicalHistoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Medical history not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Medical history not found with id: " + id));
     }
 
     @Override
-    public MedicalHistory getByUserId(UUID userId) {
+    public MedicalHistory getByUserId(Long userId) {
+        logger.info("Fetching medical history for user: {}", userId);
         return medicalHistoryRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Medical history not found for user"));
+                .orElseThrow(() -> new ResourceNotFoundException("Medical history not found for user: " + userId));
     }
 
     @Override

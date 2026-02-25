@@ -17,6 +17,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Allow error pages so you can see what's wrong if something fails
                         .requestMatchers("/error").permitAll()
+                        // Allow internal services/UI to read static role-based ID lists
+                        .requestMatchers("/api/users/patient-ids", "/api/users/doctor-ids").permitAll()
                         // Everything else requires a Keycloak Token
                         .anyRequest().authenticated()
                 )

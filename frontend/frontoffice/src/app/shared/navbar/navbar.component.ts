@@ -97,4 +97,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
   logout() {
     this.keycloakService.logout('http://localhost:4200');
   }
+
+  register() {
+    this.dropdownOpen = false;
+    this.router.navigate(['/register']);
+  }
 }

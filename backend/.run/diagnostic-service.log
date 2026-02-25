@@ -1,0 +1,24 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------< org.example:diagnostic-service >-------------------
+[INFO] Building diagnostic-app 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.4.2:run (default-cli) > test-compile @ diagnostic-service >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ diagnostic-service ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  2.215 s
+[INFO] Finished at: 2026-02-22T14:31:14+01:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-resources-plugin:3.3.1:resources (default-resources) on project diagnostic-service: filtering C:\Users\chife\IdeaProjects\PIdev\PIdev\backend\diagnostic-service\src\main\resources\application.properties to C:\Users\chife\IdeaProjects\PIdev\PIdev\backend\diagnostic-service\target\classes\application.properties failed with MalformedInputException: Input length = 1 -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException
